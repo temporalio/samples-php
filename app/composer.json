@@ -1,0 +1,13 @@
+{
+  "minimum-stability": "dev",
+  "require": {
+    "temporal/sdk": "dev-master",
+    "spiral/tokenizer": ">=2.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Temporal\\Samples\\": "src",
+      "Temporal\\SampleUtils\\": "util-src"
+    }
+  }
+}
