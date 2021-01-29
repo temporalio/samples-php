@@ -21,27 +21,22 @@ class UpdatableTimer
 
     public function sleepUntil(int $wakeUpTime)
     {
-        // todo: make it easier for user
-        return Workflow::async(
-            function () use ($wakeUpTime) {
-                $time = Carbon::createFromTimestamp($wakeUpTime);
-                $this->log("sleepUntil: %s", (string)$time);
+        $time = Carbon::createFromTimestamp($wakeUpTime);
+        $this->log("sleepUntil: %s", (string)$time);
 
-                $this->wakeUpTime = $wakeUpTime;
+        $this->wakeUpTime = $wakeUpTime;
 
-                while (true) {
-                    $this->wakeUpTimeUpdated = false;
-                    $sleepInterval = $this->wakeUpTime - Workflow::now()->getTimestamp();
-                    $this->log('going to sleep for %s seconds', $sleepInterval);
+        while (true) {
+            $this->wakeUpTimeUpdated = false;
+            $sleepInterval = $this->wakeUpTime - Workflow::now()->getTimestamp();
+            $this->log('going to sleep for %s seconds', $sleepInterval);
 
-                    if (!yield Workflow::awaitWithTimeout($sleepInterval, fn() => $this->wakeUpTimeUpdated)) {
-                        break;
-                    }
-                }
-
-                $this->log('sleep completed');
+            if (!yield Workflow::awaitWithTimeout($sleepInterval, fn() => $this->wakeUpTimeUpdated)) {
+                break;
             }
-        );
+        }
+
+        $this->log('sleep completed');
     }
 
     public function updateWakeUpTime(int $wakeUpTime): void
