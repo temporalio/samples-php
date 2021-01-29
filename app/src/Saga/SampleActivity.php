@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\Saga;
 
-class ActivityOperation implements ActivityOperationInterface
+class SampleActivity implements ActivityOperationInterface
 {
     public function execute(int $amount)
     {

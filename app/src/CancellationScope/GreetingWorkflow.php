@@ -43,7 +43,7 @@ class GreetingWorkflow implements GreetingWorkflowInterface
         $this->greetingActivity = Workflow::newActivityStub(
             GreetingActivityInterface::class,
             ActivityOptions::new()
-                ->withHeartbeatTimeout(2)
+                ->withHeartbeatTimeout(6)
                 ->withScheduleToCloseTimeout(CarbonInterval::seconds(100))
                 ->withCancellationType(ActivityCancellationType::WAIT_CANCELLATION_COMPLETED)
         );
@@ -52,22 +52,17 @@ class GreetingWorkflow implements GreetingWorkflowInterface
     public function greet(string $name)
     {
         $results = [];
-        $scheduled = new Deferred();
 
         $scope = Workflow::async(
-            function () use ($name, &$results, $scheduled) {
+            function () use ($name, &$results) {
                 foreach ($this->messages as $i => $msg) {
                     $results[] = $this->greetingActivity->composeGreeting($msg, $name);
                 }
-
-                $scheduled->resolve();
             }
         );
 
-        // todo: replace with await
-
-        // triggered when all the activities are scheduled
-        yield $scheduled;
+        // wait for all requests being scheduled
+        yield Workflow::await(fn() => count($results) === count($this->messages));
 
         // Wait for at least one activity to complete
         yield Promise::any($results);
@@ -77,7 +72,6 @@ class GreetingWorkflow implements GreetingWorkflowInterface
 
         $values = [];
 
-        // todo: check with maxim wrapping of cancellation and WTF there is timeout exception
         // Wait for all activities to complete ignoring cancellations
         foreach ($results as $promise) {
             try {

@@ -43,7 +43,7 @@ class GreetingActivity implements GreetingActivityInterface
                 );
                 sleep($random);
 
-                $this->log("Activity for %s finished cancellation", $greeting);
+                $this->log("Activity for %s finished with cancellation", $greeting);
 
                 throw $e;
             }

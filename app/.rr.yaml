@@ -13,4 +13,4 @@ logs:
   level: debug
   channels:
     temporal:
-      level: info
+      level: fatal
