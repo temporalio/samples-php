@@ -22,7 +22,7 @@ class CompensateChildWorkflow implements CompensateChildWorkflowOperation
     public function __construct()
     {
         $this->activity = Workflow::newActivityStub(
-            ActivityOperationInterface::class,
+            SampleActivityInterface::class,
             ActivityOptions::new()
                 ->withScheduleToCloseTimeout(CarbonInterval::seconds(2))
         );

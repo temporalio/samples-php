@@ -14,7 +14,7 @@ namespace Temporal\Samples\Saga;
 use Temporal\Activity\ActivityInterface;
 
 #[ActivityInterface(prefix: "Saga.")]
-interface ActivityOperationInterface
+interface SampleActivityInterface
 {
     public function execute(int $amount);
 

@@ -18,13 +18,13 @@ use Temporal\Workflow;
 
 class ChildWorkflow implements ChildWorkflowInterface
 {
-    /** @var ActivityProxy|ActivityOperationInterface */
+    /** @var ActivityProxy|SampleActivityInterface */
     private $activity;
 
     public function __construct()
     {
         $this->activity = Workflow::newActivityStub(
-            ActivityOperationInterface::class,
+            SampleActivityInterface::class,
             ActivityOptions::new()
                 ->withScheduleToCloseTimeout(CarbonInterval::seconds(2))
         );
