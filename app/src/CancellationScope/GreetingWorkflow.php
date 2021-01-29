@@ -61,9 +61,6 @@ class GreetingWorkflow implements GreetingWorkflowInterface
             }
         );
 
-        // wait for all requests being scheduled
-        yield Workflow::await(fn() => count($results) === count($this->messages));
-
         // Wait for at least one activity to complete
         yield Promise::any($results);
 
