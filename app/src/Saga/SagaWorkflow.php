@@ -56,7 +56,7 @@ class SagaWorkflow implements SagaWorkflowInterface
             // to log messages in workflow code.
             $saga->addCompensation(
                 function () {
-                    error_log("running custom compensation");
+                    file_put_contents('php://stderr', "running custom compensation");
                 }
             );
 

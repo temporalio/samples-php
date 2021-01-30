@@ -29,6 +29,6 @@ class GreetingActivity implements GreetingActivityInterface
     private function log(string $message, ...$arg)
     {
         // by default all error logs are forwarded to the application server log and docker log
-        error_log(sprintf($message, ...$arg));
+        file_put_contents('php://stderr', sprintf($message, ...$arg));
     }
 }
