@@ -35,20 +35,27 @@ class PeriodicWorkflow implements PeriodicWorkflowInterface
         );
     }
 
-    public function greetPeriodically(string $name)
+    public function greetPeriodically(string $name, int $count = 0)
     {
         // Loop the predefined number of times then continue this workflow as new.
         // This is needed to periodically truncate the history size.
         for ($i = 0; $i < self::CONTINUE_AS_NEW_FREQUENCY; $i++) {
+            // counter passed between workflow runs
+            $count++;
+
             $delayMillis = random_int(0, 10000);
             yield $this->greetingActivity->greet(
                 sprintf('Hello %s! Sleeping for %s milliseconds.', $name, $delayMillis)
             );
 
+            if (!Workflow::isReplaying()) {
+                file_put_contents('php://stderr', sprintf('Count so far %s', $count));
+            }
+
             yield Workflow::timer(CarbonInterval::milliseconds($delayMillis));
         }
 
         // Current workflow run stops executing after this call.
-        return Workflow::newContinueAsNewStub(self::class)->greetPeriodically($name);
+        return Workflow::newContinueAsNewStub(self::class)->greetPeriodically($name, $count);
     }
 }
