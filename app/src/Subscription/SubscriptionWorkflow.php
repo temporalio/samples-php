@@ -24,7 +24,7 @@ class SubscriptionWorkflow implements SubscriptionWorkflowInterface
     public function __construct()
     {
         // Lower period duration to observe workflow behaviour
-        $this->chargePeriod = CarbonInterval::seconds(30);
+        $this->chargePeriod = CarbonInterval::days(30);
 
         $this->account = Workflow::newActivityStub(
             AccountActivityInterface::class,
@@ -52,8 +52,12 @@ class SubscriptionWorkflow implements SubscriptionWorkflowInterface
                 yield $this->account->sendMonthlyChargeEmail($userID);
             }
         } catch (CanceledFailure $e) {
-            yield $this->account->processSubscriptionCancellation($userID);
-            yield $this->account->sendSorryToSeeYouGoEmail($userID);
+            yield Workflow::asyncDetached(
+                function () use ($userID) {
+                    yield $this->account->processSubscriptionCancellation($userID);
+                    yield $this->account->sendSorryToSeeYouGoEmail($userID);
+                }
+            );
         }
     }
 }
