@@ -10,6 +10,7 @@ PHP dependencies and start local temporal server.
 Make sure to install PHP version 7.4 and higher. 
 
 **GRPC:**
+
 A GRPC extension is required to communicate with Temporal server.
 
 *Linux:*
@@ -21,6 +22,7 @@ You can download php_grpc.dll from [PECL website](https://pecl.php.net/package/g
 > Install `protobuf` extension for higher performance. 
 
 **Packages:**
+
 Install all required composer packages:
 
 ```bash
@@ -29,6 +31,7 @@ $ composer install
 ```
 
 **RoadRunner:**
+
 Temporal PHP SDK requires RoadRunner 2.0 application server and supervisor to run activities and workflows in scalable way.
 You can install RoadRunner by downloading its binary from [release page](https://github.com/spiral/roadrunner/releases/tag/v1.9.2).
 
