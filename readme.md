@@ -71,5 +71,5 @@ To run sample workflow:
 $ php ./app/app.php simple-activity
 ```
 
-## Docket Installation
+## Docker Installation
 Work in progress.
