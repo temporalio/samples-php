@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Temporal\Client\WorkflowOptions;
+use Temporal\Common\IdReusePolicy;
 use Temporal\Exception\Client\WorkflowExecutionAlreadyStartedException;
 use Temporal\SampleUtils\Command;
 
@@ -36,6 +37,7 @@ class SubscribeCommand extends Command
             SubscriptionWorkflowInterface::class,
             WorkflowOptions::new()
                 ->withWorkflowId('subscription:' . $userID)
+                ->withWorkflowIdReusePolicy(IdReusePolicy::POLICY_ALLOW_DUPLICATE)
         );
 
         $output->writeln("Start <comment>SubscriptionWorkflow</comment>... ");

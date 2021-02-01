@@ -43,7 +43,7 @@ class PeriodicWorkflow implements PeriodicWorkflowInterface
             // counter passed between workflow runs
             $count++;
 
-            $delayMillis = random_int(0, 10000);
+            $delayMillis = yield Workflow::sideEffect(fn() => random_int(10, 10000));
             yield $this->greetingActivity->greet(
                 sprintf('Hello %s! Sleeping for %s milliseconds.', $name, $delayMillis)
             );
