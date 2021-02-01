@@ -11,12 +11,19 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\BookingSaga;
 
+use Psr\Log\LoggerInterface;
 use Temporal\Common\Uuid;
-use Temporal\Exception\Failure\ActivityFailure;
-use Temporal\Exception\Failure\ApplicationFailure;
+use Temporal\SampleUtils\Logger;
 
 class TripBookingActivity implements TripBookingActivitiesInterface
 {
+    private LoggerInterface $logger;
+
+    public function __construct()
+    {
+        $this->logger = new Logger();
+    }
+
     public function reserveCar(string $name): string
     {
         $this->log('reserve car for "%s"', $name);
@@ -69,6 +76,6 @@ class TripBookingActivity implements TripBookingActivitiesInterface
     private function log(string $message, ...$arg)
     {
         // by default all error logs are forwarded to the application server log and docker log
-        file_put_contents('php://stderr', sprintf($message, ...$arg));
+        $this->logger->debug(sprintf($message, ...$arg));
     }
 }

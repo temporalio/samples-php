@@ -11,7 +11,7 @@ namespace Temporal\Samples\FileProcessing;
 
 use Temporal\Activity\ActivityInterface;
 
-#[ActivityInterface]
+#[ActivityInterface(prefix:"FileProcessing.")]
 interface StoreActivitiesInterface
 {
     /**

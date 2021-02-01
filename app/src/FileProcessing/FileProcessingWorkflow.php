@@ -27,31 +27,20 @@ class FileProcessingWorkflow implements FileProcessingWorkflowInterface
         $this->defaultStoreActivities = Workflow::newActivityStub(
             StoreActivitiesInterface::class,
             ActivityOptions::new()
-                ->withScheduleToCloseTimeout(CarbonInterval::minute(1))
+                ->withScheduleToCloseTimeout(CarbonInterval::minute(5))
                 ->withTaskQueue(self::DEFAULT_TASK_QUEUE)
         );
     }
 
     public function processFile(string $sourceURL, string $destinationURL)
     {
-        $retryOptions = RetryOptions::new()->withInitialInterval(CarbonInterval::second());
-
-        yield Workflow::retry(
-            $retryOptions,
-            CarbonInterval::seconds(10),
-            fn() => yield $this->runFileProcess($sourceURL, $destinationURL)
-        );
-    }
-
-    private function runFileProcess(string $source, string $destination)
-    {
         /** @var TaskQueueFilenamePair $downloaded */
-        $downloaded = yield $this->defaultStoreActivities->download($source);
+        $downloaded = yield $this->defaultStoreActivities->download($sourceURL);
 
         $hostSpecificStore = Workflow::newActivityStub(
             StoreActivitiesInterface::class,
             ActivityOptions::new()
-                ->withScheduleToCloseTimeout(CarbonInterval::minute(1))
+                ->withScheduleToCloseTimeout(CarbonInterval::minute(5))
                 ->withTaskQueue($downloaded->hostTaskQueue)
         );
 
@@ -60,6 +49,8 @@ class FileProcessingWorkflow implements FileProcessingWorkflowInterface
         $processed = yield $hostSpecificStore->process($downloaded->filename);
 
         // Call upload activity to upload the zipped file.
-        yield $hostSpecificStore->upload($processed, $destination);
+        yield $hostSpecificStore->upload($processed, $destinationURL);
+
+        return 'OK';
     }
 }

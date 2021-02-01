@@ -12,12 +12,21 @@ declare(strict_types=1);
 namespace Temporal\Samples\UpdatableTimer;
 
 use Carbon\Carbon;
+use Psr\Log\LoggerInterface;
+use Temporal\SampleUtils\Logger;
 use Temporal\Workflow;
 
 class UpdatableTimer
 {
     private int $wakeUpTime;
     private bool $wakeUpTimeUpdated;
+
+    private LoggerInterface $logger;
+
+    public function __construct()
+    {
+        $this->logger = new Logger();
+    }
 
     public function sleepUntil(int $wakeUpTime)
     {
@@ -57,6 +66,6 @@ class UpdatableTimer
     private function log(string $message, ...$arg)
     {
         // by default all error logs are forwarded to the application server log and docker log
-        file_put_contents('php://stderr', sprintf($message, ...$arg));
+        $this->logger->debug(sprintf($message, ...$arg));
     }
 }

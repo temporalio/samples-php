@@ -11,8 +11,18 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\MoneyTransfer;
 
+use Psr\Log\LoggerInterface;
+use Temporal\SampleUtils\Logger;
+
 class AccountActivity implements AccountInterface
 {
+    private LoggerInterface $logger;
+
+    public function __construct()
+    {
+        $this->logger = new Logger();
+    }
+
     public function deposit(string $accountId, string $referenceId, int $amountCents): void
     {
         $this->log(
@@ -39,7 +49,6 @@ class AccountActivity implements AccountInterface
      */
     private function log(string $message, ...$arg)
     {
-        // by default all error logs are forwarded to the application server log and docker log
-        file_put_contents('php://stderr', sprintf($message, ...$arg));
+        $this->logger->debug(sprintf($message, ...$arg));
     }
 }

@@ -11,11 +11,20 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\CancellationScope;
 
+use Psr\Log\LoggerInterface;
 use Temporal\Activity;
 use Temporal\Exception\Client\ActivityCompletionException;
+use Temporal\SampleUtils\Logger;
 
 class GreetingActivity implements GreetingActivityInterface
 {
+    private LoggerInterface $logger;
+
+    public function __construct()
+    {
+        $this->logger = new Logger();
+    }
+
     public function composeGreeting(string $greeting, string $name): string
     {
         $random = random_int(2, 30);
@@ -61,6 +70,6 @@ class GreetingActivity implements GreetingActivityInterface
     private function log(string $message, ...$arg)
     {
         // by default all error logs are forwarded to the application server log and docker log
-        file_put_contents('php://stderr', sprintf($message, ...$arg));
+        $this->logger->debug(sprintf($message, ...$arg));
     }
 }

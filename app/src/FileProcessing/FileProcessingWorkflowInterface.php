@@ -15,7 +15,7 @@ use Temporal\Workflow\WorkflowMethod;
 #[WorkflowInterface]
 interface FileProcessingWorkflowInterface
 {
-    #[WorkflowMethod]
+    #[WorkflowMethod("FileProcessing")]
     public function processFile(
         string $sourceURL,
         string $destinationURL

@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace Temporal\Samples\Periodic;
 
 use Carbon\CarbonInterval;
+use Psr\Log\LoggerInterface;
 use Temporal\Activity\ActivityOptions;
+use Temporal\SampleUtils\Logger;
 use Temporal\Workflow;
 
 class PeriodicWorkflow implements PeriodicWorkflowInterface
@@ -24,6 +26,8 @@ class PeriodicWorkflow implements PeriodicWorkflowInterface
      */
     private const CONTINUE_AS_NEW_FREQUENCY = 10;
 
+    private LoggerInterface $logger;
+
     private $greetingActivity;
 
     public function __construct()
@@ -33,6 +37,8 @@ class PeriodicWorkflow implements PeriodicWorkflowInterface
             ActivityOptions::new()
                 ->withScheduleToCloseTimeout(CarbonInterval::seconds(10))
         );
+
+        $this->logger = new Logger();
     }
 
     public function greetPeriodically(string $name, int $count = 0)
@@ -49,7 +55,7 @@ class PeriodicWorkflow implements PeriodicWorkflowInterface
             );
 
             if (!Workflow::isReplaying()) {
-                file_put_contents('php://stderr', sprintf('Count so far %s', $count));
+                $this->logger->info(sprintf('Count so far %s', $count));
             }
 
             yield Workflow::timer(CarbonInterval::milliseconds($delayMillis));

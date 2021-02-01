@@ -9,13 +9,18 @@
 
 namespace Temporal\Samples\FileProcessing;
 
-class StoreActivities implements StoreActivitiesInterface
-{
-    private string $taskQueue;
+use Psr\Log\LoggerInterface;
+use Temporal\SampleUtils\Logger;
 
-    public function __construct(string $taskQueue)
+class StoreActivity implements StoreActivitiesInterface
+{
+    private static string $taskQueue;
+    private LoggerInterface $logger;
+
+    public function __construct(string $taskQueue = FileProcessingWorkflow::DEFAULT_TASK_QUEUE)
     {
-        $this->taskQueue = $taskQueue;
+        self::$taskQueue = $taskQueue;
+        $this->logger = new Logger();
     }
 
     public function upload(string $localFileName, string $url): void
@@ -44,6 +49,8 @@ class StoreActivities implements StoreActivitiesInterface
     public function download(string $url): TaskQueueFilenamePair
     {
         try {
+            $this->log('download activity: downloading %s', $url);
+
             $data = file_get_contents($url);
             $file = tempnam(sys_get_temp_dir(), 'demo');
 
@@ -51,7 +58,7 @@ class StoreActivities implements StoreActivitiesInterface
 
             $this->log('download activity: downloaded from %s to %s', $url, realpath($file));
 
-            return new TaskQueueFilenamePair($this->taskQueue, $file);
+            return new TaskQueueFilenamePair(self::$taskQueue, $file);
         } catch (\Throwable $e) {
             throw $e;
         }
@@ -70,6 +77,6 @@ class StoreActivities implements StoreActivitiesInterface
     private function log(string $message, ...$arg)
     {
         // by default all error logs are forwarded to the application server log and docker log
-        file_put_contents('php://stderr', sprintf($message, ...$arg));
+        $this->logger->debug(sprintf($message, ...$arg));
     }
 }

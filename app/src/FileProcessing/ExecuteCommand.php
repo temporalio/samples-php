@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\FileProcessing;
 
 use Carbon\CarbonInterval;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Temporal\Client\WorkflowOptions;
@@ -20,19 +21,23 @@ use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command
 {
-    protected const NAME = 'exception';
-    protected const DESCRIPTION = 'Execute FileProcessing workflow';
+    protected const NAME = 'process-file';
+    protected const DESCRIPTION = 'Execute FileProcessing workflow with task queue routing';
+
+    protected const ARGUMENTS = [
+        ['url', InputArgument::REQUIRED, 'Download URL']
+    ];
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             FileProcessingWorkflowInterface::class,
-            WorkflowOptions::new()->withWorkflowExecutionTimeout(CarbonInterval::minute())
+            WorkflowOptions::new()->withWorkflowExecutionTimeout(CarbonInterval::minute(10))
         );
 
         $output->writeln("Starting <comment>FileProcessing</comment>... ");
 
-        $run = $this->workflowClient->start($workflow, 'Antony');
+        $run = $this->workflowClient->start($workflow, $input->getArgument('url'), 'targetURL');
 
         $output->writeln(
             sprintf(

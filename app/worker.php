@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 use Temporal\SampleUtils\DeclarationLocator;
 use Temporal\WorkerFactory;
+use Temporal\Samples\FileProcessing;
 
 ini_set('display_errors', 'stderr');
 include "vendor/autoload.php";
@@ -33,7 +34,13 @@ foreach ($declarations->getActivityTypes() as $activityType) {
     $worker->registerActivityImplementations(new $activityType());
 }
 
-// todo: local task queue (ОЧЕНЬ ВНЯТНЫЙ КОМЕНТ)
+// We can use task queue for more complex task routing, for example our FileProcessing
+// activity will receive unique, host specific, TaskQueue which can be used to process
+// files locally.
+$hostTaskQueue = gethostname();
 
-// todo: make better comment
+$factory->newWorker($hostTaskQueue)
+    ->registerActivityImplementations(new FileProcessing\StoreActivity($hostTaskQueue));
+
+// start primary loop
 $factory->run();
