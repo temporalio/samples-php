@@ -21,7 +21,7 @@ use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command
 {
-    protected const NAME = 'updatable-timer';
+    protected const NAME = 'updatable-timer:start';
     protected const DESCRIPTION = 'Execute UpdatableTimer\DynamicSleepWorkflow';
 
     public function execute(InputInterface $input, OutputInterface $output)

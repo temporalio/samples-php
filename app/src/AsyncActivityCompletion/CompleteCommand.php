@@ -11,11 +11,9 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\AsyncActivityCompletion;
 
-use Carbon\CarbonInterval;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Temporal\Client\WorkflowOptions;
 use Temporal\SampleUtils\Command;
 
 class CompleteCommand extends Command

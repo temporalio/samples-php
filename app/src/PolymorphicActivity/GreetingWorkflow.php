@@ -15,6 +15,13 @@ use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates activities that extend a common interface. The core idea is that an activity
+ * interface annotated with {@literal @}{@link ActivityInterface} enumerates all the methods it
+ * inherited and declared and generates an activity for each of them. To avoid collisions in
+ * activity names (which are by default just method names) the {@link
+ * ActivityInterface#namePrefix()} or {@link ActivityMethod#name()} parameters should be used.
+ */
 class GreetingWorkflow implements GreetingWorkflowInterface
 {
     /** @var GreetingWorkflowInterface[] */

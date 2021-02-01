@@ -31,6 +31,8 @@ class ExecuteCommand extends Command
 
         $output->writeln("Starting <comment>GreetingWorkflow</comment>... ");
 
+        // Start a workflow execution. Usually this is done from another program.
+        // Uses task queue from the GreetingWorkflow @WorkflowMethod annotation.
         $run = $this->workflowClient->start($workflow, 'Antony');
 
         $output->writeln(
@@ -41,6 +43,7 @@ class ExecuteCommand extends Command
             )
         );
 
+        // getResult waits for workflow to complete
         $output->writeln(sprintf("Result:\n<info>%s</info>", $run->getResult()));
 
         return self::SUCCESS;

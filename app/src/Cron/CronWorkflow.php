@@ -15,6 +15,12 @@ use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates a "cron" workflow that executes activity periodically. Internally each iteration of
+ * the workflow creates a new run using "continue as new" feature.
+ *
+ * <p>Requires a local instance of Temporal server to be running.
+ */
 class CronWorkflow implements CronWorkflowInterface
 {
     private $greetingActivity;

@@ -21,6 +21,11 @@ class GreetingWorkflow implements GreetingWorkflowInterface
 
     public function __construct()
     {
+        /**
+         * Activity stub implements activity interface and proxies calls to it to Temporal activity
+         * invocations. Because activities are reentrant, only a single stub can be used for multiple
+         * activity invocations.
+         */
         $this->greetingActivity = Workflow::newActivityStub(
             GreetingActivityInterface::class,
             ActivityOptions::new()->withScheduleToCloseTimeout(CarbonInterval::seconds(2))
@@ -29,6 +34,7 @@ class GreetingWorkflow implements GreetingWorkflowInterface
 
     public function greet(string $name): \Generator
     {
+        // This is a blocking call that returns only after the activity has completed.
         return yield $this->greetingActivity->composeGreeting('Hello', $name);
     }
 }

@@ -25,6 +25,13 @@ class ExecuteCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        // Sets the cron schedule using the WorkflowOptions.
+        // The cron format is parsed by "https://github.com/robfig/cron" library.
+        // Besides the standard "* * * * *" format it supports @every and other extensions.
+        // Note that unit testing framework doesn't support the extensions.
+        // Use single fixed ID to ensure that there is at most one instance running. To run multiple
+        // instances set different IDs.
+
         $workflow = $this->workflowClient->newWorkflowStub(
             CronWorkflowInterface::class,
             WorkflowOptions::new()

@@ -15,6 +15,10 @@ use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates async invocation of an entire sequence of activities. Requires a local instance of
+ * Temporal server to be running.
+ */
 class AsyncGreetingWorkflow implements AsyncGreetingWorkflowInterface
 {
     private $greetingActivity;
@@ -30,6 +34,9 @@ class AsyncGreetingWorkflow implements AsyncGreetingWorkflowInterface
 
     public function greet(string $name): \Generator
     {
+        // Workflow::async runs it's activities and child workflows in a separate coroutine. Use keyword yield to merge
+        // it back to parent process.
+
         $first = Workflow::async(
             function () use ($name) {
                 $hello = yield $this->greetingActivity->composeGreeting('Hello', $name);

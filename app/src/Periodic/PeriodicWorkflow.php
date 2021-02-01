@@ -17,6 +17,13 @@ use Temporal\Activity\ActivityOptions;
 use Temporal\SampleUtils\Logger;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates a workflow that executes an activity periodically with random delay. Note that the
+ * looping approach is useful when the delay between invocations is dynamically calculated. Use
+ * existing cron feature demonstrated by {@link Cron} sample for a fixed periodic execution.
+ *
+ * <p>Requires a local instance of Temporal server to be running.
+ */
 class PeriodicWorkflow implements PeriodicWorkflowInterface
 {
     /**
@@ -49,6 +56,7 @@ class PeriodicWorkflow implements PeriodicWorkflowInterface
             // counter passed between workflow runs
             $count++;
 
+            // To ensure randomization determinism
             $delayMillis = yield Workflow::sideEffect(fn() => random_int(10, 10000));
             yield $this->greetingActivity->greet(
                 sprintf('Hello %s! Sleeping for %s milliseconds.', $name, $delayMillis)

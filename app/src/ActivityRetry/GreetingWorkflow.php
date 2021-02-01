@@ -17,12 +17,19 @@ use Temporal\Common\RetryOptions;
 use Temporal\Exception\IllegalStateException;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates activity retries using an exponential backoff algorithm. Requires a local instance
+ * of the Temporal service to be running.
+ */
 class GreetingWorkflow implements GreetingWorkflowInterface
 {
     private $greetingActivity;
 
     public function __construct()
     {
+        /**
+         * To enable activity retry set {@link RetryOptions} on {@link ActivityOptions}.
+         */
         $this->greetingActivity = Workflow::newActivityStub(
             GreetingActivityInterface::class,
             ActivityOptions::new()
@@ -38,6 +45,7 @@ class GreetingWorkflow implements GreetingWorkflowInterface
 
     public function greet(string $name): \Generator
     {
+        // This is a blocking call that returns only after activity is completed (including retries).
         return yield $this->greetingActivity->composeGreeting('Hello', $name);
     }
 }

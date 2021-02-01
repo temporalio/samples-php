@@ -13,14 +13,21 @@ namespace Temporal\Samples\Child;
 
 use Temporal\Workflow;
 
+/**
+ * Demonstrates a child workflow. Requires a local instance of the Temporal server to be running.
+ */
 class ParentWorkflow implements ParentWorkflowInterface
 {
     public function greet(string $name)
     {
         $child = Workflow::newChildWorkflowStub(ChildWorkflow::class);
 
-        $childGreet = yield $child->greet($name);
+        // This is a non blocking call that returns immediately.
+        // Use yield $child->greet(name) to call synchronously.
+        $childGreet = $child->greet($name);
 
-        return 'Hello ' . $name . ' from parent; ' . $childGreet;
+        // Do something else here.
+
+        return 'Hello ' . $name . ' from parent; ' . yield $childGreet;
     }
 }

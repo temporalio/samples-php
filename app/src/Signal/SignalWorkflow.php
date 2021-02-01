@@ -13,6 +13,10 @@ namespace Temporal\Samples\Signal;
 
 use Temporal\Workflow;
 
+/**
+ * Demonstrates asynchronous signalling of a workflow. Requires a local instance of Temporal server
+ * to be running.
+ */
 class SignalWorkflow implements SignalWorkflowInterface
 {
     private array $input = [];

@@ -18,7 +18,7 @@ use Temporal\SampleUtils\Command;
 class ExecuteCommand extends Command
 {
     protected const NAME = 'money-transfer';
-    protected const DESCRIPTION = 'Start MoneyTransferWorkflow';
+    protected const DESCRIPTION = 'Execute MoneyTransferWorkflow';
 
     public function execute(InputInterface $input, OutputInterface $output)
     {

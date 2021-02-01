@@ -31,6 +31,8 @@ class AccountActivity implements AccountInterface
             $amountCents,
             $referenceId
         );
+
+        // throw new \RuntimeException("simulated"); // Uncomment to simulate failure
     }
 
     public function withdraw(string $accountId, string $referenceId, int $amountCents): void

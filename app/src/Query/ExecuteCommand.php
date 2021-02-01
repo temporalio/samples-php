@@ -20,7 +20,7 @@ use Temporal\SampleUtils\Command;
 class ExecuteCommand extends Command
 {
     protected const NAME = 'query';
-    protected const DESCRIPTION = 'Execute Query\QueryWorkflow';
+    protected const DESCRIPTION = 'Execute Query\QueryWorkflow with additional query and timer';
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -40,7 +40,6 @@ class ExecuteCommand extends Command
                 $run->getExecution()->getRunID(),
             )
         );
-
 
         $output->writeln("Querying <comment>QueryWorkflow->queryGreeting</comment>... ");
         $output->writeln(sprintf("Query result:\n<info>%s</info>", $workflow->queryGreeting()));

@@ -19,7 +19,7 @@ use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command
 {
-    protected const NAME = 'periodic';
+    protected const NAME = 'periodic:start';
     protected const DESCRIPTION = 'Start Periodic\PeriodicWorkflow';
 
     public function execute(InputInterface $input, OutputInterface $output)

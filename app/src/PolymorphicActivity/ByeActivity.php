@@ -13,6 +13,10 @@ namespace Temporal\Samples\PolymorphicActivity;
 
 use Temporal\Activity;
 
+/**
+ * Activity definition interface. Must redefine the name of the composeGreeting activity to avoid
+ * collision.
+ */
 #[Activity\ActivityInterface(prefix: "Bye.")]
 class ByeActivity implements GreetingActivityInterface
 {

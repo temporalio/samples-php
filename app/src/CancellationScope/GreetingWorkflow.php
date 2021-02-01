@@ -26,7 +26,7 @@ use Temporal\Workflow;
  *
  * <p>The cancellation is done through {@link Workflow::async()->cancel()}.
  *
- * <p>Note that ActivityOptions.cancellationType is set to WAIT_CANCELLATION_COMPLETED. Otherwise
+ * <p>Note that ActivityOptions->cancellationType is set to WAIT_CANCELLATION_COMPLETED. Otherwise
  * the activity completion promise is not going to wait for the activity to finish cancellation.
  *
  * Experiment with number of activity workers to observe different cancellation behaviour.

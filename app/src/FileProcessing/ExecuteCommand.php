@@ -22,7 +22,7 @@ use Temporal\SampleUtils\Command;
 class ExecuteCommand extends Command
 {
     protected const NAME = 'process-file';
-    protected const DESCRIPTION = 'Execute FileProcessing workflow with task queue routing';
+    protected const DESCRIPTION = 'Execute FileProcessing\FileProcessingWorkflow with local task queue routing';
 
     protected const ARGUMENTS = [
         ['url', InputArgument::REQUIRED, 'Download URL']
@@ -37,17 +37,20 @@ class ExecuteCommand extends Command
 
         $output->writeln("Starting <comment>FileProcessing</comment>... ");
 
-        $run = $this->workflowClient->start($workflow, $input->getArgument('url'), 'targetURL');
+        // This is going to block until the workflow completes.
+        // This is rarely used in production. Use the commented code below for async start version.
+        $result = $workflow->processFile($input->getArgument('url'), 'targetURL');
+        $output->writeln(sprintf("Result:\n<info>%s</info>", print_r($result, true)));
 
-        $output->writeln(
-            sprintf(
-                'Started: WorkflowID=<fg=magenta>%s</fg=magenta>, RunID=<fg=magenta>%s</fg=magenta>',
-                $run->getExecution()->getID(),
-                $run->getExecution()->getRunID(),
-            )
-        );
-
-        $output->writeln(sprintf("Result:\n<info>%s</info>", print_r($run->getResult(), true)));
+        //$run = $this->workflowClient->start($workflow, $input->getArgument('url'), 'targetURL');
+        //$output->writeln(
+        //    sprintf(
+        //        'Started: WorkflowID=<fg=magenta>%s</fg=magenta>, RunID=<fg=magenta>%s</fg=magenta>',
+        //        $run->getExecution()->getID(),
+        //        $run->getExecution()->getRunID(),
+        //    )
+        //);
+        //$output->writeln(sprintf("Result:\n<info>%s</info>", print_r($run->getResult(), true)));
 
         return self::SUCCESS;
     }

@@ -20,7 +20,7 @@ use Temporal\SampleUtils\Command;
 class ExecuteCommand extends Command
 {
     protected const NAME = 'money-batch';
-    protected const DESCRIPTION = 'Execute MoneyBatch with multiple signals and queries';
+    protected const DESCRIPTION = 'Execute MoneyBatch\MoneyBatchWorkflow with multiple signals and queries';
 
     public function execute(InputInterface $input, OutputInterface $output)
     {

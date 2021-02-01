@@ -16,6 +16,9 @@ use Temporal\Activity\ActivityOptions;
 use Temporal\Exception\Failure\CanceledFailure;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates long running process to represent user subscription process.
+ */
 class SubscriptionWorkflow implements SubscriptionWorkflowInterface
 {
     private $account;

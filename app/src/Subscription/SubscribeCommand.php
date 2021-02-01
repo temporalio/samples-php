@@ -22,8 +22,8 @@ use Temporal\SampleUtils\Command;
 
 class SubscribeCommand extends Command
 {
-    protected const NAME = 'subscribe';
-    protected const DESCRIPTION = 'Execute SubscriptionWorkflow with custom user ID';
+    protected const NAME = 'subscribe:create';
+    protected const DESCRIPTION = 'Execute Subscription\SubscriptionWorkflow with custom user ID';
 
     protected const ARGUMENTS = [
         ['userID', InputArgument::REQUIRED, 'Unique user ID']

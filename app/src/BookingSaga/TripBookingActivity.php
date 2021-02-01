@@ -34,7 +34,7 @@ class TripBookingActivity implements TripBookingActivitiesInterface
     public function bookFlight(string $name): string
     {
         // uncommenting this line will trigger the saga compensation
-        //throw new ApplicationFailure('booking failed', 'BookingFailure', true);
+        // throw new ApplicationFailure('booking failed', 'BookingFailure', true);
 
         $this->log('book flight for "%s"', $name);
 

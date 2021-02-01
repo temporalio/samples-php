@@ -27,6 +27,7 @@ class TripBookingWorkflow implements TripBookingWorkflowInterface
             TripBookingActivitiesInterface::class,
             ActivityOptions::new()
                 ->withStartToCloseTimeout(CarbonInterval::hour(1))
+                // disable retries for example to run faster
                 ->withRetryOptions(RetryOptions::new()->withMaximumAttempts(1))
         );
     }

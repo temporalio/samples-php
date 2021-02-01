@@ -22,7 +22,7 @@ use Temporal\SampleUtils\Command;
 class CancelCommand extends Command
 {
     protected const NAME = 'subscribe:cancel';
-    protected const DESCRIPTION = 'Cancel subscription for user ID';
+    protected const DESCRIPTION = 'Cancel Subscription\SubscriptionWorkflow for user ID';
 
     protected const ARGUMENTS = [
         ['userID', InputArgument::REQUIRED, 'Unique user ID']

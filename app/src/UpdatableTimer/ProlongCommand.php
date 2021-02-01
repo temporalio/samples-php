@@ -18,7 +18,7 @@ use Temporal\SampleUtils\Command;
 class ProlongCommand extends Command
 {
     protected const NAME = 'updatable-timer:prolong';
-    protected const DESCRIPTION = 'Execute UpdatableTimer\DynamicSleepWorkflow';
+    protected const DESCRIPTION = 'Prolong the duration of UpdatableTimer\DynamicSleepWorkflow';
 
     public function execute(InputInterface $input, OutputInterface $output)
     {

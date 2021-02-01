@@ -15,6 +15,7 @@ use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Workflow;
 
+/** Demonstrates query capability. Requires a local instance of Temporal server to be running. */
 class QueryWorkflow implements QueryWorkflowInterface
 {
     private string $message = '';

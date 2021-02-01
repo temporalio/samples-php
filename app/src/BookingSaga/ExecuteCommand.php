@@ -20,7 +20,7 @@ use Temporal\SampleUtils\Command;
 class ExecuteCommand extends Command
 {
     protected const NAME = 'booking-saga';
-    protected const DESCRIPTION = 'Execute TripBookingWorkflow';
+    protected const DESCRIPTION = 'Execute BookingSaga\TripBookingWorkflow';
 
     public function execute(InputInterface $input, OutputInterface $output)
     {

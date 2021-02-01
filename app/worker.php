@@ -22,15 +22,16 @@ $declarations = DeclarationLocator::create(__DIR__ . '/src/');
 // factory initiates and runs task queue specific activity and workflow workers
 $factory = WorkerFactory::create();
 
+// Worker that listens on a task queue and hosts both workflow and activity implementations.
 $worker = $factory->newWorker();
 
 foreach ($declarations->getWorkflowTypes() as $workflowType) {
-    // by class name
+    // Workflows are stateful. So you need a type to create instances.
     $worker->registerWorkflowTypes($workflowType);
 }
 
 foreach ($declarations->getActivityTypes() as $activityType) {
-    // by class name (resolved via associated activity factory)
+    // Activities are stateless and thread safe. So a shared instance is used.
     $worker->registerActivityImplementations(new $activityType());
 }
 

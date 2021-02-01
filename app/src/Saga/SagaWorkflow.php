@@ -15,6 +15,11 @@ use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Workflow;
 
+/**
+ * Demonstrates implementing saga transaction and compensation logic using Temporal.
+ *
+ * @see TripBookingWorkflow for another SAGA example.
+ */
 class SagaWorkflow implements SagaWorkflowInterface
 {
     private $activity;
