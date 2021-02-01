@@ -5,7 +5,7 @@ These samples demonstrate various capabilities of PHP Temporal client and server
 * [Temporal Service](https://github.com/temporalio/temporal)
 * [Temporal Java SDK](https://github.com/temporalio/sdk-java)
 * [Temporal Go SDK](https://github.com/temporalio/sdk-go)
-* [Temporal PHP SDK](https://github.com/temporalio/php-go)
+* [Temporal PHP SDK](https://github.com/temporalio/sdk-php)
 
 ## Setup
 
