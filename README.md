@@ -96,7 +96,7 @@ Each sample has specific requirements for running it.
 
 A number of samples dedicated to demonstrate basic capabilities of SDK:
 
-* **[SimplyActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: a single activity workflow
+* **[SimpleActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: a single activity workflow
 * **[ActivityRetry](https://github.com/temporalio/samples-php/blob/master/app/src/ActivityRetry)**: how to retry an activity
 * **[AsyncActivity](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncActivity)**: how to call activities asynchronously and wait for them using Promises
 * **[AsyncActivityCompletion](https://github.com/temporalio/samples-php/tree/master/app/src/AsyncActivityCompletion)**: an asynchronous activity implementation
