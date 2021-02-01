@@ -22,19 +22,16 @@ class ExecuteCommand extends Command
     protected const NAME = 'search-attributes';
     protected const DESCRIPTION = 'Execute SearchAttributes\GreetingWorkflow';
 
-    // todo: finish https://github.com/temporalio/samples-java/blob/master/src/main/java/io/temporal/samples/hello/HelloSearchAttributes.java
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // todo: does not work!
         $workflow = $this->workflowClient->newWorkflowStub(
             GreetingWorkflowInterface::class,
             WorkflowOptions::new()
                 ->withWorkflowExecutionTimeout(CarbonInterval::minute())
                 ->withSearchAttributes(
                     [
-                        'key' => 'value',
-                        'numeric' => 123,
-                        //'map' => ['key' => 'value']
+                        'CustomKeywordField' => 'value',
+                        'CustomIntField' => 123,
                     ]
                 )
         );

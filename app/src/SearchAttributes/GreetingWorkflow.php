@@ -32,9 +32,6 @@ class GreetingWorkflow implements GreetingWorkflowInterface
 
     public function getGreeting(string $name)
     {
-        return [
-            yield $this->greetingsActivity->composeGreeting('Hello', $name),
-            Workflow::getInfo()->searchAttributes
-        ];
+        return yield $this->greetingsActivity->composeGreeting('Hello', $name);
     }
 }
