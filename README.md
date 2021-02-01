@@ -139,7 +139,7 @@ $ php ./app/app.php periodic:stop
 
 ## Specialized Samples
 
-We created a number of more complex samples to demonstrate complicate decision making of workflows.
+We created a number of more complex samples to demonstrate various decision making of workflows.
 
 ### File Processing
 [FileProcessing](https://github.com/temporalio/samples-php/tree/master/app/src/FileProcessing)
