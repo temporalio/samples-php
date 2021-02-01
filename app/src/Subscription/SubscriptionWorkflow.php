@@ -22,13 +22,9 @@ use Temporal\Workflow;
 class SubscriptionWorkflow implements SubscriptionWorkflowInterface
 {
     private $account;
-    private \DateInterval $chargePeriod;
 
     public function __construct()
     {
-        // Lower period duration to observe workflow behaviour
-        $this->chargePeriod = CarbonInterval::days(30);
-
         $this->account = Workflow::newActivityStub(
             AccountActivityInterface::class,
             ActivityOptions::new()
@@ -43,7 +39,8 @@ class SubscriptionWorkflow implements SubscriptionWorkflowInterface
         try {
             $trialPeriod = true;
             while (true) {
-                yield Workflow::timer($this->chargePeriod);
+                // Lower period duration to observe workflow behaviour
+                yield Workflow::timer(CarbonInterval::days(30));
                 yield $this->account->chargeMonthlyFee($userID);
 
                 if ($trialPeriod) {
