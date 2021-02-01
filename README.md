@@ -1,4 +1,4 @@
-# Temporal PHP SDK Samples
+# PHP Temporal Samples
 This repository contains examples of PHP driven workflows, activities. Client interactions are available in a form of
 Symfony/Console commands.
 

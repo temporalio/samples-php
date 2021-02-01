@@ -7,42 +7,36 @@
     "content-hash": "987773fe8f0de5e94a5c575262d6b471",
     "packages": [
         {
-            "name": "composer/package-versions-deprecated",
-            "version": "dev-master",
+            "name": "composer/semver",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/composer/package-versions-deprecated.git",
-                "reference": "f921205948ab93bb19f86327c793a81edb62f236"
+                "url": "https://github.com/composer/semver.git",
+                "reference": "dd61cb4efbd0cff1700b217faf24ce596af4fc4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/f921205948ab93bb19f86327c793a81edb62f236",
-                "reference": "f921205948ab93bb19f86327c793a81edb62f236",
+                "url": "https://api.github.com/repos/composer/semver/zipball/dd61cb4efbd0cff1700b217faf24ce596af4fc4e",
+                "reference": "dd61cb4efbd0cff1700b217faf24ce596af4fc4e",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.1.0 || ^2.0",
-                "php": "^7 || ^8"
-            },
-            "replace": {
-                "ocramius/package-versions": "1.11.99"
+                "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "composer/composer": "^1.9.3 || ^2.0@dev",
-                "ext-zip": "^1.13",
-                "phpunit/phpunit": "^6.5 || ^7"
+                "phpstan/phpstan": "^0.12.54",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
             },
             "default-branch": true,
-            "type": "composer-plugin",
+            "type": "library",
             "extra": {
-                "class": "PackageVersions\\Installer",
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-main": "3.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "PackageVersions\\": "src/PackageVersions"
+                    "Composer\\Semver\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -51,18 +45,32 @@
             ],
             "authors": [
                 {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com"
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
                 },
                 {
                     "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be"
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
                 }
             ],
-            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "description": "Semver library that offers utilities, version constraint parsing and validation.",
+            "keywords": [
+                "semantic",
+                "semver",
+                "validation",
+                "versioning"
+            ],
             "support": {
-                "issues": "https://github.com/composer/package-versions-deprecated/issues",
-                "source": "https://github.com/composer/package-versions-deprecated/tree/master"
+                "irc": "irc://irc.freenode.org/composer",
+                "issues": "https://github.com/composer/semver/issues",
+                "source": "https://github.com/composer/semver/tree/main"
             },
             "funding": [
                 {
@@ -78,7 +86,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-27T20:11:05+00:00"
+            "time": "2020-12-10T07:55:43+00:00"
         },
         {
             "name": "dragonmantank/cron-expression",
@@ -279,12 +287,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "c6fe1ffcf244b0411725ed80a578bf72947b1817"
+                "reference": "0d87f3d34cd9464e6807df1e41aa5a8ce87adee3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/c6fe1ffcf244b0411725ed80a578bf72947b1817",
-                "reference": "c6fe1ffcf244b0411725ed80a578bf72947b1817",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/0d87f3d34cd9464e6807df1e41aa5a8ce87adee3",
+                "reference": "0d87f3d34cd9464e6807df1e41aa5a8ce87adee3",
                 "shasum": ""
             },
             "require": {
@@ -365,7 +373,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-29T15:50:38+00:00"
+            "time": "2021-01-30T13:36:51+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -862,27 +870,22 @@
         },
         {
             "name": "spiral/roadrunner",
-            "version": "2.0.x-dev",
+            "version": "v2.0.0-beta.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spiral/roadrunner.git",
-                "reference": "99bf203511b8af4be37186017e2e0c73a030d4f3"
+                "reference": "0ee8c6ce423886c6a7776e9e3bfbed342178f94d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spiral/roadrunner/zipball/99bf203511b8af4be37186017e2e0c73a030d4f3",
-                "reference": "99bf203511b8af4be37186017e2e0c73a030d4f3",
+                "url": "https://api.github.com/repos/spiral/roadrunner/zipball/0ee8c6ce423886c6a7776e9e3bfbed342178f94d",
+                "reference": "0ee8c6ce423886c6a7776e9e3bfbed342178f94d",
                 "shasum": ""
             },
             "require": {
-                "composer/package-versions-deprecated": "^1.8",
-                "spiral/roadrunner-worker": ">=2.0",
-                "symfony/console": "^2.5.0 || ^3.0.0 || ^4.0.0 || ^5.0.0"
+                "spiral/roadrunner-worker": ">=2.0"
             },
-            "bin": [
-                "bin/rr"
-            ],
-            "type": "server",
+            "type": "metapackage",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -900,9 +903,9 @@
             "description": "RoadRunner: High-performance PHP application server, load-balancer and process manager written in Golang",
             "support": {
                 "issues": "https://github.com/spiral/roadrunner/issues",
-                "source": "https://github.com/spiral/roadrunner/tree/2.0"
+                "source": "https://github.com/spiral/roadrunner/tree/v2.0.0-beta.21"
             },
-            "time": "2021-01-25T13:07:14+00:00"
+            "time": "2021-02-01T11:43:29+00:00"
         },
         {
             "name": "spiral/roadrunner-worker",
@@ -910,29 +913,43 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spiral/roadrunner-worker.git",
-                "reference": "963c60120e09a3aee0968b3d6f2a03105e79f522"
+                "reference": "a900d1d5137e0035801c5d768c86d93d3921023d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spiral/roadrunner-worker/zipball/963c60120e09a3aee0968b3d6f2a03105e79f522",
-                "reference": "963c60120e09a3aee0968b3d6f2a03105e79f522",
+                "url": "https://api.github.com/repos/spiral/roadrunner-worker/zipball/a900d1d5137e0035801c5d768c86d93d3921023d",
+                "reference": "a900d1d5137e0035801c5d768c86d93d3921023d",
                 "shasum": ""
             },
             "require": {
-                "composer/package-versions-deprecated": "^1.8",
+                "composer-runtime-api": "^2.0",
+                "composer/semver": "^3.2",
                 "ext-json": "*",
                 "ext-sockets": "*",
                 "php": ">=7.4",
-                "spiral/goridge": ">=3.0"
+                "spiral/goridge": ">=3.0",
+                "symfony/console": "^5.1",
+                "symfony/http-client": "^5.1",
+                "symfony/polyfill-php80": "^1.22"
             },
             "require-dev": {
-                "phpstan/phpstan": "~0.12"
+                "jetbrains/phpstorm-attributes": "^1.0",
+                "phpstan/phpstan": "~0.12",
+                "symfony/var-dumper": "^5.1"
             },
             "default-branch": true,
-            "type": "server",
+            "bin": [
+                "bin/rr"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "Spiral\\RoadRunner\\": "src/"
+                    "Spiral\\RoadRunner\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -941,8 +958,8 @@
             ],
             "authors": [
                 {
-                    "name": "Anton Titov / Wolfy-J",
-                    "email": "wolfy.jd@gmail.com"
+                    "name": "Anton Titov (wolfy-j)",
+                    "email": "wolfy-j@spiralscout.com"
                 },
                 {
                     "name": "RoadRunner Community",
@@ -952,9 +969,9 @@
             "description": "RoadRunner: PHP worker",
             "support": {
                 "issues": "https://github.com/spiral/roadrunner-worker/issues",
-                "source": "https://github.com/spiral/roadrunner-worker/tree/v2.0.0"
+                "source": "https://github.com/spiral/roadrunner-worker/tree/v2.0.1"
             },
-            "time": "2021-01-21T11:24:40+00:00"
+            "time": "2021-02-01T09:23:15+00:00"
         },
         {
             "name": "spiral/tokenizer",
@@ -1168,6 +1185,172 @@
                 }
             ],
             "time": "2021-01-28T22:06:19+00:00"
+        },
+        {
+            "name": "symfony/http-client",
+            "version": "5.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client.git",
+                "reference": "b458d19fe834f055f4d50a9d0c85633a94023492"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/b458d19fe834f055f4d50a9d0c85633a94023492",
+                "reference": "b458d19fe834f055f4d50a9d0c85633a94023492",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "psr/log": "^1.0",
+                "symfony/http-client-contracts": "^2.2",
+                "symfony/polyfill-php73": "^1.11",
+                "symfony/polyfill-php80": "^1.15",
+                "symfony/service-contracts": "^1.0|^2"
+            },
+            "provide": {
+                "php-http/async-client-implementation": "*",
+                "php-http/client-implementation": "*",
+                "psr/http-client-implementation": "1.0",
+                "symfony/http-client-implementation": "1.1"
+            },
+            "require-dev": {
+                "amphp/amp": "^2.5",
+                "amphp/http-client": "^4.2.1",
+                "amphp/http-tunnel": "^1.0",
+                "amphp/socket": "^1.1",
+                "guzzlehttp/promises": "^1.4",
+                "nyholm/psr7": "^1.0",
+                "php-http/httplug": "^1.0|^2.0",
+                "psr/http-client": "^1.0",
+                "symfony/dependency-injection": "^4.4|^5.0",
+                "symfony/http-kernel": "^4.4.13|^5.1.5",
+                "symfony/process": "^4.4|^5.0",
+                "symfony/stopwatch": "^4.4|^5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\HttpClient\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides powerful methods to fetch HTTP resources synchronously or asynchronously",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/http-client/tree/5.x"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-01-19T21:00:40+00:00"
+        },
+        {
+            "name": "symfony/http-client-contracts",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client-contracts.git",
+                "reference": "56bc08e00d6bf532a0a8fbbc891027353ae3d50d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/56bc08e00d6bf532a0a8fbbc891027353ae3d50d",
+                "reference": "56bc08e00d6bf532a0a8fbbc891027353ae3d50d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5"
+            },
+            "suggest": {
+                "symfony/http-client-implementation": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "2.3-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\HttpClient\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to HTTP clients",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/http-client-contracts/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-01-27T16:27:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2004,12 +2187,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/temporalio/sdk-php.git",
-                "reference": "6561a45aa13b946ad4efb8a0769eabcb0d5e9a4d"
+                "reference": "1a68d04f536ab48296d7194bcbafe66a40bf94fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/6561a45aa13b946ad4efb8a0769eabcb0d5e9a4d",
-                "reference": "6561a45aa13b946ad4efb8a0769eabcb0d5e9a4d",
+                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/1a68d04f536ab48296d7194bcbafe66a40bf94fb",
+                "reference": "1a68d04f536ab48296d7194bcbafe66a40bf94fb",
                 "shasum": ""
             },
             "require": {
@@ -2078,7 +2261,7 @@
                 "issues": "https://github.com/temporalio/sdk-php/issues",
                 "source": "https://github.com/temporalio/sdk-php"
             },
-            "time": "2021-01-29T14:58:49+00:00"
+            "time": "2021-02-01T11:28:45+00:00"
         },
         {
             "name": "webmozart/assert",

@@ -13,6 +13,7 @@ namespace Temporal\Samples\Saga;
 
 use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
+use Temporal\SampleUtils\Logger;
 use Temporal\Workflow;
 
 /**
@@ -61,7 +62,7 @@ class SagaWorkflow implements SagaWorkflowInterface
             // to log messages in workflow code.
             $saga->addCompensation(
                 function () {
-                    file_put_contents('php://stderr', "running custom compensation");
+                    (new Logger())->debug("running custom compensation");
                 }
             );
 

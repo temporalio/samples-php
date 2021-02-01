@@ -22,7 +22,7 @@ use Temporal\SampleUtils\Command;
 
 class SubscribeCommand extends Command
 {
-    protected const NAME = 'subscribe:create';
+    protected const NAME = 'subscribe:start';
     protected const DESCRIPTION = 'Execute Subscription\SubscriptionWorkflow with custom user ID';
 
     protected const ARGUMENTS = [

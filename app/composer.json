@@ -1,7 +1,7 @@
 {
-  "minimum-stability": "dev",
+  "minimum-stability": "beta",
   "require": {
-    "temporal/sdk": "dev-master",
+    "temporal/sdk": ">=1.0",
     "spiral/tokenizer": ">=2.7"
   },
   "autoload": {

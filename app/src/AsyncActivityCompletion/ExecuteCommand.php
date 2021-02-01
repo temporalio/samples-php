@@ -19,7 +19,7 @@ use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command
 {
-    protected const NAME = 'user-activity';
+    protected const NAME = 'user-activity:start';
     protected const DESCRIPTION = 'Execute AsyncActivityCompletion\GreetingWorkflow and wait for user greeting';
 
     public function execute(InputInterface $input, OutputInterface $output)
