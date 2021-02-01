@@ -29,7 +29,7 @@ class ExecuteCommand extends Command
             WorkflowOptions::new()->withWorkflowId(PeriodicWorkflowInterface::WORKFLOW_ID)
         );
 
-        $output->writeln("Starting <comment>CronWorkflow</comment>... ");
+        $output->writeln("Starting <comment>PeriodicWorkflow</comment>... ");
 
         try {
             $run = $this->workflowClient->start($workflow, 'World');
