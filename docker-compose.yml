@@ -37,9 +37,9 @@ services:
     depends_on:
       - temporal
 
-  app:
-    build: .
-    volumes:
-    - ./app:/var/app
-    depends_on:
-      - temporal
+#  app:
+#    build: .
+#    volumes:
+#    - ./app:/var/app
+#    depends_on:
+#      - temporal

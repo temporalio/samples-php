@@ -46,7 +46,7 @@ $ ./vendor/bin/rr get
 To start Temporal server locally:
 
 ```bash
-$ docker-compose -f .\docker-compose-local.yml up
+$ docker-compose -f .\docker-compose.yml up
 ```
 
 To start application using application server:
@@ -70,6 +70,3 @@ To run sample workflow:
 ```bash
 $ php ./app/app.php simple-activity
 ```
-
-## Docker Installation
-Work in progress.
