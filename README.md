@@ -2,7 +2,7 @@
 
 The samples in this repository demonstrate the various capabilities of the [Temporal PHP SDK](https://github.com/temporalio/sdk-php) used in conjunction with the [Temporal Server](https://github.com/temporalio/temporal).
 
-If you want to learn more about the Temporal Server and how it works, read the at  [https://docs.temporal.io](https://docs.temporal.io).
+If you want to learn more about the Temporal Server and how it works, read the documentation at [https://docs.temporal.io](https://docs.temporal.io).
 
 ## Setup
 
