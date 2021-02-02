@@ -1,5 +1,9 @@
-## Saga example: trip booking
+# BookingSaga sample
 
-Temporal implementation of the [Camunda BPMN trip booking example](https://github.com/berndruecker/trip-booking-saga-java)
+This sample demonstrates Temporal's approach to the [Camunda BPMN trip booking SAGA](https://github.com/berndruecker/trip-booking-saga-java)
 
-Demonstrates Temporal approach to SAGA.
+From the root of the project, run the following command:
+
+```bash
+php ./app/app.php booking-saga
+```
