@@ -73,10 +73,10 @@ Follow the instructions in the README of the sample you wish to run.
 
 The following samples demonstrate much of the basic functionality and capabilities of the SDK.
 
--  **[SimpleActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: Single Activity Workflow
-- **[ActivityRetry](https://github.com/temporalio/samples-php/blob/master/app/src/ActivityRetry)**: How to retry an Activity
-- **[AsyncActivity](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncActivity)**: How to call Activities asynchronously and wait for them using Promises
-- **[AsyncActivityCompletion](https://github.com/temporalio/samples-php/tree/master/app/src/AsyncActivityCompletion)**: An asynchronous Activity implementation
+* **[SimpleActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: Single Activity Workflow
+* **[ActivityRetry](https://github.com/temporalio/samples-php/blob/master/app/src/ActivityRetry)**: How to retry an Activity
+* **[AsyncActivity](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncActivity)**: How to call Activities asynchronously and wait for them using Promises
+* **[AsyncActivityCompletion](https://github.com/temporalio/samples-php/tree/master/app/src/AsyncActivityCompletion)**: An asynchronous Activity implementation
 * **[AsyncClosure](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncClosure)**: How to run part of a Workflow asynchronously as a separate Task (coroutine)
 * **[CancellationScope](https://github.com/temporalio/samples-php/blob/master/app/src/CancellationScope)**: How to explicitly cancel parts of a Workflow
 * **[Child](https://github.com/temporalio/samples-php/blob/master/app/src/Child)**: Example of a child Workflow
