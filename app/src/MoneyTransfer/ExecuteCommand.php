@@ -32,6 +32,7 @@ class ExecuteCommand extends Command
             'refID',
             1000
         );
+                
         $output->writeln("<info>Workflow complete</info>");
 
         return self::SUCCESS;

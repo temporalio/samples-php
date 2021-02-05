@@ -5,7 +5,7 @@ server:
   command: "php worker.php"
 
 temporal:
-  address: "localhost:7233"
+  address: "temporal:7233"
   activities:
     num_workers: 10
 
@@ -13,4 +13,6 @@ logs:
   level: debug
   channels:
     temporal:
-      level: info
+      level: error
+    informer:
+      mode: none

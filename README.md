@@ -4,15 +4,44 @@ The samples in this repository demonstrate the various capabilities of the [Temp
 
 If you want to learn more about the Temporal Server and how it works, read the documentation at [https://docs.temporal.io](https://docs.temporal.io).
 
-## Setup
+## Docker Compose setup
+**1. Download the repository.**
+```bash
+$ git clone git@github.com:temporalio/samples-php.git
+$ cd samples-php
+```
 
+**2. Build docker images.**
+```bash
+$ docker-compose build 
+```
+
+**3. Start server and application containers.**
+```bash
+$ docker-compose up
+```
+
+**4. Run a sample**
+To run a sample in docker use:
+
+```bash
+$ docker-compose exec app php app.php {sample-name}
+```
+
+To observe active workers:
+
+```bash
+$ docker-compose exec app rr workers -i
+```
+
+## Local Setup
 **1. Make sure you have PHP 7.4, or higher, installed.**
 
 **2. Clone this repo and change directory into the root of the project.**
 
 ```bash
-git clone https://github.com/temporalio/samples-php
-cd samples-php
+$ git clone https://github.com/temporalio/samples-php
+$ cd samples-php
 ```
 
 **3. Install the gRPC PHP extension**
@@ -28,8 +57,8 @@ Make sure you follow the all the steps to activate the gRPC extension in your  `
 **4. Install additional PHP dependencies**
 
 ```bash
-cd app
-composer install
+$ cd app
+$ composer install
 ```
 
 **5. Download RoadRunner application server**
@@ -37,8 +66,8 @@ composer install
 The Temporal PHP SDK requires the RoadRunner 2.0 application server and supervisor to run Activities and Workflows in a scalable way.
 
 ```bash
-cd app
-./vendor/bin/rr get
+$ cd app
+$ ./vendor/bin/rr get
 ```
 
 Note: You can install RoadRunner manually by downloading its binary from the [release page](https://github.com/spiral/roadrunner/releases/tag/v1.9.2).
@@ -48,14 +77,19 @@ Note: You can install RoadRunner manually by downloading its binary from the [re
 The Temporal Server must be up and running for the samples to work.
 The fastest way to do that is by following the [Quick install guide](https://docs.temporal.io/docs/server-quick-install).
 
+You can also run the included `docker-compose.yml` file. Make sure to comment `app` section.
+
+**7. Update configuration**
+Make sure to update the temporal address in `app/.rr.yaml` to `localhost:7233`.  
+
 **7. Start the application using RoadRunner**
 
 By default, all samples run using a single RoadRunner Server instance.
 To start the application using RoadRunner:
 
 ```bash
-cd app
-./rr serve
+$ cd app
+$ ./rr serve
 ```
 
 You can now interact with the samples.
