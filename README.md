@@ -22,6 +22,7 @@ $ docker-compose up
 ```
 
 **4. Run a sample**
+
 To run a sample in docker use:
 
 ```bash
