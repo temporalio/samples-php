@@ -4,6 +4,11 @@ The samples in this repository demonstrate the various capabilities of the [Temp
 
 If you want to learn more about the Temporal Server and how it works, read the documentation at [https://docs.temporal.io](https://docs.temporal.io).
 
+## About this README
+This README provides two different approaches to setup the examples. First is relying on running PHP application in docker engine and 
+does not require any extra work to start examples. The second approach will require to have PHP installed with GRPC extension but makes possible
+to start the application on host machine.
+
 ## Docker Compose setup
 **1. Download the repository.**
 ```bash
