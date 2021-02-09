@@ -88,7 +88,7 @@ You can also run the included `docker-compose.yml` file. Make sure to comment `a
 **7. Update configuration**
 Make sure to update the temporal address in `app/.rr.yaml` to `localhost:7233`.  
 
-**7. Start the application using RoadRunner**
+**8. Start the application using RoadRunner**
 
 By default, all samples run using a single RoadRunner Server instance.
 To start the application using RoadRunner:
@@ -102,7 +102,7 @@ You can now interact with the samples.
 
 Note: You can alter number of PHP Workers in `app/.rr.yaml`.
 
-**8. Run a sample**
+**9. Run a sample**
 
 ## Samples
 
