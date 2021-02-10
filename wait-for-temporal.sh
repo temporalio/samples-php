@@ -13,4 +13,3 @@ done
 
 >&2 echo "Temporal is up - executing command"
 exec $cmd
-
