@@ -24,16 +24,6 @@ COPY --from=temporalio/admin-tools /usr/local/bin/tctl /usr/local/bin/tctl
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
-# Download RoadRunner
-ENV RR_VERSION "2.0.0-beta22"
-RUN mkdir /tmp/rr \
-  && cd /tmp/rr \
-  && echo "{\"require\":{\"spiral/roadrunner\":\"${RR_VERSION}\"}}" >> composer.json \
-  && composer install \
-  && vendor/bin/rr get-binary -l /usr/local/bin \
-  && chmod +x /usr/local/bin/rr \
-  && rm -rf /tmp/rr
-
 # Wait for it
 COPY wait-for-temporal.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/wait-for-temporal.sh
@@ -43,3 +33,6 @@ WORKDIR /var/app
 COPY app/ /var/app
 
 RUN composer install
+
+# Setup RoadRunner
+RUN vendor/bin/rr get && chmod +x rr && mv rr /usr/local/bin/rr
