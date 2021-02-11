@@ -41,25 +41,13 @@ class TripBookingWorkflow implements TripBookingWorkflowInterface
 
         try {
             $carReservationID = yield $this->activities->reserveCar($name);
-            $saga->addCompensation(
-                function () use ($carReservationID, $name) {
-                    yield $this->activities->cancelCar($carReservationID, $name);
-                }
-            );
+            $saga->addCompensation(fn() => yield $this->activities->cancelCar($carReservationID, $name));
 
             $hotelReservationID = yield $this->activities->bookHotel($name);
-            $saga->addCompensation(
-                function () use ($hotelReservationID, $name) {
-                    yield $this->activities->cancelHotel($hotelReservationID, $name);
-                }
-            );
+            $saga->addCompensation(fn() => yield $this->activities->cancelHotel($hotelReservationID, $name));
 
             $flightReservationID = yield $this->activities->bookFlight($name);
-            $saga->addCompensation(
-                function () use ($flightReservationID, $name) {
-                    yield $this->activities->cancelFlight($flightReservationID, $name);
-                }
-            );
+            $saga->addCompensation(fn() => yield $this->activities->cancelFlight($flightReservationID, $name));
 
             return [
                 'car' => $carReservationID,
