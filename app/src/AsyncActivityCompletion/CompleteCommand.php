@@ -28,13 +28,14 @@ class CompleteCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        // @@@SNIPSTART samples-php-async-activity-completion-completebytoken
         $client = $this->workflowClient->newActivityCompletionClient();
-
+        // Complete the Activity.
         $client->completeByToken(
             base64_decode($input->getArgument('token')),
             $input->getArgument('message')
         );
-
+        // @@@SNIPEND
         $output->writeln("Done.");
 
         return self::SUCCESS;
