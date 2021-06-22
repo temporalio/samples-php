@@ -109,6 +109,8 @@ Note: You can alter number of PHP Workers in `app/.rr.yaml`.
 Each sample has specific requirements.
 Follow the instructions in the README of the sample you wish to run.
 
+<!-- @@@SNIPSTART samples-php-readme-samples-directory -->
+
 ### Beginner samples
 
 The following samples demonstrate much of the basic functionality and capabilities of the SDK.
@@ -140,3 +142,5 @@ The following samples demonstrate some of the more complex aspects associated wi
 - **[Updatable Timer](https://github.com/temporalio/samples-php/tree/master/app/src/UpdatableTimer)**: Demonstrates the use of a helper class which relies on Workflow.await to implement a blocking sleep that can be updated at any moment
 - **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID.
 The process charges the user once every 30 days after a one month free trial period.
+
+<!-- @@@SNIPEND -->
