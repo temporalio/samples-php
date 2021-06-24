@@ -109,34 +109,56 @@ Note: You can alter number of PHP Workers in `app/.rr.yaml`.
 Each sample has specific requirements.
 Follow the instructions in the README of the sample you wish to run.
 
+<!-- @@@SNIPSTART samples-php-readme-samples-directory -->
+
 ### Beginner samples
 
 The following samples demonstrate much of the basic functionality and capabilities of the SDK.
 
-* **[SimpleActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: Single Activity Workflow
-* **[ActivityRetry](https://github.com/temporalio/samples-php/blob/master/app/src/ActivityRetry)**: How to retry an Activity
-* **[AsyncActivity](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncActivity)**: How to call Activities asynchronously and wait for them using Promises
-* **[AsyncActivityCompletion](https://github.com/temporalio/samples-php/tree/master/app/src/AsyncActivityCompletion)**: An asynchronous Activity implementation
-* **[AsyncClosure](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncClosure)**: How to run part of a Workflow asynchronously as a separate Task (coroutine)
-* **[CancellationScope](https://github.com/temporalio/samples-php/blob/master/app/src/CancellationScope)**: How to explicitly cancel parts of a Workflow
-* **[Child](https://github.com/temporalio/samples-php/blob/master/app/src/Child)**: Example of a child Workflow
-* **[Cron](https://github.com/temporalio/samples-php/blob/master/app/src/Cron)**: A Workflow that is executed according to a cron schedule
-* **[Periodic](https://github.com/temporalio/samples-php/tree/master/app/src/Periodic)**: A Workflow that executes some logic periodically
-* **[Exception](https://github.com/temporalio/samples-php/tree/master/app/src/Exception)**: Example of exception propagation and wrapping
-* **[PolymorphicActivity](https://github.com/temporalio/samples-php/tree/master/app/src/PolymorphicActivity)**: Activities that extend a common interface
-* **[Query](https://github.com/temporalio/samples-php/tree/master/app/src/Query)**: Demonstrates how to Query the state of a single Workflow
-* **[Signal](https://github.com/temporalio/samples-php/tree/master/app/src/Signal)**: Example of sending and handling a Signal
-* **[Saga](https://github.com/temporalio/samples-php/tree/master/app/src/Saga)**: Example of SAGA pattern support
-* **[SearchAttributes](https://github.com/temporalio/samples-php/tree/master/app/src/SearchAttributes)**: Example of Custom search attributes that can be used to find Workflows using predicates
+- **[SimpleActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: Single Activity Workflow
+
+- **[ActivityRetry](https://github.com/temporalio/samples-php/blob/master/app/src/ActivityRetry)**: How to retry an Activity
+
+- **[AsyncActivity](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncActivity)**: How to call Activities asynchronously and wait for them using Promises
+
+- **[AsyncActivityCompletion](https://github.com/temporalio/samples-php/tree/master/app/src/AsyncActivityCompletion)**: An asynchronous Activity implementation
+
+- **[AsyncClosure](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncClosure)**: How to run part of a Workflow asynchronously as a separate Task (coroutine)
+
+- **[CancellationScope](https://github.com/temporalio/samples-php/blob/master/app/src/CancellationScope)**: How to explicitly cancel parts of a Workflow
+
+- **[Child](https://github.com/temporalio/samples-php/blob/master/app/src/Child)**: Example of a child Workflow
+
+- **[Cron](https://github.com/temporalio/samples-php/blob/master/app/src/Cron)**: A Workflow that is executed according to a cron schedule
+
+- **[Periodic](https://github.com/temporalio/samples-php/tree/master/app/src/Periodic)**: A Workflow that executes some logic periodically
+
+- **[Exception](https://github.com/temporalio/samples-php/tree/master/app/src/Exception)**: Example of exception propagation and wrapping
+
+- **[PolymorphicActivity](https://github.com/temporalio/samples-php/tree/master/app/src/PolymorphicActivity)**: Activities that extend a common interface
+
+- **[Query](https://github.com/temporalio/samples-php/tree/master/app/src/Query)**: Demonstrates how to Query the state of a single Workflow
+
+- **[Signal](https://github.com/temporalio/samples-php/tree/master/app/src/Signal)**: Example of sending and handling a Signal
+
+- **[Saga](https://github.com/temporalio/samples-php/tree/master/app/src/Saga)**: Example of SAGA pattern support
+
+- **[SearchAttributes](https://github.com/temporalio/samples-php/tree/master/app/src/SearchAttributes)**: Example of Custom search attributes that can be used to find Workflows using predicates
 
 ### Advanced samples
 
 The following samples demonstrate some of the more complex aspects associated with running Workflows with the SDK.
 
-- **[FileProcessing](https://github.com/temporalio/samples-php/tree/master/app/src/FileProcessing)**: Demonstrates Task routing features
-- **[Booking SAGA](https://github.com/temporalio/samples-php/tree/master/app/src/BookingSaga)**: Demonstrates Temporal approach to a trip booking SAGA
+- **[FileProcessing](https://github.com/temporalio/samples-php/tree/master/app/src/FileProcessing)**: Demonstrates Task routing features.
+
+- **[Booking SAGA](https://github.com/temporalio/samples-php/tree/master/app/src/BookingSaga)**: Demonstrates Temporal approach to a trip booking SAGA.
+
 - **[Money Transfer](https://github.com/temporalio/samples-php/tree/master/app/src/MoneyTransfer)**: Basic money transfer example.
-- **[MoneyBatch](https://github.com/temporalio/samples-php/tree/master/app/src/MoneyBatch)**: Demonstrates a situation when a single deposit should be initiated for multiple withdrawals
-- **[Updatable Timer](https://github.com/temporalio/samples-php/tree/master/app/src/UpdatableTimer)**: Demonstrates the use of a helper class which relies on Workflow.await to implement a blocking sleep that can be updated at any moment
-- **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID.
-The process charges the user once every 30 days after a one month free trial period.
+
+- **[MoneyBatch](https://github.com/temporalio/samples-php/tree/master/app/src/MoneyBatch)**: Demonstrates a situation when a single deposit should be initiated for multiple withdrawals.
+
+- **[Updatable Timer](https://github.com/temporalio/samples-php/tree/master/app/src/UpdatableTimer)**: Demonstrates the use of a helper class which relies on Workflow.await to implement a blocking sleep that can be updated at any moment.
+
+- **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID. The process charges the user once every 30 days after a one month free trial period.
+
+<!-- @@@SNIPEND -->
