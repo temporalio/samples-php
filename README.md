@@ -1,4 +1,6 @@
 # Temporal PHP SDK samples
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftemporalio%2Fsamples-php.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftemporalio%2Fsamples-php?ref=badge_shield)
+
 
 The samples in this repository demonstrate the various capabilities of the [Temporal PHP SDK](https://github.com/temporalio/sdk-php) used in conjunction with the [Temporal Server](https://github.com/temporalio/temporal).
 
@@ -162,3 +164,7 @@ The following samples demonstrate some of the more complex aspects associated wi
 - **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID. The process charges the user once every 30 days after a one month free trial period.
 
 <!-- @@@SNIPEND -->
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftemporalio%2Fsamples-php.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftemporalio%2Fsamples-php?ref=badge_large)
