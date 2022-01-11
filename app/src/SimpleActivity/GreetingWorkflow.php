@@ -15,6 +15,8 @@ use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Workflow;
 
+
+// @@@SNIPSTART php-hello-workflow
 class GreetingWorkflow implements GreetingWorkflowInterface
 {
     private $greetingActivity;
@@ -38,3 +40,4 @@ class GreetingWorkflow implements GreetingWorkflowInterface
         return yield $this->greetingActivity->composeGreeting('Hello', $name);
     }
 }
+// @@@SNIPEND
