@@ -13,6 +13,7 @@ namespace Temporal\Samples\SimpleActivity;
 
 use Temporal\Activity;
 
+// @@@SNIPSTART php-hello-activity
 class GreetingActivity implements GreetingActivityInterface
 {
     public function composeGreeting(string $greeting, string $name): string
@@ -20,3 +21,4 @@ class GreetingActivity implements GreetingActivityInterface
         return $greeting . ' ' . $name;
     }
 }
+// @@@SNIPEND
