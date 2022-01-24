@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\SimpleActivity;
 
+// @@@SNIPSTART php-hello-activity-interface
 use Temporal\Activity\ActivityInterface;
 use Temporal\Activity\ActivityMethod;
 
@@ -23,3 +24,4 @@ interface GreetingActivityInterface
         string $name
     ): string;
 }
+// @@@SNIPEND

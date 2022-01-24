@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Temporal\Client\WorkflowOptions;
 use Temporal\SampleUtils\Command;
 
+// @@@SNIPSTART php-hello-client
 class ExecuteCommand extends Command
 {
     protected const NAME = 'simple-activity';
@@ -37,9 +38,8 @@ class ExecuteCommand extends Command
 
         $output->writeln(
             sprintf(
-                'Started: WorkflowID=<fg=magenta>%s</fg=magenta>, RunID=<fg=magenta>%s</fg=magenta>',
+                'Started: WorkflowID=<fg=magenta>%s</fg=magenta>',
                 $run->getExecution()->getID(),
-                $run->getExecution()->getRunID(),
             )
         );
 
@@ -49,3 +49,4 @@ class ExecuteCommand extends Command
         return self::SUCCESS;
     }
 }
+// @@@SNIPEND

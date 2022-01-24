@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\SimpleActivity;
 
+// @@@SNIPSTART php-hello-workflow-interface
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 
@@ -26,3 +27,4 @@ interface GreetingWorkflowInterface
         string $name
     );
 }
+// @@@SNIPEND
