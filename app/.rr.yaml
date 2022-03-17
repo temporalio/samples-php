@@ -1,3 +1,5 @@
+version: "2.7"
+
 rpc:
   listen: tcp://127.0.0.1:6001
 
@@ -11,8 +13,4 @@ temporal:
 
 logs:
   level: debug
-  channels:
-    temporal:
-      level: error
-    informer:
-      mode: none
+  mode: development
