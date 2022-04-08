@@ -32,7 +32,7 @@ foreach ($declarations->getWorkflowTypes() as $workflowType) {
 
 foreach ($declarations->getActivityTypes() as $activityType) {
     // Activities are stateless and thread safe. So a shared instance is used.
-    $worker->registerActivityImplementations(new $activityType());
+    $worker->registerActivity($activityType);
 }
 
 // We can use task queue for more complex task routing, for example our FileProcessing
