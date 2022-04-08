@@ -1,4 +1,4 @@
-FROM php:7.4-cli
+FROM php:8.0.15-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   nano \
@@ -8,12 +8,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libonig-dev
 
 # Install PHP Extensions
+ENV CFLAGS="$CFLAGS -D_GNU_SOURCE"
 RUN docker-php-ext-install zip \
   && docker-php-ext-install opcache sockets mbstring \
   && docker-php-ext-enable opcache sockets mbstring
 
 # Protobuf and GRPC
-ENV PROTOBUF_VERSION "3.14.0"
+ENV PROTOBUF_VERSION "3.19.2"
 RUN pecl channel-update pecl.php.net
 RUN pecl install protobuf-${PROTOBUF_VERSION} grpc \
     && docker-php-ext-enable protobuf grpc
