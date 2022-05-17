@@ -48,8 +48,8 @@ services:
 
   app:
     build: .
-    #volumes:
-    #  - ./app:/var/app
+#    volumes:
+#      - ./app:/var/app
     depends_on:
       - temporal
     environment:
