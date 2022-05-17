@@ -12,7 +12,7 @@ services:
 
   temporal:
     container_name: temporal
-    image: temporalio/auto-setup:1.14.2
+    image: temporalio/auto-setup:1.16.2
     depends_on:
       - postgresql
     environment:
@@ -24,12 +24,10 @@ services:
       - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml
     ports:
       - 7233:7233
-    volumes:
-      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
 
   temporal-admin-tools:
     container_name: temporal-admin-tools
-    image: temporalio/admin-tools:1.14.2
+    image: temporalio/admin-tools:1.16.2
     depends_on:
       - temporal
     environment:
