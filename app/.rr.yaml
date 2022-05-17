@@ -9,7 +9,7 @@ server:
 temporal:
   address: "temporal:7233"
   activities:
-    num_workers: 10
+    num_workers: 4
 
 logs:
   level: debug
