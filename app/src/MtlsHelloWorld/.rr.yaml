@@ -1,0 +1,26 @@
+version: "2.7"
+# Application configuration
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php worker.php"
+  env:
+    XDEBUG_SESSION: 1
+
+# Workflow and activity mesh service
+temporal:
+  address: "localhost:7233"
+  activities:
+    num_workers: 1
+  tls:
+    key: 'certs/client.key'
+    cert: 'certs/client.pem'
+    root_ca: 'certs/ca.cert'
+    client_auth_type: require_and_verify_client_cert
+    server_name: "tls-sample"
+
+logs:
+  mode: development
+  level: debug
+
