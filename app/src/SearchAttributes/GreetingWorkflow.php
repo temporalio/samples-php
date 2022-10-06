@@ -32,6 +32,13 @@ class GreetingWorkflow implements GreetingWorkflowInterface
 
     public function getGreeting(string $name)
     {
+        Workflow::upsertSearchAttributes(
+            [
+                'CustomKeywordField' => 'attr1-value',
+                'CustomIntField' => 123,
+            ]
+        );
+
         return yield $this->greetingsActivity->composeGreeting('Hello', $name);
     }
 }
