@@ -15,8 +15,9 @@ RUN docker-php-ext-install zip \
 
 # Protobuf and GRPC
 ENV PROTOBUF_VERSION "3.19.2"
+ENV GRPC_VERSION "1.49.0"
 RUN pecl channel-update pecl.php.net
-RUN pecl install protobuf-${PROTOBUF_VERSION} grpc \
+RUN pecl install protobuf-${PROTOBUF_VERSION} grpc-${GRPC_VERSION} \
     && docker-php-ext-enable protobuf grpc
 
 # Install Temporal CLI
