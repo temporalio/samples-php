@@ -1,4 +1,4 @@
-version: '3.5'
+version: '3.7'
 
 services:
   postgresql:
@@ -35,23 +35,49 @@ services:
     stdin_open: true
     tty: true
 
-  temporal-web:
-    container_name: temporal-web
-    image: temporalio/web:1.13.0
+  temporal-ui:
+    container_name: temporal-ui
+    image: temporalio/ui:2.15.0
     depends_on:
       - temporal
     environment:
-      - TEMPORAL_GRPC_ENDPOINT=temporal:7233
-      - TEMPORAL_PERMIT_WRITE_API=true
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CSRF_COOKIE_INSECURE=true
     ports:
       - 8088:8088
+      - 8080:8080
+
+  collector:
+    container_name: collector
+    image: otel/opentelemetry-collector-contrib:0.79.0
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    ports:
+      - 4317:4317
+      - 4318:4318
+    volumes:
+      - ./docker/otel/otel-collector-config.yml:/etc/otel-collector-config.yml
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin-slim
+    ports:
+      - 9411:9411
 
   app:
-    build: .
+    container_name: app
+    build:
+      dockerfile: docker/app/Dockerfile
+      context: ./
 #    volumes:
 #      - ./app:/var/app
     depends_on:
       - temporal
     environment:
-      - "TEMPORAL_CLI_ADDRESS=temporal:7233"
+      - TEMPORAL_CLI_ADDRESS=temporal:7233
+      - TELEMETRY_DRIVER=otel
+      - OTEL_SERVICE_NAME=Temporal samples
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
+      - OTEL_PHP_TRACES_PROCESSOR=simple
     command: [ "/usr/local/bin/wait-for-temporal.sh", "temporal", "/usr/local/bin/rr", "serve", "-c", "/var/app/.rr.yaml" ]

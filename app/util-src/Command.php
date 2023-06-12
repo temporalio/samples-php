@@ -11,7 +11,17 @@ declare(strict_types=1);
 
 namespace Temporal\SampleUtils;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Temporal\Client\GRPC\ServiceClient;
+use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowClientInterface;
+use Temporal\DataConverter\DataConverter;
+use Temporal\Interceptor\SimplePipelineProvider;
+use Temporal\OpenTelemetry\OpenTelemetryActivityInboundInterceptor;
+use Temporal\OpenTelemetry\OpenTelemetryWorkflowClientCallsInterceptor;
+use Temporal\OpenTelemetry\OpenTelemetryWorkflowOutboundRequestInterceptor;
 
 class Command extends \Symfony\Component\Console\Command\Command
 {
@@ -21,27 +31,32 @@ class Command extends \Symfony\Component\Console\Command\Command
     //  Short command description.
     protected const DESCRIPTION = '';
 
-    // Command options specified in Symphony format. For more complex definitions redefine
+    // Command options specified in Symfony format. For more complex definitions redefine
     // getOptions() method.
-    protected const OPTIONS = [];
+    protected const OPTIONS = [
+        [
+            'telemetry',
+            null,
+            InputOption::VALUE_NONE,
+            'Run with OpenTelemetry interceptors'
+        ]
+    ];
 
-    // Command arguments specified in Symphony format. For more complex definitions redefine
+    // Command arguments specified in Symfony format. For more complex definitions redefine
     // getArguments() method.
     protected const ARGUMENTS = [];
 
-    /**
-     * @var WorkflowClientInterface
-     */
+    private ServiceClient $serviceClient;
+
     protected WorkflowClientInterface $workflowClient;
 
     /**
      * Command constructor.
-     * @param WorkflowClientInterface $workflowClient
      */
-    public function __construct(WorkflowClientInterface $workflowClient)
+    public function __construct(ServiceClient $serviceClient)
     {
         parent::__construct();
-        $this->workflowClient = $workflowClient;
+        $this->serviceClient = $serviceClient;
     }
 
     /**
@@ -81,13 +96,32 @@ class Command extends \Symfony\Component\Console\Command\Command
         return static::ARGUMENTS;
     }
 
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $interceptors = [];
+        if ($input->getOption('telemetry')) {
+            $converter = DataConverter::createDefault();
+            $tracer = TracerFactory::create();
+
+            $interceptors = [
+                new OpenTelemetryActivityInboundInterceptor($tracer, $converter),
+                new OpenTelemetryWorkflowClientCallsInterceptor($tracer, $converter),
+                new OpenTelemetryWorkflowOutboundRequestInterceptor($tracer, $converter)
+            ];
+        }
+
+        $this->workflowClient = WorkflowClient::create(
+            serviceClient: $this->serviceClient,
+            interceptorProvider: new SimplePipelineProvider($interceptors)
+        );
+    }
+
     /**
      * @param string $class
-     * @param WorkflowClientInterface $workflowClient
      * @return static
      */
-    public static function create(string $class, WorkflowClientInterface $workflowClient): self
+    public static function create(string $class, ServiceClient $client): self
     {
-        return new $class($workflowClient);
+        return new $class($client);
     }
 }

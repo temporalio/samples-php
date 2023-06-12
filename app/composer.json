@@ -1,13 +1,22 @@
 {
-  "minimum-stability": "beta",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
-    "temporal/sdk": ">=2.0",
-    "spiral/tokenizer": ">=2.7"
+    "temporal/sdk": "^2.6",
+    "spiral/tokenizer": "^3.7",
+    "temporal/open-telemetry-interceptors": "dev-master",
+    "open-telemetry/exporter-otlp": "^0.0.17",
+    "open-telemetry/transport-grpc": "^0.0.17"
   },
   "autoload": {
     "psr-4": {
       "Temporal\\Samples\\": "src",
       "Temporal\\SampleUtils\\": "util-src"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
     }
   }
 }

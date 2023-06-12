@@ -1,4 +1,4 @@
-version: "2.7"
+version: "3.0"
 
 rpc:
   listen: tcp://127.0.0.1:6001
@@ -14,3 +14,12 @@ temporal:
 logs:
   level: debug
   mode: development
+
+otel:
+  insecure: true
+  compress: false
+  client: http
+  exporter: otlp
+  service_name: rr-temporal-samples
+  service_version: 1.0.0
+  endpoint: collector:4318
