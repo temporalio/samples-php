@@ -17,11 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Temporal\Client\GRPC\ServiceClient;
 use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowClientInterface;
-use Temporal\DataConverter\DataConverter;
 use Temporal\Interceptor\SimplePipelineProvider;
-use Temporal\OpenTelemetry\OpenTelemetryActivityInboundInterceptor;
-use Temporal\OpenTelemetry\OpenTelemetryWorkflowClientCallsInterceptor;
-use Temporal\OpenTelemetry\OpenTelemetryWorkflowOutboundRequestInterceptor;
+use Temporal\OpenTelemetry\Interceptor\OpenTelemetryActivityInboundInterceptor;
+use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowClientCallsInterceptor;
+use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowOutboundRequestInterceptor;
 
 class Command extends \Symfony\Component\Console\Command\Command
 {
@@ -100,13 +99,12 @@ class Command extends \Symfony\Component\Console\Command\Command
     {
         $interceptors = [];
         if ($input->getOption('telemetry')) {
-            $converter = DataConverter::createDefault();
             $tracer = TracerFactory::create();
 
             $interceptors = [
-                new OpenTelemetryActivityInboundInterceptor($tracer, $converter),
-                new OpenTelemetryWorkflowClientCallsInterceptor($tracer, $converter),
-                new OpenTelemetryWorkflowOutboundRequestInterceptor($tracer, $converter)
+                new OpenTelemetryActivityInboundInterceptor($tracer),
+                new OpenTelemetryWorkflowClientCallsInterceptor($tracer),
+                new OpenTelemetryWorkflowOutboundRequestInterceptor($tracer)
             ];
         }
 
