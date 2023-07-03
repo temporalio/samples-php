@@ -75,7 +75,6 @@ services:
     environment:
       - TEMPORAL_CLI_ADDRESS=temporal:7233
       - TELEMETRY_DRIVER=otel
-      - OTEL_SERVICE_NAME=Temporal samples
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318

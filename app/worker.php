@@ -9,7 +9,11 @@
 
 declare(strict_types=1);
 
+use Temporal\Interceptor\SimplePipelineProvider;
+use Temporal\OpenTelemetry\Interceptor\OpenTelemetryActivityInboundInterceptor;
+use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowOutboundRequestInterceptor;
 use Temporal\SampleUtils\DeclarationLocator;
+use Temporal\SampleUtils\TracerFactory;
 use Temporal\WorkerFactory;
 use Temporal\Samples\FileProcessing;
 
@@ -22,8 +26,14 @@ $declarations = DeclarationLocator::create(__DIR__ . '/src/');
 // factory initiates and runs task queue specific activity and workflow workers
 $factory = WorkerFactory::create();
 
+// OpenTelemetry tracer
+$tracer = TracerFactory::create('interceptors-sample-worker');
+
 // Worker that listens on a task queue and hosts both workflow and activity implementations.
-$worker = $factory->newWorker();
+$worker = $factory->newWorker(interceptorProvider: new SimplePipelineProvider([
+    new OpenTelemetryActivityInboundInterceptor($tracer),
+    new OpenTelemetryWorkflowOutboundRequestInterceptor($tracer)
+]));
 
 foreach ($declarations->getWorkflowTypes() as $workflowType) {
     // Workflows are stateful. So you need a type to create instances.

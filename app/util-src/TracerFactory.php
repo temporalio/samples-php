@@ -16,12 +16,17 @@ use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\Contrib\Grpc\GrpcTransportFactory;
 use OpenTelemetry\Contrib\Otlp\OtlpUtil;
 use OpenTelemetry\Contrib\Otlp\SpanExporter;
+use OpenTelemetry\SDK\Common\Attribute\Attributes;
+use OpenTelemetry\SDK\Resource\ResourceInfo;
+use OpenTelemetry\SDK\Resource\ResourceInfoFactory;
+use OpenTelemetry\SemConv\ResourceAttributes;
 use Temporal\OpenTelemetry\Tracer;
-use OpenTelemetry\SDK\Trace;
+use OpenTelemetry\SDK\Trace\SpanProcessorFactory;
+use OpenTelemetry\SDK\Trace\TracerProvider;
 
 final class TracerFactory
 {
-    public static function create(): Tracer
+    public static function create(string $serviceName): Tracer
     {
         $endpoint = getenv('OTEL_COLLECTOR_ENDPOINT');
         if (empty($endpoint)) {
@@ -29,10 +34,17 @@ final class TracerFactory
         }
 
         $transport = (new GrpcTransportFactory())->create($endpoint . OtlpUtil::method(Signals::TRACE));
-        $spanProcessor = (new Trace\SpanProcessorFactory())->create(new SpanExporter($transport));
+        $spanProcessor = (new SpanProcessorFactory())->create(new SpanExporter($transport));
+
+        $resource = ResourceInfoFactory::merge(
+            ResourceInfo::create(Attributes::create([
+                ResourceAttributes::SERVICE_NAME => $serviceName,
+            ])),
+            ResourceInfoFactory::defaultResource(),
+        );
 
         return new Tracer(
-            (new Trace\TracerProvider($spanProcessor))->getTracer('Temporal Samples'),
+            (new TracerProvider(spanProcessors: $spanProcessor, resource: $resource))->getTracer('Temporal Samples'),
             TraceContextPropagator::getInstance()
         );
     }

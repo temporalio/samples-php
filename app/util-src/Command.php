@@ -11,16 +11,11 @@ declare(strict_types=1);
 
 namespace Temporal\SampleUtils;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Temporal\Client\GRPC\ServiceClient;
 use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowClientInterface;
 use Temporal\Interceptor\SimplePipelineProvider;
-use Temporal\OpenTelemetry\Interceptor\OpenTelemetryActivityInboundInterceptor;
 use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowClientCallsInterceptor;
-use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowOutboundRequestInterceptor;
 
 class Command extends \Symfony\Component\Console\Command\Command
 {
@@ -32,20 +27,11 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     // Command options specified in Symfony format. For more complex definitions redefine
     // getOptions() method.
-    protected const OPTIONS = [
-        [
-            'telemetry',
-            null,
-            InputOption::VALUE_NONE,
-            'Run with OpenTelemetry interceptors'
-        ]
-    ];
+    protected const OPTIONS = [];
 
     // Command arguments specified in Symfony format. For more complex definitions redefine
     // getArguments() method.
     protected const ARGUMENTS = [];
-
-    private ServiceClient $serviceClient;
 
     protected WorkflowClientInterface $workflowClient;
 
@@ -55,7 +41,13 @@ class Command extends \Symfony\Component\Console\Command\Command
     public function __construct(ServiceClient $serviceClient)
     {
         parent::__construct();
-        $this->serviceClient = $serviceClient;
+
+        $this->workflowClient = WorkflowClient::create(
+            serviceClient: $serviceClient,
+            interceptorProvider: new SimplePipelineProvider([
+                new OpenTelemetryWorkflowClientCallsInterceptor(TracerFactory::create('interceptors-sample-client')),
+            ])
+        );
     }
 
     /**
@@ -93,25 +85,6 @@ class Command extends \Symfony\Component\Console\Command\Command
     protected function defineArguments(): array
     {
         return static::ARGUMENTS;
-    }
-
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        $interceptors = [];
-        if ($input->getOption('telemetry')) {
-            $tracer = TracerFactory::create();
-
-            $interceptors = [
-                new OpenTelemetryActivityInboundInterceptor($tracer),
-                new OpenTelemetryWorkflowClientCallsInterceptor($tracer),
-                new OpenTelemetryWorkflowOutboundRequestInterceptor($tracer)
-            ];
-        }
-
-        $this->workflowClient = WorkflowClient::create(
-            serviceClient: $this->serviceClient,
-            interceptorProvider: new SimplePipelineProvider($interceptors)
-        );
     }
 
     /**
