@@ -162,12 +162,3 @@ The following samples demonstrate some of the more complex aspects associated wi
 - **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID. The process charges the user once every 30 days after a one month free trial period.
 
 <!-- @@@SNIPEND -->
-
-## OpenTelemetry interceptors
-
-Each sample can be executed with [OpenTelemetry](https://github.com/temporalio/sdk-php-interceptors-opentelemetry) 
-interceptors. To do this, run a console command with the `telemetry` option. For example:
-
-```bash
-$ php app.php saga --telemetry
-```
