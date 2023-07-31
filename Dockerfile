@@ -36,6 +36,6 @@ COPY app/ /var/app
 RUN composer install
 
 # Setup RoadRunner
-RUN vendor/bin/rr get --no-interaction \
+RUN vendor/bin/rr get --no-interaction -f 2023.2.1 \
     && mv rr /usr/local/bin/rr \
     && chmod +x /usr/local/bin/rr

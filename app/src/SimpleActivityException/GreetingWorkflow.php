@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\SimpleActivity;
+namespace Temporal\Samples\SimpleActivityException;
 
 use Temporal\Activity\ActivityOptions;
 use Temporal\Common\RetryOptions;
@@ -35,7 +35,7 @@ class GreetingWorkflow implements GreetingWorkflowInterface
                     RetryOptions::new()
                         ->withInitialInterval(new \DateInterval('PT5S'))
                         ->withBackoffCoefficient(3)
-                        ->withMaximumAttempts(5)
+                        ->withMaximumAttempts(2)
                         ->withMaximumInterval(new \DateInterval('PT10S'))
                 )
         );

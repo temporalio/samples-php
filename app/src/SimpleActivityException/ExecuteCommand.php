@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\SimpleActivity;
+namespace Temporal\Samples\SimpleActivityException;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,8 +19,8 @@ use Temporal\SampleUtils\Command;
 // @@@SNIPSTART php-hello-client
 class ExecuteCommand extends Command
 {
-    protected const NAME = 'simple-activity';
-    protected const DESCRIPTION = 'Execute SimpleActivity\GreetingWorkflow';
+    protected const NAME = 'simple-activity-exception';
+    protected const DESCRIPTION = 'Execute SimpleActivityException\GreetingWorkflow';
 
     public function execute(InputInterface $input, OutputInterface $output)
     {

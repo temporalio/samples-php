@@ -9,11 +9,13 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\SimpleActivity;
+namespace Temporal\Samples\SimpleActivityTimeout;
 
+use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Common\RetryOptions;
 use Temporal\Workflow;
+
 
 // @@@SNIPSTART php-hello-workflow
 class GreetingWorkflow implements GreetingWorkflowInterface
@@ -30,12 +32,12 @@ class GreetingWorkflow implements GreetingWorkflowInterface
         $this->greetingActivity = Workflow::newActivityStub(
             GreetingActivityInterface::class,
             ActivityOptions::new()
-                ->withStartToCloseTimeout(new \DateInterval('PT45S'))
+                ->withStartToCloseTimeout(new \DateInterval('PT4S'))
                 ->withRetryOptions(
                     RetryOptions::new()
                         ->withInitialInterval(new \DateInterval('PT5S'))
                         ->withBackoffCoefficient(3)
-                        ->withMaximumAttempts(5)
+                        ->withMaximumAttempts(2)
                         ->withMaximumInterval(new \DateInterval('PT10S'))
                 )
         );
