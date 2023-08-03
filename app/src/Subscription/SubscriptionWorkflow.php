@@ -41,7 +41,6 @@ class SubscriptionWorkflow implements SubscriptionWorkflowInterface
             while (true) {
                 // Lower period duration to observe workflow behaviour
                 yield Workflow::timer(CarbonInterval::days(30));
-                yield $this->account->chargeMonthlyFee($userID);
 
                 if ($trialPeriod) {
                     yield $this->account->sendEndOfTrialEmail($userID);
@@ -49,6 +48,7 @@ class SubscriptionWorkflow implements SubscriptionWorkflowInterface
                     continue;
                 }
 
+                yield $this->account->chargeMonthlyFee($userID);
                 yield $this->account->sendMonthlyChargeEmail($userID);
             }
         } catch (CanceledFailure $e) {
