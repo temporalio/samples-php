@@ -20,7 +20,7 @@ require __DIR__ . '/vendor/autoload.php';
 // finds all available workflows, activity types and commands in a given directory
 $declarations = DeclarationLocator::create(__DIR__ . '/src/');
 
-$host = getenv('TEMPORAL_CLI_ADDRESS');
+$host = getenv('TEMPORAL_ADDRESS') ?: getenv('TEMPORAL_CLI_ADDRESS');
 if (empty($host)) {
     $host = 'localhost:7233';
 }
