@@ -1,6 +1,6 @@
 # FileProcessing sample
 
-This sample demonstrates how to how to use Task routing.
+This sample demonstrates how to use Task routing.
 
 This Workflow downloads a file, processes it, and uploads the result to a destination.
 Any worker can pick up the first Activity.

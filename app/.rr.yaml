@@ -1,4 +1,4 @@
-version: "2.7"
+version: "3"
 
 rpc:
   listen: tcp://127.0.0.1:6001
@@ -11,6 +11,10 @@ temporal:
   activities:
     num_workers: 4
 
+service:
+  interceptors:
+    command: "./rr serve -c ./src/Interceptors/.rr.yaml"
+
 logs:
-  level: debug
+  level: info
   mode: development
