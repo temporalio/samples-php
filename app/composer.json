@@ -1,7 +1,8 @@
 {
   "minimum-stability": "beta",
+  "prefer-stable": true,
   "require": {
-    "temporal/sdk": ">=2.6.0",
+    "temporal/sdk": ">=2.7.0",
     "spiral/tokenizer": ">=2.7"
   },
   "autoload": {

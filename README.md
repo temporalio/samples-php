@@ -161,4 +161,6 @@ The following samples demonstrate some of the more complex aspects associated wi
 
 - **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID. The process charges the user once every 30 days after a one month free trial period.
 
+- **[Interceptors](https://github.com/temporalio/samples-php/tree/master/app/src/Interceptors)**: Demonstrates how to use Workflow and Activity interceptors to implement custom logic.
+
 <!-- @@@SNIPEND -->
