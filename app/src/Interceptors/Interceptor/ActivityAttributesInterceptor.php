@@ -37,7 +37,7 @@ final class ActivityAttributesInterceptor implements WorkflowOutboundCallsInterc
 
         foreach ($this->iterateOptions($input->method) as $attribute) {
             if ($attribute instanceof Attribute\StartToCloseTimeout) {
-                \error_log(\sprintf('Redeclare timeout of %s to %s', $input->type, $attribute->timeout));
+                \error_log(\sprintf('Redeclare start_to_close timeout of %s to %s', $input->type, $attribute->timeout));
                 $options = $options->withStartToCloseTimeout($attribute->timeout);
             }
         }
