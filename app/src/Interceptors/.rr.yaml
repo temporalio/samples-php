@@ -1,0 +1,14 @@
+version: "3"
+
+server:
+  command: "php worker.php"
+  env:
+    - TEMPORAL_CLI_ADDRESS: temporal:7233
+
+temporal:
+  address: "temporal:7233"
+  activities:
+    num_workers: 2
+
+logs:
+  level: info

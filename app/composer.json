@@ -2,7 +2,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "temporal/sdk": "^2.6",
+    "temporal/sdk": ">=2.7.0",
     "spiral/tokenizer": "^3.7",
     "temporal/open-telemetry-interceptors": "dev-master",
     "open-telemetry/exporter-otlp": "^0.0.17",

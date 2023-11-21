@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3"
 
 rpc:
   listen: tcp://127.0.0.1:6001
@@ -7,12 +7,16 @@ server:
   command: "php worker.php"
 
 temporal:
-  address: "temporal:7233"
+  address: "127.0.0.1:7233"
   activities:
     num_workers: 4
 
+service:
+  interceptors:
+    command: "./rr serve -c ./src/Interceptors/.rr.yaml"
+
 logs:
-  level: debug
+  level: info
   mode: development
 
 otel:
