@@ -82,6 +82,8 @@ services:
   collector:
     container_name: collector
     image: otel/opentelemetry-collector-contrib:0.79.0
+    networks:
+      - temporal-network
     command: [ "--config=/etc/otel-collector-config.yml" ]
     ports:
       - 4317:4317
@@ -92,13 +94,17 @@ services:
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin-slim
+    networks:
+      - temporal-network
     ports:
       - 9411:9411
 
   app:
-    build: .
-    #    volumes:
-    #      - ./app:/var/app
+    build:
+      dockerfile: docker/app/Dockerfile
+      context: ./
+    # volumes:
+    #  - ./app:/var/app
     depends_on:
       - temporal
     networks:
