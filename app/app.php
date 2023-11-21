@@ -27,7 +27,7 @@ if (empty($host)) {
 $app = new Application('Temporal PHP-SDK Samples');
 
 foreach ($declarations->getCommands() as $command) {
-    $app->add(Command::create($command,  ServiceClient::create($host)));
+    $app->add(Command::create($command, ServiceClient::create($host)));
 }
 
 $app->run();
