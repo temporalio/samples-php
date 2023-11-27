@@ -6,7 +6,7 @@ server:
     - TEMPORAL_CLI_ADDRESS: temporal:7233
 
 temporal:
-  address: "temporal:7233"
+  address: ${TEMPORAL_HOST:-localhost}:${TEMPORAL_PORT:-7233}
   activities:
     num_workers: 2
 

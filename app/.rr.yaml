@@ -7,14 +7,24 @@ server:
   command: "php worker.php"
 
 temporal:
-  address: "127.0.0.1:7233"
+  address: ${TEMPORAL_HOST:-localhost}:${TEMPORAL_PORT:-7233}
   activities:
     num_workers: 4
 
 service:
   interceptors:
-    command: "./rr serve -c ./src/Interceptors/.rr.yaml"
+    command: "${INTERCEPTORS_RR_PATH:-./rr} serve -c ./src/Interceptors/.rr.yaml"
 
 logs:
   level: info
   mode: development
+
+otel:
+  insecure: true
+  compress: false
+  client: http
+  exporter: otlp
+  resource:
+    service_name: rr-temporal-samples
+    service_version: 1.0.0
+  endpoint: ${OTEL_HOST:-localhost}:${OTEL_PORT:-4318}

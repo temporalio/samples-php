@@ -11,7 +11,11 @@ declare(strict_types=1);
 
 namespace Temporal\SampleUtils;
 
+use Temporal\Client\GRPC\ServiceClient;
+use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowClientInterface;
+use Temporal\Interceptor\SimplePipelineProvider;
+use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowClientCallsInterceptor;
 
 class Command extends \Symfony\Component\Console\Command\Command
 {
@@ -21,27 +25,29 @@ class Command extends \Symfony\Component\Console\Command\Command
     //  Short command description.
     protected const DESCRIPTION = '';
 
-    // Command options specified in Symphony format. For more complex definitions redefine
+    // Command options specified in Symfony format. For more complex definitions redefine
     // getOptions() method.
     protected const OPTIONS = [];
 
-    // Command arguments specified in Symphony format. For more complex definitions redefine
+    // Command arguments specified in Symfony format. For more complex definitions redefine
     // getArguments() method.
     protected const ARGUMENTS = [];
 
-    /**
-     * @var WorkflowClientInterface
-     */
     protected WorkflowClientInterface $workflowClient;
 
     /**
      * Command constructor.
-     * @param WorkflowClientInterface $workflowClient
      */
-    public function __construct(WorkflowClientInterface $workflowClient)
+    public function __construct(ServiceClient $serviceClient)
     {
         parent::__construct();
-        $this->workflowClient = $workflowClient;
+
+        $this->workflowClient = WorkflowClient::create(
+            serviceClient: $serviceClient,
+            interceptorProvider: new SimplePipelineProvider([
+                new OpenTelemetryWorkflowClientCallsInterceptor(TracerFactory::create('interceptors-sample-client')),
+            ])
+        );
     }
 
     /**
@@ -83,11 +89,10 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     /**
      * @param string $class
-     * @param WorkflowClientInterface $workflowClient
      * @return static
      */
-    public static function create(string $class, WorkflowClientInterface $workflowClient): self
+    public static function create(string $class, ServiceClient $client): self
     {
-        return new $class($workflowClient);
+        return new $class($client);
     }
 }

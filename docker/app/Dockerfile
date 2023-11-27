@@ -1,4 +1,4 @@
-FROM php:8.0.15-cli
+FROM php:8.2.7-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   nano \
@@ -14,7 +14,7 @@ RUN docker-php-ext-install zip \
   && docker-php-ext-enable opcache sockets mbstring
 
 # Protobuf and GRPC
-ENV PROTOBUF_VERSION "3.19.2"
+ENV PROTOBUF_VERSION "3.20.1"
 RUN pecl channel-update pecl.php.net
 RUN pecl install protobuf-${PROTOBUF_VERSION} grpc \
     && docker-php-ext-enable protobuf grpc

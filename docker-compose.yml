@@ -79,17 +79,46 @@ services:
     ports:
       - 8080:8080
 
+  collector:
+    container_name: collector
+    image: otel/opentelemetry-collector-contrib:0.79.0
+    networks:
+      - temporal-network
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    ports:
+      - 4317:4317
+      - 4318:4318
+    volumes:
+      - ./docker/otel/otel-collector-config.yml:/etc/otel-collector-config.yml
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin-slim
+    networks:
+      - temporal-network
+    ports:
+      - 9411:9411
 
   app:
-    build: .
-    #    volumes:
-    #      - ./app:/var/app
+    build:
+      dockerfile: docker/app/Dockerfile
+      context: ./
+    # volumes:
+    #  - ./app:/var/app
     depends_on:
       - temporal
     networks:
       - temporal-network
     environment:
-      - "TEMPORAL_CLI_ADDRESS=temporal:7233"
+      - TEMPORAL_CLI_ADDRESS=temporal:7233
+      - TELEMETRY_DRIVER=otel
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
+      - OTEL_PHP_TRACES_PROCESSOR=simple
+      - TEMPORAL_HOST=temporal
+      - OTEL_HOST=collector
+      - INTERCEPTORS_RR_PATH=/usr/local/bin/rr
     command: [ "/usr/local/bin/wait-for-temporal.sh", "temporal", "/usr/local/bin/rr", "serve", "-c", "/var/app/.rr.yaml" ]
 
 networks:

@@ -41,7 +41,7 @@ $ docker-compose exec app rr workers -i
 ```
 
 ## Local Setup
-**1. Make sure you have PHP 7.4, or higher, installed.**
+**1. Make sure you have PHP 8.1, or higher, installed.**
 
 **2. Clone this repo and change directory into the root of the project.**
 
@@ -69,7 +69,7 @@ $ composer install
 
 **5. Download RoadRunner application server**
 
-The Temporal PHP SDK requires the RoadRunner 2.0 application server and supervisor to run Activities and Workflows in a scalable way.
+The Temporal PHP SDK requires the RoadRunner v2023.2 application server and supervisor to run Activities and Workflows in a scalable way.
 
 ```bash
 $ cd app
@@ -85,10 +85,7 @@ The fastest way to do that is by following the [Quick install guide](https://doc
 
 You can also run the included `docker-compose.yml` file. Make sure to comment `app` section.
 
-**7. Update configuration**
-Make sure to update the temporal address in `app/.rr.yaml` to `localhost:7233`.  
-
-**8. Start the application using RoadRunner**
+**7. Start the application using RoadRunner**
 
 By default, all samples run using a single RoadRunner Server instance.
 To start the application using RoadRunner:
@@ -102,7 +99,7 @@ You can now interact with the samples.
 
 Note: You can alter number of PHP Workers in `app/.rr.yaml`.
 
-**9. Run a sample**
+**8. Run a sample**
 
 ## Samples
 

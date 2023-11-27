@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 use Temporal\SampleUtils\DeclarationLocator;
 use Temporal\Client\GRPC\ServiceClient;
-use Temporal\Client\WorkflowClient;
 use Symfony\Component\Console\Application;
 use Temporal\SampleUtils\Command;
 
@@ -25,12 +24,10 @@ if (empty($host)) {
     $host = 'localhost:7233';
 }
 
-$workflowClient = WorkflowClient::create(ServiceClient::create($host));
-
 $app = new Application('Temporal PHP-SDK Samples');
 
 foreach ($declarations->getCommands() as $command) {
-    $app->add(Command::create($command, $workflowClient));
+    $app->add(Command::create($command, ServiceClient::create($host)));
 }
 
 $app->run();
