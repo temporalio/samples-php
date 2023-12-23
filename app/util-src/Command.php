@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace Temporal\SampleUtils;
 
 use Temporal\Client\GRPC\ServiceClient;
+use Temporal\Client\ScheduleClient;
+use Temporal\Client\ScheduleClientInterface;
 use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowClientInterface;
 use Temporal\Interceptor\SimplePipelineProvider;
@@ -34,6 +36,7 @@ class Command extends \Symfony\Component\Console\Command\Command
     protected const ARGUMENTS = [];
 
     protected WorkflowClientInterface $workflowClient;
+    protected ScheduleClientInterface $scheduleClient;
 
     /**
      * Command constructor.
@@ -48,6 +51,7 @@ class Command extends \Symfony\Component\Console\Command\Command
                 new OpenTelemetryWorkflowClientCallsInterceptor(TracerFactory::create('interceptors-sample-client')),
             ])
         );
+        $this->scheduleClient = ScheduleClient::create($serviceClient);
     }
 
     /**
