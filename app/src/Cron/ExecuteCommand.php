@@ -23,7 +23,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'cron';
     protected const DESCRIPTION = 'Start Cron\CronWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         // Sets the cron schedule using the WorkflowOptions.
         // The cron format is parsed by "https://github.com/robfig/cron" library.

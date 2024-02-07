@@ -23,7 +23,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'exception';
     protected const DESCRIPTION = 'Execute Exception\FailedWorkflow with multiple signals';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             FailedWorkflow::class,

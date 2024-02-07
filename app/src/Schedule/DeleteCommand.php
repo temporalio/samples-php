@@ -23,7 +23,7 @@ class DeleteCommand extends Command
     protected const NAME = 'schedule:delete';
     protected const DESCRIPTION = 'Delete scheduled workflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $handle = $this->scheduleClient->getHandle(ScheduleWorkflowInterface::SCHEDULE_ID);
 

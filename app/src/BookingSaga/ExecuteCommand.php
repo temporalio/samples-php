@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'booking-saga';
     protected const DESCRIPTION = 'Execute BookingSaga\TripBookingWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             TripBookingWorkflowInterface::class,

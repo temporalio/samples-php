@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'child';
     protected const DESCRIPTION = 'Execute Child\ParentWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             ParentWorkflowInterface::class,

@@ -21,7 +21,7 @@ class DescribeCommand extends Command
     protected const NAME = 'schedule:describe';
     protected const DESCRIPTION = 'Describe the Schedule';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $handle = $this->scheduleClient->getHandle(ScheduleWorkflowInterface::SCHEDULE_ID);
 

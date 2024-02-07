@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'money-batch';
     protected const DESCRIPTION = 'Execute MoneyBatch\MoneyBatchWorkflow with multiple signals and queries';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             MoneyBatchWorkflowInterface::class,

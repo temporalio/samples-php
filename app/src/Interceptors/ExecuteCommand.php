@@ -23,7 +23,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'interceptors';
     protected const DESCRIPTION = 'Execute workflow with interceptors';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             TestActivityAttributesInterceptor::class,

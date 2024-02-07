@@ -23,7 +23,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'simple-activity';
     protected const DESCRIPTION = 'Execute SimpleActivity\GreetingWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             GreetingWorkflowInterface::class,

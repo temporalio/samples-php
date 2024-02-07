@@ -28,7 +28,7 @@ class CancelCommand extends Command
         ['userID', InputArgument::REQUIRED, 'Unique user ID']
     ];
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $userID = $input->getArgument('userID');
 

@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'query';
     protected const DESCRIPTION = 'Execute Query\QueryWorkflow with additional query and timer';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             QueryWorkflowInterface::class,

@@ -20,7 +20,7 @@ class ProlongCommand extends Command
     protected const NAME = 'updatable-timer:prolong';
     protected const DESCRIPTION = 'Prolong the duration of UpdatableTimer\DynamicSleepWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newRunningWorkflowStub(
             DynamicSleepWorkflowInterface::class,

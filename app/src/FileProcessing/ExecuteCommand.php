@@ -28,7 +28,7 @@ class ExecuteCommand extends Command
         ['url', InputArgument::REQUIRED, 'Download URL']
     ];
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             FileProcessingWorkflowInterface::class,
