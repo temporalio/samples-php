@@ -25,6 +25,7 @@ COPY --from=temporalio/admin-tools /usr/local/bin/tctl /usr/local/bin/tctl
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
+# Copy application codebase
 WORKDIR /var/app
 COPY app/ /var/app
 
