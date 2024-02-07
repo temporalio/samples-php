@@ -25,15 +25,14 @@ COPY --from=temporalio/admin-tools /usr/local/bin/tctl /usr/local/bin/tctl
 # Install Composer
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
-# Wait for Temporal service to star up
-COPY wait-for-temporal.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/wait-for-temporal.sh
-
-# Copy application codebase
 WORKDIR /var/app
 COPY app/ /var/app
 
 RUN composer install
+
+# Wait for Temporal service to start up
+COPY wait-for-temporal.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/wait-for-temporal.sh
 
 # Setup RoadRunner
 RUN vendor/bin/rr get --no-interaction \
