@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\Updates;
 
+use Exception;
 use React\Promise\PromiseInterface;
 use Temporal\Promise;
 use Temporal\Workflow;
@@ -34,92 +35,117 @@ class UpdateWorkflow implements UpdateWorkflowInterface
         6 => 600,
     ];
 
-    /**
-     * Available dices
-     * @var array<Dice>
-     */
-    private array $dices = [];
-
-    private int $tries = 1;
-    private bool $ended = false;
     private bool $exit = false;
-    private int $score = 0;
+    private State $state;
 
-    /**
-     * @return int<0, max> Score
-     */
     public function handle(int $maxTries = 3)
     {
-        for ($i = 0; $i < self::DICES_COUNT; $i++) {
-            $this->dices[] = new Dice($i);
-        }
+        $this->state = new State();
+
+        yield $this->resetDices();
 
         yield Workflow::await(fn() => $this->exit);
+
+        return $this->state;
     }
 
     public function roll()
     {
-        --$this->tries;
+        --$this->state->tries;
         yield $this->rollDices();
-        return $this->dices;
+        $this->endIfPossible();
+        return $this->state;
     }
 
+    /**
+     * The method validates the roll action is possible in the current game state.
+     *
+     * @throws Exception
+     */
     public function validateRoll(): void
     {
-        $this->ended and throw new \Exception('Game ended');
-        $this->tries > 0 or throw new \Exception('No more tries');
+        $this->state->ended and throw new \Exception('Game ended');
+        $this->state->tries > 0 or throw new \Exception('No more tries');
+        // Unreachable condition
+        $this->state->dices !== [] or throw new \Exception('You forgot your dices');
     }
 
     public function holdAndRoll(array $colors)
     {
-        // Picked dices
-        $dices = $this->pickDices($colors);
+        // Take dices
+        $dices = $this->takeDices($colors, true);
         // Calculate score
         $score = $this->calcDicesScore($dices);
-        $this->score += $score;
-        // Remove picked dices
-        foreach ($this->dices as $key => $dice) {
-            if (\in_array($dice, $dices, true)) {
-                unset($this->dices[$key]);
-            }
+        $this->state->score += $score;
+
+        if ($this->state->dices === []) {
+            // Reset dices if there are no dices left
+            yield $this->resetDices();
+        } else {
+            // Roll the remaining dices
+            yield $this->rollDices();
         }
-        // Roll the remaining dices
-        yield $this->rollDices();
 
-        // todo Check if the game ended
+        // Check if the game ended
+        $this->endIfPossible();
 
-        // todo Check if there are no dices left
+        return $this->state;
     }
 
+    /**
+     * Note: validation method must have the same signature as the update method.
+     * @throws Exception
+     */
     public function validateHoldAndRoll(array $colors): void
     {
-        $this->ended and throw new \Exception('Game ended');
+        $this->state->ended and throw new \Exception('Game ended');
         $colors === [] and throw new \Exception('You must pick at least one dice');
-        \count($colors) <= \count($this->dices) or throw new \Exception('Invalid dices count');
+        \count($colors) <= \count($this->state->dices) or throw new \Exception('Invalid dices count');
         \array_unique($colors) === $colors or throw new \Exception('You can not use the same dice twice');
         // Picked dices are available
-        $dices = $this->pickDices($colors);
+        $dices = $this->takeDices($colors);
         // Scores are calculated here
         $this->calcDicesScore($dices);
     }
 
     public function complete()
     {
-        // TODO: Implement complete() method.
+        $this->hasPossibleMoves() or --$this->state->tries;
+
+        $this->state->ended = true;
+        $this->exit();
+        return $this->state;
+    }
+
+    public function getState(): State
+    {
+        return $this->state;
+    }
+
+    public function exit()
+    {
+        $this->exit = true;
     }
 
     /**
+     * Take dices by colors
+     *
      * @param array<non-empty-string> $colors
+     * @param bool $remove Remove dices from the table
      * @return list<Dice>
      * @throws \Exception
      */
-    private function pickDices(array $colors): array
+    private function takeDices(array $colors, bool $remove = false): array
     {
         $picked = [];
         foreach ($colors as $color) {
-            foreach ($this->dices as $dice) {
+            foreach ($this->state->dices as $pos => $dice) {
                 if ($dice->color === $color) {
                     $picked[] = $dice;
+                    if ($remove) {
+                        unset($this->state->dices[$pos]);
+                    }
+
                     continue 2;
                 }
             }
@@ -132,10 +158,11 @@ class UpdateWorkflow implements UpdateWorkflowInterface
 
     /**
      * @param non-empty-list<Dice> $dices
+     * @param bool $throwException Throw exception if invalid dice combination
      * @return int<0, max>
      * @throws \Exception
      */
-    private function calcDicesScore(array $dices): int
+    private function calcDicesScore(array $dices, bool $throwException = true): int
     {
         // Normalize dices values
         $values = \array_map(static fn(Dice $dice): int => $dice->getValue(), $dices);
@@ -162,7 +189,7 @@ class UpdateWorkflow implements UpdateWorkflowInterface
         $counts = \array_count_values($values);
         foreach ($counts as $value => $count) {
             if ($count >= 3) {
-                $score += self::SCORE_SEQUENCES[$value] ** ($count - 2);
+                $score += self::SCORE_SEQUENCES[$value] * ($count - 2);
                 unset($counts[$value]);
                 continue;
             }
@@ -171,7 +198,9 @@ class UpdateWorkflow implements UpdateWorkflowInterface
             $score += match ($value) {
                 1 => 100 * $count,
                 5 => 50 * $count,
-                default => throw new \Exception("Picked dice with value $value has no score"),
+                default => $throwException
+                    ? throw new \Exception("Picked dice with value $value has no score")
+                    : 0,
             };
         }
 
@@ -180,8 +209,8 @@ class UpdateWorkflow implements UpdateWorkflowInterface
 
     private function rollDices(): PromiseInterface
     {
-        $dices = $this->dices;
-        $promises = $this->dices = [];
+        $dices = $this->state->dices;
+        $promises = $this->state->dices = [];
         foreach ($dices as $dice) {
             // Might be replaced with an activity call
             $promises[] = Workflow::sideEffect(static function () use ($dice): Dice {
@@ -189,12 +218,51 @@ class UpdateWorkflow implements UpdateWorkflowInterface
                 return $dice;
             })->then(
                 function (Dice $dice): Dice {
-                    $this->dices[] = $dice;
+                    $this->state->dices[] = $dice;
                     return $dice;
                 }
             );
         }
 
         return Promise::all($promises);
+    }
+
+    /**
+     * Check possible moves and end the game if there are no moves left
+     *
+     * @return bool True if the game ended
+     */
+    private function endIfPossible(): bool
+    {
+        if ($this->state->tries > 0) {
+            return false;
+        }
+
+        if ($this->hasPossibleMoves()) {
+            return false;
+        }
+
+        $this->state->score = 0;
+        $this->state->ended = true;
+
+        return true;
+    }
+
+    private function hasPossibleMoves(): bool
+    {
+        return $this->calcDicesScore($this->state->dices, false) > 0;
+    }
+
+    /**
+     * Remove all dices from the table and create new ones
+     */
+    private function resetDices(): PromiseInterface
+    {
+        $this->state->dices = [];
+        for ($i = 0; $i < self::DICES_COUNT; $i++) {
+            $this->state->dices[] = new Dice($i);
+        }
+
+        return $this->rollDices();
     }
 }

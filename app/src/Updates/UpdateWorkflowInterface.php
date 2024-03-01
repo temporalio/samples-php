@@ -13,6 +13,8 @@ namespace Temporal\Samples\Updates;
 
 use DateTimeInterface;
 use Exception;
+use Temporal\Workflow\QueryMethod;
+use Temporal\Workflow\ReturnType;
 use Temporal\Workflow\SignalMethod;
 use Temporal\Workflow\UpdateMethod;
 use Temporal\Workflow\UpdateValidatorMethod;
@@ -23,27 +25,42 @@ use Temporal\Workflow\WorkflowMethod;
 interface UpdateWorkflowInterface
 {
     #[WorkflowMethod('Zonk.start')]
+    #[ReturnType(State::class)]
     public function handle(int $maxTries = 5);
 
+    /**
+     * @return State
+     */
     #[UpdateMethod(name: 'rollDices')]
+    #[ReturnType(State::class)]
     public function roll();
 
-    /**
-     * @throws Exception
-     */
     #[UpdateValidatorMethod(forUpdate: 'rollDices')]
     public function validateRoll(): void;
 
-    #[SignalMethod(name: 'holdAndRoll')]
+    /**
+     * @param list<non-empty-string> $colors
+     * @return State
+     */
+    #[UpdateMethod(name: 'holdAndRoll')]
+    #[ReturnType(State::class)]
     public function holdAndRoll(array $colors);
 
-    /**
-     * Note: validation method must have the same signature as the update method.
-     * @throws Exception
-     */
     #[UpdateValidatorMethod(forUpdate: 'holdAndRoll')]
     public function validateHoldAndRoll(array $colors): void;
 
-    #[SignalMethod]
+    /**
+     * Stop the game and save the score
+     *
+     * Note: the method has no validator
+     */
+    #[UpdateMethod]
+    #[ReturnType(State::class)]
     public function complete();
+
+    #[QueryMethod]
+    public function getState(): State;
+
+    #[SignalMethod]
+    public function exit();
 }

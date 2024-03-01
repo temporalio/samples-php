@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\Updates;
 
+use Temporal\Internal\Marshaller\Meta\Marshal;
+
 final class Dice
 {
-    private const COLORS = ['red', 'green', 'blue', 'yellow', 'black', 'cyan', 'magenta', 'white'];
+    private const COLORS = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta'];
 
+    #[Marshal]
     public readonly string $color;
-    private int $value;
+    #[Marshal]
+    private int $value = 0;
 
     public function __construct(int $num)
     {
         $this->color = self::COLORS[$num % \count(self::COLORS)];
-        $this->roll();
     }
 
+    /**
+     * @return int<1, 6>
+     */
     public function getValue(): int
     {
         return $this->value;
