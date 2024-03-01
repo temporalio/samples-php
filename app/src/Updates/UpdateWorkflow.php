@@ -22,19 +22,6 @@ use Temporal\Workflow;
  */
 class UpdateWorkflow implements UpdateWorkflowInterface
 {
-    // Rules
-    private const DICES_COUNT = 6;
-    private const SCORE_STRAIGHT = 1500;
-    private const SCORE_THREE_PAIRS = 750;
-    private const SCORE_SEQUENCES = [
-        1 => 1000,
-        2 => 200,
-        3 => 300,
-        4 => 400,
-        5 => 500,
-        6 => 600,
-    ];
-
     private bool $exit = false;
     private State $state;
 
@@ -53,7 +40,7 @@ class UpdateWorkflow implements UpdateWorkflowInterface
     {
         --$this->state->tries;
         yield $this->rollDices();
-        $this->endIfPossible();
+        Rules::endIfPossible($this->state);
         return $this->state;
     }
 
@@ -73,9 +60,9 @@ class UpdateWorkflow implements UpdateWorkflowInterface
     public function holdAndRoll(array $colors)
     {
         // Take dices
-        $dices = $this->takeDices($colors, true);
+        $dices = Rules::takeDices($this->state, $colors, true);
         // Calculate score
-        $score = $this->calcDicesScore($dices);
+        $score = Rules::calcDicesScore($dices);
         $this->state->score += $score;
 
         if ($this->state->dices === []) {
@@ -87,7 +74,7 @@ class UpdateWorkflow implements UpdateWorkflowInterface
         }
 
         // Check if the game ended
-        $this->endIfPossible();
+        Rules::endIfPossible($this->state);
 
         return $this->state;
     }
@@ -103,14 +90,14 @@ class UpdateWorkflow implements UpdateWorkflowInterface
         \count($colors) <= \count($this->state->dices) or throw new \Exception('Invalid dices count');
         \array_unique($colors) === $colors or throw new \Exception('You can not use the same dice twice');
         // Picked dices are available
-        $dices = $this->takeDices($colors);
+        $dices = Rules::takeDices($this->state, $colors);
         // Scores are calculated here
-        $this->calcDicesScore($dices);
+        Rules::calcDicesScore($dices);
     }
 
     public function complete()
     {
-        $this->hasPossibleMoves() or --$this->state->tries;
+        Rules::hasPossibleMoves($this->state) or --$this->state->tries;
 
         $this->state->ended = true;
         $this->exit();
@@ -125,86 +112,6 @@ class UpdateWorkflow implements UpdateWorkflowInterface
     public function exit()
     {
         $this->exit = true;
-    }
-
-    /**
-     * Take dices by colors
-     *
-     * @param array<non-empty-string> $colors
-     * @param bool $remove Remove dices from the table
-     * @return list<Dice>
-     * @throws \Exception
-     */
-    private function takeDices(array $colors, bool $remove = false): array
-    {
-        $picked = [];
-        foreach ($colors as $color) {
-            foreach ($this->state->dices as $pos => $dice) {
-                if ($dice->color === $color) {
-                    $picked[] = $dice;
-                    if ($remove) {
-                        unset($this->state->dices[$pos]);
-                    }
-
-                    continue 2;
-                }
-            }
-
-            throw new \Exception("Dice with color $color not found");
-        }
-
-        return $picked;
-    }
-
-    /**
-     * @param non-empty-list<Dice> $dices
-     * @param bool $throwException Throw exception if invalid dice combination
-     * @return int<0, max>
-     * @throws \Exception
-     */
-    private function calcDicesScore(array $dices, bool $throwException = true): int
-    {
-        // Normalize dices values
-        $values = \array_map(static fn(Dice $dice): int => $dice->getValue(), $dices);
-        \sort($values);
-
-        // Find combinations
-
-        if (\count($values) === 6) {
-            // Straight
-            if ($values === [1, 2, 3, 4, 5, 6]) {
-                return self::SCORE_STRAIGHT;
-            }
-
-            // Three pairs
-            if (\count(\array_unique($values)) === 3
-                && $values[0] === $values[1] && $values[2] === $values[3] && $values[4] === $values[5]
-            ) {
-                return self::SCORE_THREE_PAIRS;
-            }
-        }
-
-        $score = 0;
-        // Find sequences
-        $counts = \array_count_values($values);
-        foreach ($counts as $value => $count) {
-            if ($count >= 3) {
-                $score += self::SCORE_SEQUENCES[$value] * ($count - 2);
-                unset($counts[$value]);
-                continue;
-            }
-
-            // Dices 1 and 5 have special score outside of sequences
-            $score += match ($value) {
-                1 => 100 * $count,
-                5 => 50 * $count,
-                default => $throwException
-                    ? throw new \Exception("Picked dice with value $value has no score")
-                    : 0,
-            };
-        }
-
-        return $score;
     }
 
     private function rollDices(): PromiseInterface
@@ -228,38 +135,12 @@ class UpdateWorkflow implements UpdateWorkflowInterface
     }
 
     /**
-     * Check possible moves and end the game if there are no moves left
-     *
-     * @return bool True if the game ended
-     */
-    private function endIfPossible(): bool
-    {
-        if ($this->state->tries > 0) {
-            return false;
-        }
-
-        if ($this->hasPossibleMoves()) {
-            return false;
-        }
-
-        $this->state->score = 0;
-        $this->state->ended = true;
-
-        return true;
-    }
-
-    private function hasPossibleMoves(): bool
-    {
-        return $this->calcDicesScore($this->state->dices, false) > 0;
-    }
-
-    /**
      * Remove all dices from the table and create new ones
      */
     private function resetDices(): PromiseInterface
     {
         $this->state->dices = [];
-        for ($i = 0; $i < self::DICES_COUNT; $i++) {
+        for ($i = 0; $i < Rules::DICES_COUNT; $i++) {
             $this->state->dices[] = new Dice($i);
         }
 
