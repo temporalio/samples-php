@@ -22,24 +22,23 @@ use Temporal\Workflow;
  */
 class UpdateWorkflow implements UpdateWorkflowInterface
 {
-    private bool $exit = false;
     private State $state;
 
     public function handle(int $maxTries = 3)
     {
         $this->state = new State();
 
-        yield $this->resetDices();
-
-        yield Workflow::await(fn() => $this->exit);
+        yield Workflow::await(fn() => $this->state->ended);
 
         return $this->state;
     }
 
     public function roll()
     {
-        --$this->state->tries;
-        yield $this->rollDices();
+        yield $this->state->dices === []
+            ? $this->resetDices()
+            : $this->rollDices();
+
         Rules::endIfPossible($this->state);
         return $this->state;
     }
@@ -52,44 +51,34 @@ class UpdateWorkflow implements UpdateWorkflowInterface
     public function validateRoll(): void
     {
         $this->state->ended and throw new \Exception('Game ended');
-        $this->state->tries > 0 or throw new \Exception('No more tries');
-        // Unreachable condition
-        $this->state->dices !== [] or throw new \Exception('You forgot your dices');
+        $this->state->canRoll or throw new \Exception('Invalid roll action');
     }
 
-    public function holdAndRoll(array $colors)
+    public function choose(array $colors)
     {
         // Take dices
         $dices = Rules::takeDices($this->state, $colors, true);
         // Calculate score
-        $score = Rules::calcDicesScore($dices);
-        $this->state->score += $score;
-
-        if ($this->state->dices === []) {
-            // Reset dices if there are no dices left
-            yield $this->resetDices();
-        } else {
-            // Roll the remaining dices
-            yield $this->rollDices();
-        }
-
-        // Check if the game ended
-        Rules::endIfPossible($this->state);
+        $this->state->score += Rules::calcDicesScore($dices);
+        // Unlock Roll action
+        $this->state->canRoll = true;
 
         return $this->state;
     }
 
     /**
+     * The method validates the move is possible in the current game state.
+     *
      * Note: validation method must have the same signature as the update method.
      * @throws Exception
      */
-    public function validateHoldAndRoll(array $colors): void
+    public function validateChoose(array $colors): void
     {
         $this->state->ended and throw new \Exception('Game ended');
         $colors === [] and throw new \Exception('You must pick at least one dice');
         \count($colors) <= \count($this->state->dices) or throw new \Exception('Invalid dices count');
         \array_unique($colors) === $colors or throw new \Exception('You can not use the same dice twice');
-        // Picked dices are available
+        // Chosen dices are available
         $dices = Rules::takeDices($this->state, $colors);
         // Scores are calculated here
         Rules::calcDicesScore($dices);
@@ -97,10 +86,7 @@ class UpdateWorkflow implements UpdateWorkflowInterface
 
     public function complete()
     {
-        Rules::hasPossibleMoves($this->state) or --$this->state->tries;
-
         $this->state->ended = true;
-        $this->exit();
         return $this->state;
     }
 
@@ -109,15 +95,11 @@ class UpdateWorkflow implements UpdateWorkflowInterface
         return $this->state;
     }
 
-    public function exit()
-    {
-        $this->exit = true;
-    }
-
     private function rollDices(): PromiseInterface
     {
         $dices = $this->state->dices;
         $promises = $this->state->dices = [];
+        $this->state->canRoll = false;
         foreach ($dices as $dice) {
             // Might be replaced with an activity call
             $promises[] = Workflow::sideEffect(static function () use ($dice): Dice {

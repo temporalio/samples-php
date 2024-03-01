@@ -44,43 +44,57 @@ class ExecuteCommand extends Command
 
         $output->writeln(
             \sprintf(
-                '<options=bold>Zonk</> game started: WorkflowID=<fg=magenta>%s</>, RunID=<fg=magenta>%s</>',
+                '<options=bold>Zonk</> game initialized: WorkflowID=<fg=magenta>%s</>, RunID=<fg=magenta>%s</>',
                 $run->getExecution()->getID(),
                 $run->getExecution()->getRunID(),
             ),
         );
 
         try {
-            $output->writeln("<fg=gray>! The first roll</>");
-            $state = $workflow->roll();
+            $state = $workflow->getState();
             do {
-                $this->renderState($state);
-
                 // Wait input
-                $answer = $this->ask("Choose dices to hold (e.g. 1 2 3) or press enter to roll again...\n");
+                if ($state->canRoll) {
+                    $this->output->writeln('<fg=gray>Press enter to roll the dices...</>');
+                }
+                if ($state->dices !== []) {
+                    $this->output->writeln('<fg=gray>Choose dices to hold (e.g. 1 2 3) or press enter to stop...</>');
+                }
+                if ($state->score  > 0) {
+                    $this->output->writeln('<fg=gray>Enter "stop" to stop the game...</>');
+                }
+                $answer = $this->ask('');
 
                 try {
                     if ($answer === null) {
+                        $this->printInfo('Rolling the dices...');
                         $state = $workflow->roll();
+                        $this->renderState($state);
+
                         $state->ended and $this->printDanger('Game over!');
                         continue;
                     }
 
                     if ($answer === 'stop') {
-                        $state->ended and $this->printDanger('Stopping the game...');
+                        $state->ended and $this->printInfo('Stopping the game...');
                         $state = $workflow->complete();
+
+                        $this->printInfo(\sprintf('Game over! Your score is %d', $state->score));
+
                         continue;
                     }
 
                     // map number to colors
                     $colors = $this->mapDices($state->dices, $answer);
-                    $output->writeln(\sprintf('<fg=gray>! Holding %s</>', \implode(', ', $colors)));
-                    $state = $workflow->holdAndRoll($colors);
-
-                    $state->ended and $this->printDanger('Game over');
+                    $this->printInfo(\sprintf('Chosen %s', \implode(', ', $colors)));
+                    $before = $state->score;
+                    $state = $workflow->choose($colors);
+                    $this->printInfo(\sprintf("You scored %d\n", $state->score - $before));
+                    $this->renderDices($state->dices);
                 } catch (\Throwable $e) {
                     $output->writeln(\sprintf('<fg=yellow>%s</>', $e->getPrevious()?->getMessage() ?? $e->getMessage()));
                     $this->ask('<fg=gray>Press enter to continue...</>');
+                    $this->renderState($state);
                     continue;
                 }
             } while (!$state->ended);
@@ -88,8 +102,6 @@ class ExecuteCommand extends Command
             $this->output->writeln(\sprintf('<fg=red>%s</>', $e->getMessage()));
             $this->output->writeln(\sprintf('<fg=red>%s</>', $e->getPrevious()?->getMessage()));
         }
-
-        isset($state) and $this->renderState($state);
 
         return self::SUCCESS;
     }
@@ -99,8 +111,6 @@ class ExecuteCommand extends Command
         $this->output->writeln('<options=bold>Game status</>');
         // Render Score
         $this->output->writeln(\sprintf('<fg=green>Score: %d</>', $state->score));
-        // Render Tries
-        $this->output->writeln(\sprintf('<fg=yellow>Tries: %d</>', $state->tries));
 
         $this->output->writeln('');
         // Render Dices
@@ -158,5 +168,9 @@ class ExecuteCommand extends Command
         $this->output->writeln('');
         $this->output->writeln("<bg=red;fg=white;options=bold>$text!</>");
         $this->output->writeln('');
+    }
+    public function printInfo($text): void
+    {
+        $this->output->writeln("<fg=cyan>$text</>");
     }
 }

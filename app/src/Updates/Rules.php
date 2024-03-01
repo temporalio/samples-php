@@ -77,10 +77,6 @@ final class Rules
      */
     public static function endIfPossible(State $state): bool
     {
-        if ($state->tries > 0) {
-            return false;
-        }
-
         if (self::hasPossibleMoves($state)) {
             return false;
         }
@@ -104,7 +100,7 @@ final class Rules
      * @return list<Dice>
      * @throws \Exception
      */
-    private function takeDices(State $state, array $colors, bool $remove = false): array
+    public static function takeDices(State $state, array $colors, bool $remove = false): array
     {
         $picked = [];
         foreach ($colors as $color) {

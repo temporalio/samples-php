@@ -16,7 +16,7 @@ final class State
     #[MarshalArray(of: Dice::class)]
     public array $dices = [];
 
-    public int $tries = 3;
     public bool $ended = false;
     public int $score = 0;
+    public bool $canRoll = true;
 }

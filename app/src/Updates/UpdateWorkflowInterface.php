@@ -42,12 +42,12 @@ interface UpdateWorkflowInterface
      * @param list<non-empty-string> $colors
      * @return State
      */
-    #[UpdateMethod(name: 'holdAndRoll')]
+    #[UpdateMethod(name: 'chooseDices')]
     #[ReturnType(State::class)]
-    public function holdAndRoll(array $colors);
+    public function choose(array $colors);
 
-    #[UpdateValidatorMethod(forUpdate: 'holdAndRoll')]
-    public function validateHoldAndRoll(array $colors): void;
+    #[UpdateValidatorMethod(forUpdate: 'chooseDices')]
+    public function validateChoose(array $colors): void;
 
     /**
      * Stop the game and save the score
@@ -60,7 +60,4 @@ interface UpdateWorkflowInterface
 
     #[QueryMethod]
     public function getState(): State;
-
-    #[SignalMethod]
-    public function exit();
 }
