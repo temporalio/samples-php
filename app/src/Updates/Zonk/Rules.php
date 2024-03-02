@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\Updates;
+namespace Temporal\Samples\Updates\Zonk;
 
 final class Rules
 {
@@ -89,7 +89,7 @@ final class Rules
 
     public static function hasPossibleMoves(State $state): bool
     {
-        return self::calcDicesScore($state->dices, false) > 0;
+        return self::calcDicesScore($state->dices->toArray(), false) > 0;
     }
 
     /**
@@ -102,13 +102,13 @@ final class Rules
      */
     public static function takeDices(State $state, array $colors, bool $remove = false): array
     {
-        $picked = [];
+        $chosen = [];
         foreach ($colors as $color) {
             foreach ($state->dices as $pos => $dice) {
                 if ($dice->color === $color) {
-                    $picked[] = $dice;
+                    $chosen[] = $dice;
                     if ($remove) {
-                        unset($state->dices[$pos]);
+                        $state->dices->removeByIndex($pos);
                     }
 
                     continue 2;
@@ -118,6 +118,6 @@ final class Rules
             throw new \Exception("Dice with color $color not found");
         }
 
-        return $picked;
+        return $chosen;
     }
 }

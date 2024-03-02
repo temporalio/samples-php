@@ -13,12 +13,16 @@ namespace Temporal\Samples\Updates;
 
 use Exception;
 use React\Promise\PromiseInterface;
-use Temporal\Promise;
+use Temporal\Samples\Updates\Zonk\Rules;
+use Temporal\Samples\Updates\Zonk\State;
+use Temporal\Samples\Updates\Zonk\Table;
 use Temporal\Workflow;
 
 /**
- * Demonstrates asynchronous signalling of a workflow. Requires a local instance of Temporal server
- * to be running.
+ * Demonstrates the Workflow Update feature using a turn of the game Zonk (Farkle) as an example.
+ * The state of the virtual table with dice is stored in the Workflow.
+ * All player actions are performed through Update functions with pre-validation.
+ * Invalid actions will be rejected at the validation stage.
  */
 class UpdateWorkflow implements UpdateWorkflowInterface
 {
@@ -35,7 +39,7 @@ class UpdateWorkflow implements UpdateWorkflowInterface
 
     public function roll()
     {
-        yield $this->state->dices === []
+        $this->state->dices = yield $this->state->dices->isEmpty()
             ? $this->resetDices()
             : $this->rollDices();
 
@@ -95,37 +99,26 @@ class UpdateWorkflow implements UpdateWorkflowInterface
         return $this->state;
     }
 
+    /**
+     * @return PromiseInterface<Table>
+     */
     private function rollDices(): PromiseInterface
     {
-        $dices = $this->state->dices;
-        $promises = $this->state->dices = [];
         $this->state->canRoll = false;
-        foreach ($dices as $dice) {
-            // Might be replaced with an activity call
-            $promises[] = Workflow::sideEffect(static function () use ($dice): Dice {
-                $dice->reRoll();
-                return $dice;
-            })->then(
-                function (Dice $dice): Dice {
-                    $this->state->dices[] = $dice;
-                    return $dice;
-                }
-            );
-        }
-
-        return Promise::all($promises);
+        // We have to use SideEffect here to make random actions in deterministic way
+        // Might be replaced with an activity call
+        return Workflow::sideEffect(fn(): Table => $this->state->dices->rollDices());
     }
 
     /**
      * Remove all dices from the table and create new ones
+     * @return PromiseInterface<Table>
      */
     private function resetDices(): PromiseInterface
     {
-        $this->state->dices = [];
-        for ($i = 0; $i < Rules::DICES_COUNT; $i++) {
-            $this->state->dices[] = new Dice($i);
-        }
-
-        return $this->rollDices();
+        $this->state->canRoll = false;
+        // We have to use SideEffect here to make random actions in deterministic way
+        // Might be replaced with an activity call
+        return Workflow::sideEffect(fn(): Table => $this->state->dices->resetDices());
     }
 }

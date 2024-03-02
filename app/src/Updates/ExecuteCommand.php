@@ -17,12 +17,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Temporal\Client\WorkflowOptions;
+use Temporal\Samples\Updates\Zonk\State;
+use Temporal\Samples\Updates\Zonk\Table;
 use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command
 {
     protected const NAME = 'update';
     protected const DESCRIPTION = 'Execute Workflow Update';
+    protected const DICES = [
+        1 => ['     ', '  •  ', '     '],
+        2 => ['  •  ', '     ', '  •  '],
+        3 => ['    •', '  •  ', '•    '],
+        4 => ['•   •', '     ', '•   •'],
+        5 => ['•   •', '  •  ', '•   •'],
+        6 => ['•   •', '•   •', '•   •'],
+    ];
 
     private InputInterface $input;
     private OutputInterface $output;
@@ -35,7 +45,7 @@ class ExecuteCommand extends Command
         $workflow = $this->workflowClient->newWorkflowStub(
             UpdateWorkflowInterface::class,
             WorkflowOptions::new()
-                ->withWorkflowExecutionTimeout(CarbonInterval::minutes(2))
+                ->withWorkflowExecutionTimeout(CarbonInterval::day())
         );
 
         $output->writeln("Starting <comment>UpdateWorkflow</comment>... ");
@@ -44,7 +54,7 @@ class ExecuteCommand extends Command
 
         $output->writeln(
             \sprintf(
-                '<options=bold>Zonk</> game initialized: WorkflowID=<fg=magenta>%s</>, RunID=<fg=magenta>%s</>',
+                '<options=bold>Zonk</> workflow scheduled: WorkflowID=<fg=magenta>%s</>, RunID=<fg=magenta>%s</>',
                 $run->getExecution()->getID(),
                 $run->getExecution()->getRunID(),
             ),
@@ -54,32 +64,36 @@ class ExecuteCommand extends Command
             $state = $workflow->getState();
             do {
                 // Wait input
-                if ($state->canRoll) {
-                    $this->output->writeln('<fg=gray>Press enter to roll the dices...</>');
-                }
-                if ($state->dices !== []) {
-                    $this->output->writeln('<fg=gray>Choose dices to hold (e.g. 1 2 3) or press enter to stop...</>');
-                }
-                if ($state->score  > 0) {
-                    $this->output->writeln('<fg=gray>Enter "stop" to stop the game...</>');
-                }
+                $state->canRoll and $this->output
+                    ->writeln('<fg=gray>Press <options=bold>Enter</options=bold> to roll the dices...</>');
+                $state->dices->isEmpty() or $this->output
+                    ->writeln('<fg=gray>Choose scoring dices to set aside (e.g. 1 2 3)...</>');
+                $state->score  > 0 and $this->output
+                    ->writeln(\sprintf(
+                        '<fg=gray>Enter "%s" or "%s" to stop the game...</>',
+                        '<options=bold>stop</options=bold>',
+                        '<options=bold>bank</options=bold>',
+                    ));
                 $answer = $this->ask('');
 
                 try {
                     if ($answer === null) {
                         $this->printInfo('Rolling the dices...');
                         $state = $workflow->roll();
-                        $this->renderState($state);
+                        $this->renderDices($state->dices);
 
                         $state->ended and $this->printDanger('Game over!');
                         continue;
                     }
 
-                    if ($answer === 'stop') {
+                    if (\in_array(\strtolower($answer), ['stop', 'bank'], true)) {
                         $state->ended and $this->printInfo('Stopping the game...');
                         $state = $workflow->complete();
 
-                        $this->printInfo(\sprintf('Game over! Your score is %d', $state->score));
+                        $this->printInfo(\sprintf(
+                            'Turn over! Your score is <options=bold>%d</options=bold>',
+                            $state->score,
+                        ));
 
                         continue;
                     }
@@ -89,7 +103,7 @@ class ExecuteCommand extends Command
                     $this->printInfo(\sprintf('Chosen %s', \implode(', ', $colors)));
                     $before = $state->score;
                     $state = $workflow->choose($colors);
-                    $this->printInfo(\sprintf("You scored %d\n", $state->score - $before));
+                    $this->printInfo(\sprintf("Your total score is %d (+%d)", $state->score, $state->score - $before));
                     $this->renderDices($state->dices);
                 } catch (\Throwable $e) {
                     $output->writeln(\sprintf('<fg=yellow>%s</>', $e->getPrevious()?->getMessage() ?? $e->getMessage()));
@@ -117,58 +131,57 @@ class ExecuteCommand extends Command
         $this->renderDices($state->dices);
     }
 
-    /**
-     * @param list<Dice> $dices
-     */
-    private function renderDices(array $dices): void
+    private function renderDices(Table $dices): void
     {
-        if ($dices === []) {
+        if ($dices->isEmpty()) {
             return;
         }
 
-        $diceString = [];
+        $diceLines = [];
         $numberString = [];
         foreach ($dices as $k => $dice) {
-            $side = ['×', '•', '••', '•••', '::', ':•:', ':::'][$dice->getValue()];
-            $diceString[] = \sprintf(
-                '<fg=%s>[%s]</>',
-                $dice->color,
-                $side,
-            );
-            $numberString[] = \str_pad((string)($k + 1), \mb_strlen($side) + 2, ' ', STR_PAD_BOTH);
+            $matrix = self::DICES[$dice->getValue()];
+
+            $diceLines[0][] = \sprintf('<fg=%s>┌───────┐</>', $dice->color);
+            $diceLines[1][] = \sprintf('<fg=%s>│ %s │</>', $dice->color, $matrix[0]);
+            $diceLines[2][] = \sprintf('<fg=%s>│ %s │</>', $dice->color, $matrix[1]);
+            $diceLines[3][] = \sprintf('<fg=%s>│ %s │</>', $dice->color, $matrix[2]);
+            $diceLines[4][] = \sprintf('<fg=%s>└───────┘</>',  $dice->color);
+            $numberString[] = \str_pad((string)($k + 1), 9, ' ', STR_PAD_BOTH);
         }
 
-        $this->output->writeln(\implode(' ', $diceString));
+        foreach ($diceLines as $line) {
+            $this->output->writeln(\implode(' ', $line));
+        }
         $this->output->writeln('<fg=gray>' . \implode(' ', $numberString) . '</>');
     }
 
     private function ask(string $message): ?string
     {
-        $helper = new QuestionHelper();
-        $answer = $helper->ask($this->input, $this->output, new Question($message));
-        return $answer;
+        return (new QuestionHelper())->ask($this->input, $this->output, new Question($message));
     }
 
-    private function mapDices(array $dices, string $answer): array
+    /**
+     * @return list<non-empty-string>
+     */
+    private function mapDices(Table $dices, string $answer): array
     {
         $result = [];
         \preg_match_all('/\d/', $answer, $matches);
         foreach ($matches[0] as $match) {
-            $index = (int)$match - 1;
-            if (!isset($dices[$index])) {
-                throw new \InvalidArgumentException(\sprintf('Dice with index %d not found', $index));
-            }
-            $result[] = $dices[$index]->color;
+            $result[] = $dices->getByIndex((int)$match - 1)->color;
         }
+
         return $result;
     }
 
     public function printDanger($text): void
     {
         $this->output->writeln('');
-        $this->output->writeln("<bg=red;fg=white;options=bold>$text!</>");
+        $this->output->writeln("<bg=red;fg=white;options=bold>$text</>");
         $this->output->writeln('');
     }
+
     public function printInfo($text): void
     {
         $this->output->writeln("<fg=cyan>$text</>");

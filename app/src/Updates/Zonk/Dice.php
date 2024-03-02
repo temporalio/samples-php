@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\Updates;
+namespace Temporal\Samples\Updates\Zonk;
 
 use Temporal\Internal\Marshaller\Meta\Marshal;
 
@@ -28,9 +28,11 @@ final class Dice
         return $this->value;
     }
 
-    public function reRoll(): int
+    public function reRoll(): self
     {
-        return $this->roll();
+        $clone = clone $this;
+        $clone->roll();
+        return $clone;
     }
 
     private function roll(): int

@@ -11,11 +11,9 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\Updates;
 
-use DateTimeInterface;
-use Exception;
+use Temporal\Samples\Updates\Zonk\State;
 use Temporal\Workflow\QueryMethod;
 use Temporal\Workflow\ReturnType;
-use Temporal\Workflow\SignalMethod;
 use Temporal\Workflow\UpdateMethod;
 use Temporal\Workflow\UpdateValidatorMethod;
 use Temporal\Workflow\WorkflowInterface;
