@@ -37,6 +37,8 @@ interface UpdateWorkflowInterface
     public function validateRoll(): void;
 
     /**
+     * Choose scoring dices to set aside
+     *
      * @param list<non-empty-string> $colors
      * @return State
      */

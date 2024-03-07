@@ -10,5 +10,3 @@ From the root of the project, run the following command:
 ```bash
 php ./app/app.php update
 ```
-
-

@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Temporal\Client\WorkflowOptions;
+use Temporal\Exception\Failure\TemporalFailure;
 use Temporal\Samples\Updates\Zonk\State;
 use Temporal\Samples\Updates\Zonk\Table;
 use Temporal\SampleUtils\Command;
@@ -103,11 +104,18 @@ class ExecuteCommand extends Command
                     $this->printInfo(\sprintf('Chosen %s', \implode(', ', $colors)));
                     $before = $state->score;
                     $state = $workflow->choose($colors);
-                    $this->printInfo(\sprintf("Your total score is %d (+%d)", $state->score, $state->score - $before));
+                    $this->printInfo(\sprintf(
+                        'Your total score is %d (<options=bold>+%d</options=bold>)',
+                        $state->score,
+                        $state->score - $before,
+                    ));
                     $this->renderDices($state->dices);
                 } catch (\Throwable $e) {
-                    $output->writeln(\sprintf('<fg=yellow>%s</>', $e->getPrevious()?->getMessage() ?? $e->getMessage()));
-                    $this->ask('<fg=gray>Press enter to continue...</>');
+                    $previous = $e->getPrevious();
+                    $output->writeln(\sprintf('<fg=red>%s</>', $previous instanceof TemporalFailure
+                        ? $previous->getOriginalMessage()
+                        : $previous?->getMessage() ?? $e->getMessage()));
+                    $this->ask('<fg=gray>Press <options=bold>Enter</options=bold> to continue...</>');
                     $this->renderState($state);
                     continue;
                 }
