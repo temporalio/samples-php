@@ -1,4 +1,4 @@
-# Signal sample
+# Workflow Update sample
 
 This sample demonstrates the Workflow Update feature using a turn of the game Zonk (Farkle) as an example.
 The state of the virtual table with dice is stored in the Workflow.
