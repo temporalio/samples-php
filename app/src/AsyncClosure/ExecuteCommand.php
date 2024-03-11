@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'async-closure';
     protected const DESCRIPTION = 'Execute AsyncClosure\GreetingWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             AsyncGreetingWorkflowInterface::class,

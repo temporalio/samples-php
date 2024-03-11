@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'saga';
     protected const DESCRIPTION = 'Execute Saga\SagaWorkflow with multiple signals';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             SagaWorkflowInterface::class,

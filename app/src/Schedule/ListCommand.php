@@ -21,7 +21,7 @@ class ListCommand extends Command
     protected const NAME = 'schedule:list';
     protected const DESCRIPTION = 'List all Schedules';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $schedules = $this->scheduleClient->listSchedules();
 

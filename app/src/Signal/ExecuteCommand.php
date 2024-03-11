@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'signal';
     protected const DESCRIPTION = 'Execute Signal\SignalWorkflow with multiple signals';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             SignalWorkflowInterface::class,

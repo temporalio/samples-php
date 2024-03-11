@@ -20,7 +20,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'money-transfer';
     protected const DESCRIPTION = 'Execute MoneyTransferWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(AccountTransferWorkflowInterface::class);
         $output->writeln("Starting <comment>MoneyTransferWorkflow</comment>... ");
