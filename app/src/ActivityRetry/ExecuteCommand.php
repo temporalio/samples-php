@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'activity-retry';
     protected const DESCRIPTION = 'Execute ActivityRetry\GreetingWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             GreetingWorkflowInterface::class,

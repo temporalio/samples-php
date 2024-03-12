@@ -20,7 +20,7 @@ class StopCommand extends Command
     protected const NAME = 'periodic:stop';
     protected const DESCRIPTION = 'Stop Periodic\PeriodicWorkflow';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newUntypedRunningWorkflowStub(
             PeriodicWorkflowInterface::WORKFLOW_ID

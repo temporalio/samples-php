@@ -30,7 +30,7 @@ class ExecuteCommand extends Command
     ];
     protected const DESCRIPTION = 'Replay workflow executions from history events';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $replayer = new WorkflowReplayer();
         $workflowType = $input->getArgument('workflow-type');

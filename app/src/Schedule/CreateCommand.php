@@ -34,7 +34,7 @@ class CreateCommand extends Command
     ];
 
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $specInit = $spec = Schedule\Spec\ScheduleSpec::new()
             ->withJitter('10m');

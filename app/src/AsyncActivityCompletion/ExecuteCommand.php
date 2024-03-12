@@ -22,7 +22,7 @@ class ExecuteCommand extends Command
     protected const NAME = 'user-activity:start';
     protected const DESCRIPTION = 'Execute AsyncActivityCompletion\GreetingWorkflow and wait for user greeting';
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $workflow = $this->workflowClient->newWorkflowStub(
             GreetingWorkflowInterface::class,

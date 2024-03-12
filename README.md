@@ -138,6 +138,8 @@ The following samples demonstrate much of the basic functionality and capabiliti
 
 - **[Signal](https://github.com/temporalio/samples-php/tree/master/app/src/Signal)**: Example of sending and handling a Signal
 
+- **[Update](https://github.com/temporalio/samples-php/tree/master/app/src/Updates)**: Example of Workflow Update feature
+
 - **[Saga](https://github.com/temporalio/samples-php/tree/master/app/src/Saga)**: Example of SAGA pattern support
 
 - **[SearchAttributes](https://github.com/temporalio/samples-php/tree/master/app/src/SearchAttributes)**: Example of Custom search attributes that can be used to find Workflows using predicates
