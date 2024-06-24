@@ -40,7 +40,7 @@ final class Rules
             }
 
             // Three pairs
-            if (\count(\array_unique($values)) === 3
+            if (\count(\array_unique($values)) <= 3
                 && $values[0] === $values[1] && $values[2] === $values[3] && $values[4] === $values[5]
             ) {
                 return Rules::SCORE_THREE_PAIRS;
