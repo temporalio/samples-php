@@ -5,8 +5,8 @@
     "temporal/sdk": "^2.8.0",
     "spiral/tokenizer": "^3.7",
     "temporal/open-telemetry-interceptors": "dev-master",
-    "open-telemetry/exporter-otlp": "^0.0.17",
-    "open-telemetry/transport-grpc": "^0.0.17",
+    "open-telemetry/exporter-otlp": "^1.0",
+    "open-telemetry/transport-grpc": "^1.0",
     "symfony/console": "^5.4 || ^6.0 || ^7.0"
   },
   "require-dev": {
