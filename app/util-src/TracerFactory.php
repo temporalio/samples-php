@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Temporal\SampleUtils;
 
-use OpenTelemetry\API\Common\Signal\Signals;
+use OpenTelemetry\API\Signals;
 use OpenTelemetry\API\Trace\Propagation\TraceContextPropagator;
 use OpenTelemetry\Contrib\Grpc\GrpcTransportFactory;
 use OpenTelemetry\Contrib\Otlp\OtlpUtil;
