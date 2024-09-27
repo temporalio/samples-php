@@ -36,12 +36,15 @@ final class TracerFactory
         $transport = (new GrpcTransportFactory())->create($endpoint . OtlpUtil::method(Signals::TRACE));
         $spanProcessor = (new SpanProcessorFactory())->create(new SpanExporter($transport));
 
-        $resource = ResourceInfoFactory::merge(
-            ResourceInfo::create(Attributes::create([
-                ResourceAttributes::SERVICE_NAME => $serviceName,
-            ])),
-            ResourceInfoFactory::defaultResource(),
-        );
+        $defaultResource = ResourceInfoFactory::defaultResource();
+        $defaultAttributes = $defaultResource->getAttributes()->toArray();
+
+        $customAttributes = [
+            ResourceAttributes::SERVICE_NAME => $serviceName,
+        ];
+
+        $mergedAttributes = array_merge($defaultAttributes, $customAttributes);
+        $resource = ResourceInfo::create(Attributes::create($mergedAttributes));
 
         return new Tracer(
             (new TracerProvider(spanProcessors: $spanProcessor, resource: $resource))->getTracer('Temporal Samples'),
