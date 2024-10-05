@@ -18,12 +18,12 @@ $ cd samples-php
 
 **2. Build docker images.**
 ```bash
-$ docker-compose build
+$ docker compose build
 ```
 
 **3. Start server and application containers.**
 ```bash
-$ docker-compose up
+$ docker compose up
 ```
 
 **4. Run a sample**
@@ -31,13 +31,13 @@ $ docker-compose up
 To run a sample in docker use:
 
 ```bash
-$ docker-compose exec app php app.php {sample-name}
+$ docker compose exec app php app.php {sample-name}
 ```
 
 To observe active workers:
 
 ```bash
-$ docker-compose exec app rr workers -i
+$ docker compose exec app rr workers -i
 ```
 
 ## Local Setup
