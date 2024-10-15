@@ -18,12 +18,8 @@ use Temporal\Samples\SafeMessageHandlers\DTO\FindBadNodesInput;
 use Temporal\Samples\SafeMessageHandlers\DTO\UnassignNodesForJobInput;
 use Temporal\Workflow;
 use Temporal\Workflow\Mutex;
-use Temporal\Workflow\SignalMethod;
-use Temporal\Workflow\WorkflowInterface;
-use Temporal\Workflow\WorkflowMethod;
 
-#[WorkflowInterface]
-class WorkflowImpl
+class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
 {
     private ClusterManagerState $state;
     private Mutex $nodesLock;
@@ -38,10 +34,9 @@ class WorkflowImpl
         $this->sleepIntervalSeconds = 600;
     }
 
-    #[WorkflowMethod]
     public function run(ClusterManagerInput $input)
     {
-        // todo rewrite after https://github.com/temporalio/sdk-php/issues/480/
+        // todo use init method with https://github.com/temporalio/sdk-php/issues/480/
         $this->init($input);
 
         yield Workflow::await(fn() => $this->state->clusterStarted);
@@ -79,7 +74,6 @@ class WorkflowImpl
         );
     }
 
-    #[SignalMethod('start_cluster')]
     public function startCluster(): void
     {
         $this->state->clusterStarted = true;
@@ -87,7 +81,6 @@ class WorkflowImpl
         trap("Cluster started");
     }
 
-    #[SignalMethod('shutdown_cluster')]
     public function shutdownCluster()
     {
         yield Workflow::await(fn() => $this->state->clusterStarted);
@@ -95,13 +88,6 @@ class WorkflowImpl
         trap("Cluster shut down");
     }
 
-    /**
-     * This is an update as opposed to a signal because the client may want to wait for nodes to be allocated
-     * before sending work to those nodes.
-     * Returns the list of node names that were allocated to the job.
-     */
-    #[Workflow\UpdateMethod('assign_nodes_to_job')]
-    #[Workflow\ReturnType(ClusterManagerAssignNodesToJobResult::class)]
     public function assignNodesToJob(ClusterManagerAssignNodesToJobInput $input)
     {
         yield Workflow::await(fn() => $this->state->clusterStarted);
@@ -144,11 +130,6 @@ class WorkflowImpl
         });
     }
 
-    /**
-     * Even though it returns nothing, this is an update because the client may want to track it, for example
-     * to wait for nodes to be unassigned before reassigning them.
-     */
-    #[Workflow\UpdateMethod('delete_job')]
     public function deleteJob(ClusterManagerDeleteJobInput $input): \Generator
     {
         yield Workflow::await(fn() => $this->state->clusterStarted);

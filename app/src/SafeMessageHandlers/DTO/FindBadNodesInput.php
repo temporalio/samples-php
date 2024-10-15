@@ -7,9 +7,9 @@ namespace Temporal\Samples\SafeMessageHandlers\DTO;
 final class FindBadNodesInput
 {
     /**
-     * @param array $assignedNodes
+     * @param array $nodesToCheck
      */
     public function __construct(
-        public array $assignedNodes,
+        public array $nodesToCheck,
     ) {}
 }
