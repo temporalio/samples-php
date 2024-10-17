@@ -44,9 +44,9 @@ class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
         while (true) {
             yield $this->performHealthChecks();
             try {
-                yield Workflow::await(
+                yield Workflow::awaitWithTimeout(
+                    '600 seconds',
                     fn() => $this->state->clusterShutdown || $this->shouldContinueAsNew(),
-                    ['timeout' => '600 seconds'],
                 );
             } catch (\Throwable) {
                 // do nothing
@@ -61,7 +61,7 @@ class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
                 trap("Continuing as new");
                 Workflow::continueAsNew(
                     Workflow::getInfo()->type->name,
-                    [new ClusterManagerInput($this->state, $input->testContinueAsNew)]
+                    [new ClusterManagerInput($this->state, $input->testContinueAsNew)],
                 );
             }
         }
@@ -107,17 +107,15 @@ class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
             }
 
             $unassignedNodes = $this->getUnassignedNodes();
-            if (\count($unassignedNodes) < $input->totalNumNodes) {
-                throw new ApplicationFailure(
-                    \sprintf(
-                        'Cannot assign %d nodes; have only %d available',
-                        $input->totalNumNodes,
-                        \count($unassignedNodes),
-                    ),
-                    'CannotAssignNodesToJob',
-                    true,
-                );
-            }
+            \count($unassignedNodes) < $input->totalNumNodes and throw new ApplicationFailure(
+                \sprintf(
+                    'Cannot assign %d nodes; have only %d available',
+                    $input->totalNumNodes,
+                    \count($unassignedNodes),
+                ),
+                'CannotAssignNodesToJob',
+                true,
+            );
 
             $nodesToAssign = \array_slice($unassignedNodes, 0, $input->totalNumNodes);
             /**
@@ -148,6 +146,11 @@ class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
              */
             yield $this->_unassignNodesForJob($nodesToUnassign, $input->jobName);
         });
+    }
+
+    public function getState(): ClusterManagerState
+    {
+        return $this->state;
     }
 
     private function init(ClusterManagerInput $input): void

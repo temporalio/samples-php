@@ -10,6 +10,8 @@ namespace Temporal\Samples\SafeMessageHandlers\DTO;
  */
 final class ClusterManagerAssignNodesToJobInput
 {
-    public int $totalNumNodes;
-    public string $jobName;
+    public function __construct(
+        public int $totalNumNodes,
+        public string $jobName,
+    ) {}
 }

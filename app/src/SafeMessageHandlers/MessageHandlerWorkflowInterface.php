@@ -8,6 +8,7 @@ use Temporal\Samples\SafeMessageHandlers\DTO\ClusterManagerAssignNodesToJobInput
 use Temporal\Samples\SafeMessageHandlers\DTO\ClusterManagerAssignNodesToJobResult;
 use Temporal\Samples\SafeMessageHandlers\DTO\ClusterManagerDeleteJobInput;
 use Temporal\Samples\SafeMessageHandlers\DTO\ClusterManagerInput;
+use Temporal\Samples\SafeMessageHandlers\DTO\ClusterManagerState;
 use Temporal\Workflow;
 
 #[Workflow\WorkflowInterface]
@@ -37,4 +38,7 @@ interface MessageHandlerWorkflowInterface
      */
     #[Workflow\UpdateMethod('delete_job')]
     public function deleteJob(ClusterManagerDeleteJobInput $input): \Generator;
+
+    #[Workflow\QueryMethod('get_state')]
+    public function getState(): ClusterManagerState;
 }
