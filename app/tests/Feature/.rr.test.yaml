@@ -1,0 +1,26 @@
+version: "3"
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php worker.php"
+
+temporal:
+  address: ${TEMPORAL_TEST_ADDRESS:-localhost:7233}
+  activities:
+    num_workers: 2
+
+kv:
+  test:
+    driver: memory
+    config:
+      interval: 60
+
+logs:
+  level: info
+  #    mode: production
+  channels:
+    server:
+      mode: production
+      output: worker.log
