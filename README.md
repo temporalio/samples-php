@@ -168,4 +168,8 @@ The following samples demonstrate some of the more complex aspects associated wi
 
 - **[Interceptors](https://github.com/temporalio/samples-php/tree/master/app/src/Interceptors)**: Demonstrates how to use Workflow and Activity interceptors to implement custom logic.
 
+### Testing samples
+
+- **[Feature](https://github.com/temporalio/samples-php/tree/master/app/tests/Feature)**: Demonstrates how to mock activities and test Workflows using temporal test server.
+
 <!-- @@@SNIPEND -->
