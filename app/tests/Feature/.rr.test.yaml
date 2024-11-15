@@ -1,13 +1,13 @@
 version: "3"
 
 rpc:
-  listen: tcp://127.0.0.1:6001
+  listen: tcp://127.0.0.1:6006
 
 server:
   command: "php worker.php"
 
 temporal:
-  address: ${TEMPORAL_TEST_ADDRESS:-localhost:7233}
+  address: ${TEMPORAL_ADDRESS:-localhost:7236}
   activities:
     num_workers: 2
 

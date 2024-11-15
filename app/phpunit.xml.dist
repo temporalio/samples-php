@@ -18,7 +18,8 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <ini name="memory_limit" value="-1"/>
-        <env name="TEMPORAL_TEST_ADDRESS" value="localhost:7233" />
+        <env name="TEMPORAL_ADDRESS" value="localhost:7236" force="true"/>
+        <env name="RR_RPC" value="tcp://127.0.0.1:6006" force="true"/>
     </php>
     <source>
         <include>

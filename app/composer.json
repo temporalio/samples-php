@@ -32,6 +32,7 @@
     }
   },
   "scripts": {
+    "load:binaries": "dload",
     "test:feat": "phpunit --testsuite=Feature --color=always --testdox"
   }
 }

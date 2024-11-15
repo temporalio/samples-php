@@ -40,6 +40,12 @@ To observe active workers:
 $ docker compose exec app rr workers -i
 ```
 
+To run feature tests in docker use:
+
+```bash
+$ docker compose exec app composer test:feat
+````
+
 ## Local Setup
 **1. Make sure you have PHP 8.1, or higher, installed.**
 

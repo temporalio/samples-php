@@ -10,9 +10,11 @@ require_once 'vendor/autoload.php';
 
 $environment = Environment::create();
 
+$sysInfo = \Temporal\Testing\SystemInfo::detect();
+
 $environment->startTemporalTestServer();
 $environment->startRoadRunner(
-    rrCommand: 'rr serve -c .rr.test.yaml -w tests/Feature',
+    rrCommand: sprintf('%s serve -c .rr.test.yaml -w tests/Feature', $sysInfo->rrExecutable),
     commandTimeout: 5
 );
 
