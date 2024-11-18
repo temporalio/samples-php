@@ -2,7 +2,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "temporal/sdk": "^2.8.0",
+    "temporal/sdk": "^2.12.0",
     "spiral/tokenizer": "^3.7",
     "temporal/open-telemetry-interceptors": "dev-master",
     "open-telemetry/exporter-otlp": "^1.0",
@@ -20,7 +20,8 @@
   },
   "config": {
     "allow-plugins": {
-      "php-http/discovery": true
+      "php-http/discovery": true,
+      "tbachert/spi": false
     }
   }
 }
