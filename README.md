@@ -40,6 +40,12 @@ To observe active workers:
 $ docker compose exec app rr workers -i
 ```
 
+To run feature tests in docker use:
+
+```bash
+$ docker compose exec app composer test:feat
+````
+
 ## Local Setup
 **1. Make sure you have PHP 8.1, or higher, installed.**
 
@@ -161,5 +167,9 @@ The following samples demonstrate some of the more complex aspects associated wi
 - **[Subscription](https://github.com/temporalio/samples-php/tree/master/app/src/Subscription)**: Demonstrates a long-running process associated with a user ID. The process charges the user once every 30 days after a one month free trial period.
 
 - **[Interceptors](https://github.com/temporalio/samples-php/tree/master/app/src/Interceptors)**: Demonstrates how to use Workflow and Activity interceptors to implement custom logic.
+
+### Testing samples
+
+- **[Feature](https://github.com/temporalio/samples-php/tree/master/app/tests/Feature)**: Demonstrates how to mock activities and test Workflows using temporal test server.
 
 <!-- @@@SNIPEND -->
