@@ -35,7 +35,5 @@ COPY app/ /var/app
 
 RUN composer install
 
-# Setup RoadRunner
-RUN vendor/bin/rr get --no-interaction \
-    && mv rr /usr/local/bin/rr \
-    && chmod +x /usr/local/bin/rr
+# Load binaries
+RUN vendor/bin/dload get --no-interaction
