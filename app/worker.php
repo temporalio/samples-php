@@ -14,11 +14,14 @@ use Temporal\OpenTelemetry\Interceptor\OpenTelemetryActivityInboundInterceptor;
 use Temporal\OpenTelemetry\Interceptor\OpenTelemetryWorkflowOutboundRequestInterceptor;
 use Temporal\SampleUtils\DeclarationLocator;
 use Temporal\SampleUtils\TracerFactory;
+use Temporal\Worker\FeatureFlags;
 use Temporal\WorkerFactory;
 use Temporal\Samples\FileProcessing;
 
 ini_set('display_errors', 'stderr');
 include "vendor/autoload.php";
+
+FeatureFlags::$workflowDeferredHandlerStart = true;
 
 // finds all available workflows, activity types and commands in a given directory
 $declarations = DeclarationLocator::create(__DIR__ . '/src/');
