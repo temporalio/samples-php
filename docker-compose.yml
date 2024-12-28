@@ -120,8 +120,8 @@ services:
       - OTEL_PHP_TRACES_PROCESSOR=simple
       - TEMPORAL_HOST=temporal
       - OTEL_HOST=collector
-      - INTERCEPTORS_RR_PATH=/usr/local/bin/rr
-    command: [ "/usr/local/bin/wait-for-temporal.sh", "temporal", "/usr/local/bin/rr", "serve", "-c", "/var/app/.rr.yaml" ]
+      - INTERCEPTORS_RR_PATH=/var/app/rr
+    command: [ "/usr/local/bin/wait-for-temporal.sh", "temporal", "/var/app/rr", "serve" ]
 
 networks:
   temporal-network:
