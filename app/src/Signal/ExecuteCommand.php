@@ -33,6 +33,15 @@ class ExecuteCommand extends Command
 
         $run = $this->workflowClient->start($workflow);
 
+        $runningWorkflowStub = $this->workflowClient->newRunningWorkflowStub(
+            SignalWorkflowInterface::class,
+            $run->getExecution()->getID(),
+        );
+
+        $untypedRunningWorkflowStub = $this->workflowClient->newUntypedRunningWorkflowStub(
+            $run->getExecution()->getID(),
+        );
+
         $output->writeln(
             sprintf(
                 'Started: WorkflowID=<fg=magenta>%s</fg=magenta>, RunID=<fg=magenta>%s</fg=magenta>',
@@ -41,14 +50,22 @@ class ExecuteCommand extends Command
             )
         );
 
-        $output->writeln(sprintf("Add: <info>%s</info>", 'Antony'));
-        $workflow->addName('Antony');
+        $output->writeln(sprintf("Add from workflow stub: <info>%s</info>", 'Name1'));
+        $result = $workflow->addName('Name1');
+        $output->writeln(sprintf("Result: <info>%s</info>", $result));
 
-        $output->writeln(sprintf("Add: <info>%s</info>", 'John'));
-        $workflow->addName('John');
+        $output->writeln(sprintf("Add from running workflow stub: <info>%s</info>", 'Name2'));
+        $result = $runningWorkflowStub->addName('Name2');
+        $output->writeln(sprintf("Result: <info>%s</info>", $result));
 
-        $output->writeln(sprintf("Add: <info>%s</info>", 'Bob'));
-        $workflow->addName('Bob');
+        $output->writeln(sprintf("Add from untyped running workflow stub: <info>%s</info>", 'Name3'));
+        try {
+            // FIXME Client error happens here
+            $result = $untypedRunningWorkflowStub->update('addName', 'Name3');
+            $output->writeln(sprintf("Result: <info>%s</info>", $result->getValue(0)));
+        } catch (\Throwable $t) {
+            $output->writeln(sprintf("Error: <info>%s</info>", $t->getMessage()));
+        }
 
         $output->writeln('Signal exit');
         $workflow->exit();

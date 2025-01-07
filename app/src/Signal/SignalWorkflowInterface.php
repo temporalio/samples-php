@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\Signal;
 
 use Temporal\Workflow\SignalMethod;
+use Temporal\Workflow\UpdateMethod;
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 
@@ -28,10 +29,10 @@ interface SignalWorkflowInterface
      * Receives name through an external signal.
      * @param string $name
      */
-    #[SignalMethod]
+    #[UpdateMethod]
     public function addName(
         string $name
-    ): void;
+    ): string;
 
     #[SignalMethod]
     public function exit(): void;

@@ -26,7 +26,7 @@ class SignalWorkflow implements SignalWorkflowInterface
     {
         $result = [];
         while (true) {
-            yield Workflow::await(fn() => $this->input !== [] || $this->exit);
+            yield Workflow::await(fn () => $this->input !== [] || $this->exit);
             if ($this->input === [] && $this->exit) {
                 return $result;
             }
@@ -36,9 +36,10 @@ class SignalWorkflow implements SignalWorkflowInterface
         }
     }
 
-    public function addName(string $name): void
+    public function addName(string $name): string
     {
         $this->input[] = $name;
+        return "$name was added";
     }
 
     public function exit(): void
