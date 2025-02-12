@@ -3,14 +3,14 @@
   "prefer-stable": true,
   "require": {
     "spiral/tokenizer": "^3.14.5",
-    "temporal/sdk": "dev-mutex as 2.12.0",
+    "temporal/sdk": "^2.13",
     "temporal/open-telemetry-interceptors": "dev-master",
     "open-telemetry/exporter-otlp": "^1.1",
     "open-telemetry/transport-grpc": "^1.1",
     "symfony/console": "^5.4 || ^6.0 || ^7.0"
   },
   "require-dev": {
-    "buggregator/trap": "^1.11",
+    "buggregator/trap": "^1.13",
     "internal/dload": "^1.0",
     "phpunit/phpunit": "^10.5"
   },

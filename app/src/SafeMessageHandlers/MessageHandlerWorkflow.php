@@ -26,26 +26,25 @@ class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
     private ?int $maxHistoryLength;
     private int $sleepIntervalSeconds;
 
-    public function __construct() {
-        $this->state = new ClusterManagerState();
+    #[Workflow\WorkflowInit]
+    public function __construct(ClusterManagerInput $input) {
+        $this->state = $input->state ?? new ClusterManagerState();
+        $this->maxHistoryLength = $input->testContinueAsNew ? 120 : null;
+        $this->sleepIntervalSeconds = $input->testContinueAsNew ? 1 : 600;
+
         // Protects workflow state from interleaved access
         $this->nodesLock = new Mutex();
-        $this->maxHistoryLength = null;
-        $this->sleepIntervalSeconds = 600;
     }
 
     public function run(ClusterManagerInput $input)
     {
-        // todo use init method with https://github.com/temporalio/sdk-php/issues/480/
-        $this->init($input);
-
         yield Workflow::await(fn() => $this->state->clusterStarted);
         // Perform health checks at intervals.
         while (true) {
             yield $this->performHealthChecks();
             try {
                 yield Workflow::awaitWithTimeout(
-                    '600 seconds',
+                    $this->sleepIntervalSeconds,
                     fn() => $this->state->clusterShutdown || $this->shouldContinueAsNew(),
                 );
             } catch (\Throwable) {
@@ -151,13 +150,6 @@ class MessageHandlerWorkflow implements MessageHandlerWorkflowInterface
     public function getState(): ClusterManagerState
     {
         return $this->state;
-    }
-
-    private function init(ClusterManagerInput $input): void
-    {
-        $input->state === null or $this->state = $input->state;
-        $input->testContinueAsNew and $this->maxHistoryLength = 120;
-        $input->testContinueAsNew and $this->sleepIntervalSeconds = 1;
     }
 
     private function getUnassignedNodes(): array
