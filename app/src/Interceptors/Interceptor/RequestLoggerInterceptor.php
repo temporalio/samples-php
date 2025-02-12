@@ -19,9 +19,8 @@ use Temporal\Worker\Transport\Command\RequestInterface;
 final class RequestLoggerInterceptor implements WorkflowOutboundRequestInterceptor
 {
     public function __construct(
-        private LoggerInterface $logger,
-    ) {
-    }
+        private readonly LoggerInterface $logger,
+    ) {}
 
     public function handleOutboundRequest(RequestInterface $request, callable $next): PromiseInterface
     {
