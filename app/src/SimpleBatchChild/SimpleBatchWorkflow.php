@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\SimpleBatch;
+namespace Temporal\Samples\SimpleBatchChild;
 
 use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
@@ -67,34 +67,22 @@ class SimpleBatchWorkflow implements SimpleBatchWorkflowInterface
         {
             // Set the batch item as pending.
             $this->pending[$itemId] = true;
-            // Process the batch item.
-            $promises[$itemId] = Workflow::async(
-                function() use($itemId, $batchId) {
-                    // Notify the item processing start.
-                    yield $this->batchActivity->itemProcessingStarted($itemId, $batchId);
 
-                    // This activity randomly throws an exception.
-                    $output = yield $this->batchActivity->processItem($itemId, $batchId);
-
-                    // Notify the item processing end.
-                    yield $this->batchActivity->itemProcessingEnded($itemId, $batchId);
-
-                    return $output;
-                }
-            )
-            ->then(
-                fn($output) => $this->results[$itemId] = [
-                    'success' => true,
-                    'output' => $output,
-                ],
-                fn(Throwable $e) => $this->results[$itemId] = [
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                ]
-            )
-            // We are calling always() instead of finally() because the Temporal PHP SDK depends on
-            // react/promise 2.9. Need to be changed to finally() after upgrade to react/promise 3.x.
-            ->always(fn() => $this->pending[$itemId] = false);
+            $promises[$itemId] = Workflow::newChildWorkflowStub(SimpleBatchChildWorkflowInterface::class)
+                ->processItem($itemId, $batchId)
+                ->then(
+                    fn($output) => $this->results[$itemId] = [
+                        'success' => true,
+                        'output' => $output,
+                    ],
+                    fn(Throwable $e) => $this->results[$itemId] = [
+                        'success' => false,
+                        'message' => $e->getMessage(),
+                    ]
+                )
+                // We are calling always() instead of finally() because the Temporal PHP SDK depends on
+                // react/promise 2.9. Will need to change to finally() when upgrading to react/promise 3.x.
+                ->always(fn() => $this->pending[$itemId] = false);
         }
 
         // Wait for all the async calls to terminate.

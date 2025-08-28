@@ -1,4 +1,4 @@
-# SimpleActivity sample
+# Simple batch sample
 
 This sample demonstrates a simple batch processing.
 

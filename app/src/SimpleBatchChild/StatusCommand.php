@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\SimpleBatch;
+namespace Temporal\Samples\SimpleBatchChild;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +18,7 @@ use Temporal\SampleUtils\Command;
 
 class StatusCommand extends Command
 {
-    protected const NAME = 'simple-batch:status';
+    protected const NAME = 'simple-batch-child:status';
 
     protected const DESCRIPTION = 'Get SimpleBatchWorkflow status';
 
