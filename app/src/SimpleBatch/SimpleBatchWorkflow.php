@@ -40,9 +40,9 @@ class SimpleBatchWorkflow implements SimpleBatchWorkflowInterface
         $this->batchActivity = Workflow::newActivityStub(
             SimpleBatchActivityInterface::class,
             ActivityOptions::new()
-                ->withStartToCloseTimeout(CarbonInterval::hours(6))
-                ->withScheduleToStartTimeout(CarbonInterval::hours(4))
-                ->withScheduleToCloseTimeout(CarbonInterval::hours(6))
+                ->withStartToCloseTimeout(CarbonInterval::seconds(10))
+                ->withScheduleToStartTimeout(CarbonInterval::seconds(10))
+                ->withScheduleToCloseTimeout(CarbonInterval::hours(4))
                 ->withRetryOptions(
                     RetryOptions::new()
                         ->withMaximumAttempts(100)
@@ -93,7 +93,7 @@ class SimpleBatchWorkflow implements SimpleBatchWorkflowInterface
                 ]
             )
             // We are calling always() instead of finally() because the Temporal PHP SDK depends on
-            // react/promise 2.9. Will need to change to finally() when upgrading to react/promise 3.x.
+            // react/promise 2.9. Need to be changed to finally() after upgrade to react/promise 3.x.
             ->always(fn() => $this->pending[$itemId] = false);
         }
 

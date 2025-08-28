@@ -48,7 +48,7 @@ class SimpleBatchActivity implements SimpleBatchActivityInterface
 
         $random = random_int(0, 90);
         // Wait for max 1 second.
-        usleep($random % 10000);
+        usleep($random * 10000);
 
         // Randomly throw an error.
         if($random > 30)
