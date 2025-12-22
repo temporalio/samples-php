@@ -14,10 +14,10 @@ namespace Temporal\Samples\SearchAttributes;
 use Temporal\Activity\ActivityInterface;
 use Temporal\Activity\ActivityMethod;
 
-#[ActivityInterface]
+#[ActivityInterface("GreetingActivity.")]
 interface GreetingActivityInterface
 {
-    #[ActivityMethod]
+    #[ActivityMethod("ComposeGreeting")]
     public function composeGreeting(
         string $greeting,
         string $name

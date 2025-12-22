@@ -14,12 +14,12 @@ namespace Temporal\Samples\MoneyTransfer;
 use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Common\RetryOptions;
+use Temporal\Internal\Workflow\ActivityProxy;
 use Temporal\Workflow;
 
 class AccountTransferWorkflow implements AccountTransferWorkflowInterface
 {
-    /** @var AccountInterface */
-    private $account;
+    private ActivityProxy|AccountInterface $account;
 
     public function __construct()
     {

@@ -13,12 +13,13 @@ namespace Temporal\Samples\LocalActivity;
 
 use Carbon\CarbonInterval;
 use Temporal\Activity\LocalActivityOptions;
+use Temporal\Internal\Workflow\ActivityProxy;
 use Temporal\Workflow;
 
 
 class GreetingWorkflow implements GreetingWorkflowInterface
 {
-    private $greetingActivity;
+    private ActivityProxy|GreetingActivityInterface $greetingActivity;
 
     public function __construct()
     {
