@@ -1,4 +1,8 @@
-app/vendor
 .idea
-app/rr
-app/rr.exe
+app/**/rr
+app/**/rr.exe
+app/**/temporal-test-server
+app/**/temporal-test-server.exe
+app/tests/**/*.log
+app/runtime
+app/vendor
