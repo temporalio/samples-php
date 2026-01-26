@@ -1,4 +1,4 @@
-# SimpleActivity sample
+# LocalActivity sample
 
 This sample demonstrates a basic local activity Workflow.
 

@@ -22,7 +22,7 @@ interface GreetingWorkflowInterface
      * @param string $name
      * @return string
      */
-    #[WorkflowMethod(name: "SimpleActivity.greet")]
+    #[WorkflowMethod(name: "LocalActivity.greet")]
     public function greet(
         string $name
     );
