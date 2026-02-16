@@ -14,13 +14,14 @@ namespace Temporal\Samples\SimpleActivity;
 use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
 use Temporal\Common\RetryOptions;
+use Temporal\Internal\Workflow\ActivityProxy;
 use Temporal\Workflow;
 
 
 // @@@SNIPSTART php-hello-workflow
 class GreetingWorkflow implements GreetingWorkflowInterface
 {
-    private $greetingActivity;
+    private ActivityProxy|GreetingActivityInterface $greetingActivity;
 
     public function __construct()
     {

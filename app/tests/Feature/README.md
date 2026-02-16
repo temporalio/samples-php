@@ -5,7 +5,7 @@ There is an implementation of [the testing guide](https://github.com/temporalio/
 To load all the required binaries outside the docker container, run the following command:
 
 ```bash
-composer load:binaries
+composer get:binaries
 ```
 
 To run the tests, use the following command:
