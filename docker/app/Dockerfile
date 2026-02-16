@@ -36,5 +36,5 @@ FROM vendor as app
 WORKDIR /var/app
 COPY app .
 
-# build autoload
-RUN composer dump-autoload
+# Load binaries
+RUN vendor/bin/dload get --no-interaction

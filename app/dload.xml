@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<dload xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="vendor/internal/dload/dload.xsd"
+>
+    <actions>
+        <download software="rr" version="^2025.1.5"/>
+        <download software="temporal" version="^1.5"/>
+    </actions>
+</dload>

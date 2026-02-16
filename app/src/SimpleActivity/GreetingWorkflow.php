@@ -13,13 +13,15 @@ namespace Temporal\Samples\SimpleActivity;
 
 use Carbon\CarbonInterval;
 use Temporal\Activity\ActivityOptions;
+use Temporal\Common\RetryOptions;
+use Temporal\Internal\Workflow\ActivityProxy;
 use Temporal\Workflow;
 
 
 // @@@SNIPSTART php-hello-workflow
 class GreetingWorkflow implements GreetingWorkflowInterface
 {
-    private $greetingActivity;
+    private ActivityProxy|GreetingActivityInterface $greetingActivity;
 
     public function __construct()
     {
@@ -30,7 +32,9 @@ class GreetingWorkflow implements GreetingWorkflowInterface
          */
         $this->greetingActivity = Workflow::newActivityStub(
             GreetingActivityInterface::class,
-            ActivityOptions::new()->withStartToCloseTimeout(CarbonInterval::seconds(2))
+            ActivityOptions::new()
+                ->withStartToCloseTimeout(CarbonInterval::seconds(2))
+                ->withRetryOptions(RetryOptions::new()->withMaximumAttempts(1))
         );
     }
 
