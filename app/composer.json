@@ -3,7 +3,7 @@
   "prefer-stable": true,
   "require": {
     "spiral/tokenizer": "^3.16.0",
-    "temporal/sdk": "^2.16",
+    "temporal/sdk": "^2.17",
     "temporal/open-telemetry-interceptors": "^1.0",
     "open-telemetry/exporter-otlp": "^1.3",
     "open-telemetry/transport-grpc": "^1.1",

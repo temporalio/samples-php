@@ -137,6 +137,8 @@ The following samples demonstrate much of the basic functionality and capabiliti
 
 - **[Periodic](https://github.com/temporalio/samples-php/tree/master/app/src/Periodic)**: A Workflow that executes some logic periodically
 
+- **[InfrequentPolling](https://github.com/temporalio/samples-php/tree/master/app/src/InfrequentPolling)**: Infrequent polling using Activity retries and benign failures
+
 - **[Exception](https://github.com/temporalio/samples-php/tree/master/app/src/Exception)**: Example of exception propagation and wrapping
 
 - **[PolymorphicActivity](https://github.com/temporalio/samples-php/tree/master/app/src/PolymorphicActivity)**: Activities that extend a common interface
