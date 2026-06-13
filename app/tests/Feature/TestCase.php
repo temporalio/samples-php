@@ -15,7 +15,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->workflowClient = new WorkflowClient(
+        $this->workflowClient = WorkflowClient::create(
             ServiceClient::create(\getenv('TEMPORAL_ADDRESS')),
         );
 

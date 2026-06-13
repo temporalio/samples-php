@@ -19,7 +19,6 @@ kv:
 
 logs:
   level: info
-  #    mode: production
   channels:
     server:
       mode: production
