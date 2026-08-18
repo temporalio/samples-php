@@ -4514,12 +4514,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/temporalio/sdk-php.git",
-                "reference": "d44ed80bd49a450b2c2507e8ef65bce7cb105a32"
+                "reference": "4bd17951195336a6d42d6323fade9bfbb642790c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/d44ed80bd49a450b2c2507e8ef65bce7cb105a32",
-                "reference": "d44ed80bd49a450b2c2507e8ef65bce7cb105a32",
+                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/4bd17951195336a6d42d6323fade9bfbb642790c",
+                "reference": "4bd17951195336a6d42d6323fade9bfbb642790c",
                 "shasum": ""
             },
             "require": {
@@ -4625,6 +4625,9 @@
                 "test:func": [
                     "tests/runner.php vendor/bin/phpunit --testsuite=Functional --color=always --testdox"
                 ],
+                "test:func-timeskip": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=Functional-TimeSkipping --color=always --testdox"
+                ],
                 "test:arch": [
                     "phpunit --testsuite=Arch --color=always --testdox"
                 ],
@@ -4671,7 +4674,7 @@
                 "issues": "https://github.com/temporalio/sdk-php/issues",
                 "source": "https://github.com/temporalio/sdk-php"
             },
-            "time": "2026-07-20T18:41:51+00:00"
+            "time": "2026-08-18T07:46:30+00:00"
         }
     ],
     "packages-dev": [
