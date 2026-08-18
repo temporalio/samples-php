@@ -9,6 +9,7 @@ use Temporal\Api\Nexus\V1\EndpointTarget;
 use Temporal\Api\Nexus\V1\EndpointTarget\Worker as WorkerTarget;
 use Temporal\Api\Operatorservice\V1\CreateNexusEndpointRequest;
 use Temporal\Api\Operatorservice\V1\DeleteNexusEndpointRequest;
+use Temporal\Api\Operatorservice\V1\GetNexusEndpointRequest;
 use Temporal\Api\Operatorservice\V1\OperatorServiceClient;
 
 /**
@@ -60,11 +61,35 @@ final class NexusEndpointHelper
             );
         }
 
-        // Give the frontend's endpoint registry a moment to pick up the new
-        // endpoint before the first call routes through it.
-        \usleep(100_000);
+        $id = $response->getEndpoint()->getId();
+        $this->awaitEndpointResolvable($id);
 
-        return ['id' => $response->getEndpoint()->getId(), 'name' => $name];
+        return ['id' => $id, 'name' => $name];
+    }
+
+    private function awaitEndpointResolvable(string $endpointId, float $timeoutSeconds = 15.0): void
+    {
+        $deadline = \microtime(true) + $timeoutSeconds;
+        $request = (new GetNexusEndpointRequest())->setId($endpointId);
+
+        do {
+            [, $status] = $this->operator->GetNexusEndpoint($request)->wait();
+
+            if ($status->code === \Grpc\STATUS_OK) {
+                return;
+            }
+
+            \usleep(100_000);
+        } while (\microtime(true) < $deadline);
+
+        throw new \RuntimeException(
+            "Nexus endpoint {$endpointId} did not become resolvable within {$timeoutSeconds}s.",
+        );
+    }
+
+    public function close(): void
+    {
+        $this->operator->close();
     }
 
     public function deleteEndpoint(string $endpointId, int $expectedVersion = 1): void

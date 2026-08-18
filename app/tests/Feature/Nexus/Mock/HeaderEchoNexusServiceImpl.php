@@ -7,10 +7,10 @@ namespace App\Tests\Feature\Nexus\Mock;
 use Temporal\Nexus\Nexus;
 use Temporal\Nexus\WorkflowHandle;
 use Temporal\Samples\NexusContextPropagation\Handler\SampleNexusServiceImpl;
-use Temporal\Samples\NexusContextPropagation\Service\EchoInput;
-use Temporal\Samples\NexusContextPropagation\Service\EchoOutput;
-use Temporal\Samples\NexusContextPropagation\Service\HelloInput;
-use Temporal\Samples\NexusContextPropagation\Service\SampleNexusService;
+use Temporal\Samples\Nexus\Service\EchoInput;
+use Temporal\Samples\Nexus\Service\EchoOutput;
+use Temporal\Samples\Nexus\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\SampleNexusService;
 
 /**
  * Test double for the context-propagation contract: `echo` returns the

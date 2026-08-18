@@ -6,3 +6,5 @@ app/**/temporal.exe
 app/tests/**/*.log
 app/runtime
 app/vendor
+app/**/temporal-test-server
+.DS_Store

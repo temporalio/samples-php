@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\NexusManualOperation\Handler;
 
-final class ExternalJobClient
+class ExternalJobClient
 {
     public function submit(string $jobName, string $requestId): string
     {

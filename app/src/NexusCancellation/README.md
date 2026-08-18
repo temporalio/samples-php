@@ -6,9 +6,10 @@ the other 4 in-flight operations get cancellation requests, the handler
 workflows clean up and rethrow `CanceledFailure`, and the caller drains the
 promises (ignoring `CanceledFailure`) before returning the first result.
 
-Defines its own single-operation `SampleNexusService` (no `echo`), modeled
-on the [Nexus sample](../Nexus/README.md). Its `HelloHandlerWorkflowImpl`
-(in `Handler/`) adds a random delay and a detached cleanup scope.
+Reuses the service contract and `SampleNexusServiceImpl` of the
+[Nexus sample](../Nexus/README.md); the only sample-specific handler code is
+`HelloHandlerWorkflowImpl`, which adds a random delay and a detached cleanup
+scope.
 
 Caller passes `NexusOperationCancellationType::WaitRequested` so it returns
 as soon as the handler acknowledges the cancellation request — it doesn't
@@ -16,10 +17,18 @@ wait for the detached cleanup scope to finish on the handler side.
 
 ## Prerequisites
 
-Same setup as the [Nexus sample](../Nexus/README.md) — namespaces and the
-endpoint must already exist. **Stop any regular-Nexus workers first**: both
-samples share `my-handler-task-queue` / `my-caller-workflow-task-queue` and
-register the same workflow type names.
+Beyond the usual (`./temporal`, `./rr`), and the two namespaces the
+[Nexus sample](../Nexus/README.md) creates:
+
+```bash
+./temporal operator nexus endpoint create \
+  --name my-cancellation-nexus-endpoint \
+  --target-namespace my-target-namespace \
+  --target-task-queue my-cancellation-handler-task-queue
+```
+
+This sample owns its endpoint, task queues and RoadRunner RPC ports, so it
+can run alongside the other Nexus samples.
 
 ## Run
 

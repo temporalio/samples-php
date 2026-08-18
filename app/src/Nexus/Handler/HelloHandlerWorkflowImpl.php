@@ -28,7 +28,7 @@ class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
         throw new ApplicationFailure(
             "Unsupported language: {$input->language->value}",
             'UNSUPPORTED_LANGUAGE',
-            false,
+            true,
         );
     }
 }

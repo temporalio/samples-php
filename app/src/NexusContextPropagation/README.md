@@ -1,22 +1,31 @@
 # Nexus Context Propagation sample
 
-Demonstrates copying a value from a caller workflow into the Nexus operation
-headers, then reading it on the handler side. The caller writes a workflow ID
-into a static `MDC` bag, a `WorkflowOutboundCallsInterceptor` copies any
-`x-nexus-*` keys onto the operation's nexus headers, and the handler reads
-them off `OperationContext::$headers` inside the service implementation.
+Demonstrates carrying a value from a caller workflow all the way into the
+workflow that backs an async Nexus operation. Four pieces, all in
+`Propagation/`:
 
-Each sample keeps its own copy of `Service/`, `Caller/` and `Handler/`. The
-caller implementations mirror the [Nexus sample](../Nexus/README.md) with one
-addition — the `MDC::put(...)` line. The `SampleNexusServiceImpl` (in
-`Handler/`) logs the propagated workflow ID before delegating.
+| Piece | Role |
+|---|---|
+| `MDC` | per-workflow bag of `x-nexus-*` values |
+| `NexusOutboundContextInterceptor` | caller side: MDC → operation headers |
+| `NexusStartContextInterceptor` | handler side: operation headers → start header of the backing workflow |
+| `WorkflowInboundContextInterceptor` | backing workflow: start header → MDC |
 
-> **Workflow-side propagation gap.** The Java sample also uses
-> `MDCContextPropagator` plus a Nexus inbound interceptor to push values into
-> the handler workflow's MDC so its body can log them. PHP SDK doesn't yet
-> have a `ContextPropagator`, so this port logs only at the service-impl
-> boundary (where `OperationContext` is available). Inside the started
-> `HelloHandlerWorkflow` the headers are not visible.
+`NexusStartContextInterceptor` is a `WorkflowClientCallsInterceptor` registered
+on the handler worker's `WorkflowClient`, which is the client the SDK uses to
+start the backing workflow — the same shape as `ContextPropagator` in the Java
+and Go samples. Nothing is propagated unless you register it: the SDK never
+copies Nexus headers into a workflow by itself.
+
+The service contract, the caller workflow interfaces and the handler
+`EchoClient` come from the [Nexus sample](../Nexus/README.md); only
+`Handler/HelloHandlerWorkflow` stays local, so this sample's handler workflow
+can be registered next to the base one in the shared feature-test worker. The
+caller
+implementations mirror it with one addition — the `MDC::put(...)` line.
+`SampleNexusServiceImpl` logs the
+propagated workflow ID, and `HelloHandlerWorkflowImpl` appends it to the
+greeting, so the value is observable at both boundaries.
 
 > **⚠️ Do not put secrets into Nexus headers.** Nexus header values are
 > plain strings on the wire. They bypass the workflow data-converter (the
@@ -28,10 +37,18 @@ addition — the `MDC::put(...)` line. The `SampleNexusServiceImpl` (in
 
 ## Prerequisites
 
-Same setup as the [Nexus sample](../Nexus/README.md) — namespaces and the
-endpoint must already exist. **Stop any other Nexus-flavour workers first**:
-this sample shares `my-handler-task-queue` / `my-caller-workflow-task-queue`
-and registers the same workflow type names.
+Beyond the usual (`./temporal`, `./rr`), and the two namespaces the
+[Nexus sample](../Nexus/README.md) creates:
+
+```bash
+./temporal operator nexus endpoint create \
+  --name my-context-propagation-nexus-endpoint \
+  --target-namespace my-target-namespace \
+  --target-task-queue my-context-propagation-handler-task-queue
+```
+
+This sample owns its endpoint, task queues and RoadRunner RPC ports, so it
+can run alongside the other Nexus samples.
 
 ## Run
 

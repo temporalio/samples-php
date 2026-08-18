@@ -20,7 +20,9 @@ use Temporal\WorkerFactory;
 ini_set('display_errors', 'stderr');
 include "../../vendor/autoload.php";
 
-$address = \getenv('TEMPORAL_ADDRESS') ?: '127.0.0.1:7233';
+$address = \getenv('TEMPORAL_ADDRESS')
+    ?: \getenv('TEMPORAL_CLI_ADDRESS')
+    ?: ((\getenv('TEMPORAL_HOST') ?: '127.0.0.1') . ':' . (\getenv('TEMPORAL_PORT') ?: '7233'));
 $namespace = \getenv('TEMPORAL_NAMESPACE') ?: 'my-target-namespace';
 
 $workflowClient = WorkflowClient::create(

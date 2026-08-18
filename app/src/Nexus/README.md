@@ -7,16 +7,13 @@ service hosted by a handler worker in `my-target-namespace`. Two operations:
 - `hello` — async, `WorkflowRunOperation`, starts `HelloHandlerWorkflow`
   server-side (`#[AsyncOperation(output: HelloOutput::class)]`)
 
-Three caller workflows:
+Two caller workflows:
 
 - `EchoCallerWorkflow` — typed stub, sync op.
-- `HelloCallerWorkflow` — typed stub, async op (the typed proxy resolves
-  directly to `HelloOutput`, the operation token stays hidden).
-- `HelloWithTokenCallerWorkflow` — same call routed through the **untyped**
-  stub via `Workflow::newUntypedNexusOperationStub()`. `start()` returns a
+- `HelloCallerWorkflow` — untyped stub via
+  `Workflow::newUntypedNexusOperationStub()`. `start()` resolves with a
   `NexusOperationHandle` that exposes `operationToken` (string for async,
-  null for sync) before `getResult()` resolves with the typed result. Use
-  this when you need the token — for cancel-by-token, linking, logging.
+  null for sync) before `getResult()` resolves with the typed result.
 
 ## Prerequisites
 
@@ -67,15 +64,7 @@ Result: Nexus Echo 👋
 Starting HelloCallerWorkflow...
 Started: WorkflowID=... RunID=...
 Result: ¡Hola! Nexus 👋
-
-Starting HelloWithTokenCallerWorkflow...
-Started: WorkflowID=... RunID=...
-Result: [token=ChJteS10YXJnZXQt...] Bonjour Nexus 👋
 ```
-
-The `token=...` prefix in the third line is the server-issued operation
-token, base64-ish blob encoding `namespace + workflowId`. It is only
-present for async operations.
 
 ## Constants
 

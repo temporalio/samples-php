@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusManualOperation\Caller;
 
 use Carbon\CarbonInterval;
+use Temporal\Exception\Failure\CanceledFailure;
+use Temporal\Exception\Failure\NexusOperationFailure;
 use Temporal\Samples\NexusManualOperation\Service\JobInput;
 use Temporal\Samples\NexusManualOperation\Service\JobResult;
 use Temporal\Workflow;
@@ -45,27 +47,51 @@ class JobCallerWorkflowImpl implements JobCallerWorkflow
         $instantResult = yield $handle->getResult();
 
         $handle2 = null;
-        $scope = Workflow::async(function () use ($jobName, &$handle2): \Generator {
-            $handle2 = yield $this->stub->start(
-                'startJob',
-                [new JobInput($jobName)],
-                JobResult::class,
-            );
+        $failure = null;
+        $scope = Workflow::async(function () use ($jobName, &$handle2, &$failure): \Generator {
+            try {
+                $handle2 = yield $this->stub->start(
+                    'startJob',
+                    [new JobInput($jobName)],
+                    JobResult::class,
+                );
+            } catch (\Throwable $e) {
+                $failure = $e;
+                throw $e;
+            }
+
             yield $handle2->getResult();
         });
 
-        yield Workflow::await(function () use (&$handle2): bool {
-            return $handle2 !== null;
+        yield Workflow::await(function () use (&$handle2, &$failure): bool {
+            return $handle2 !== null || $failure !== null;
         });
+
+        if ($failure !== null) {
+            throw $failure;
+        }
 
         $token2 = $handle2->getOperationToken();
 
         yield Workflow::timer(1);
         $scope->cancel();
 
+        $cancelled = false;
+
         try {
             yield $scope;
-        } catch (\Throwable) {
+        } catch (CanceledFailure) {
+            $cancelled = true;
+        } catch (NexusOperationFailure $e) {
+            if (!$e->getPrevious() instanceof CanceledFailure) {
+                throw $e;
+            }
+
+            $cancelled = true;
+        }
+
+        if (!$cancelled) {
+            throw new \LogicException('Async operation did not end cancelled.');
         }
 
         return "[instant={$instantResult->message}] [token={$token2}] cancelled";

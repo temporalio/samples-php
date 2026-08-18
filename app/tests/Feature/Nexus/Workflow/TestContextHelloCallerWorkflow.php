@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Temporal\Samples\NexusContextPropagation\Caller;
+namespace App\Tests\Feature\Nexus\Workflow;
 
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 
 #[WorkflowInterface]
-interface EchoCallerWorkflow
+interface TestContextHelloCallerWorkflow
 {
     #[WorkflowMethod]
-    public function echo(string $message);
+    public function hello(string $endpoint, string $name);
 }

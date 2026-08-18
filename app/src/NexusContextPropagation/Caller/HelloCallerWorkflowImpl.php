@@ -6,10 +6,11 @@ namespace Temporal\Samples\NexusContextPropagation\Caller;
 
 use Carbon\CarbonInterval;
 use Temporal\Samples\NexusContextPropagation\Propagation\MDC;
-use Temporal\Samples\NexusContextPropagation\Service\HelloInput;
-use Temporal\Samples\NexusContextPropagation\Service\HelloOutput;
-use Temporal\Samples\NexusContextPropagation\Service\Language;
-use Temporal\Samples\NexusContextPropagation\Service\SampleNexusService;
+use Temporal\Samples\Nexus\Caller\HelloCallerWorkflow;
+use Temporal\Samples\Nexus\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\HelloOutput;
+use Temporal\Samples\Nexus\Service\Language;
+use Temporal\Samples\Nexus\Service\SampleNexusService;
 use Temporal\Workflow;
 use Temporal\Workflow\NexusOperationOptions;
 

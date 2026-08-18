@@ -7,10 +7,12 @@ namespace Temporal\Samples\NexusMultipleArguments\Handler;
 use Temporal\Client\WorkflowOptions;
 use Temporal\Nexus\Nexus;
 use Temporal\Nexus\WorkflowHandle;
-use Temporal\Samples\NexusMultipleArguments\Service\EchoInput;
-use Temporal\Samples\NexusMultipleArguments\Service\EchoOutput;
-use Temporal\Samples\NexusMultipleArguments\Service\HelloInput;
-use Temporal\Samples\NexusMultipleArguments\Service\SampleNexusService;
+use Temporal\Samples\Nexus\Handler\EchoClient;
+use Temporal\Samples\Nexus\Handler\EchoClientImpl;
+use Temporal\Samples\Nexus\Service\EchoInput;
+use Temporal\Samples\Nexus\Service\EchoOutput;
+use Temporal\Samples\Nexus\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\SampleNexusService;
 
 final class SampleNexusServiceImpl implements SampleNexusService
 {

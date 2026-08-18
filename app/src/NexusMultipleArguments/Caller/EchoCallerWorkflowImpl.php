@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusMultipleArguments\Caller;
 
 use Carbon\CarbonInterval;
-use Temporal\Samples\NexusMultipleArguments\Service\EchoInput;
-use Temporal\Samples\NexusMultipleArguments\Service\EchoOutput;
-use Temporal\Samples\NexusMultipleArguments\Service\SampleNexusService;
+use Temporal\Samples\Nexus\Service\EchoInput;
+use Temporal\Samples\Nexus\Service\EchoOutput;
+use Temporal\Samples\Nexus\Service\SampleNexusService;
 use Temporal\Workflow;
 use Temporal\Workflow\NexusOperationOptions;
 

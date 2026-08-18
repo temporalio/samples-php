@@ -1,7 +1,7 @@
 version: "3"
 
 rpc:
-    listen: tcp://127.0.0.1:6101
+    listen: tcp://127.0.0.1:6121
 
 server:
     command: "php handler-worker.php"

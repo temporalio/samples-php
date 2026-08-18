@@ -15,9 +15,11 @@ $sysInfo = \Temporal\Testing\SystemInfo::detect();
 // Nexus needs the full Temporal server; the time-skipping test server
 // shipped via `startTemporalTestServer()` doesn't expose the Nexus APIs.
 // Mirrors what sdk-php's acceptance harness does in TemporalStarter.
+$httpPort = getenv('TEMPORAL_HTTP_PORT') ?: '7246';
+
 $environment->startTemporalServer(
     parameters: [
-        '--http-port', '7243',
+        '--http-port', $httpPort,
     ],
 );
 // rr's `-c` is resolved relative to its `-w` workdir, while

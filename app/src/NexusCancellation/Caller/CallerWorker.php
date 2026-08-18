@@ -6,6 +6,6 @@ namespace Temporal\Samples\NexusCancellation\Caller;
 
 final class CallerWorker
 {
-    public const TASK_QUEUE = 'my-caller-workflow-task-queue';
-    public const ENDPOINT_NAME = 'my-nexus-endpoint-name';
+    public const TASK_QUEUE = 'my-cancellation-caller-task-queue';
+    public const ENDPOINT_NAME = 'my-cancellation-nexus-endpoint';
 }

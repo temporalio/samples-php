@@ -12,20 +12,25 @@ have to evolve independently — e.g. the workflow already exists with a
 multi-arg signature and is called from many places, and you want to wrap
 it behind a Nexus operation without changing the workflow.
 
-Each sample keeps its own copy of `Service/`, `Caller/` and `Handler/`;
-nothing is literally shared with the [basic Nexus sample](../Nexus/README.md).
-Differences: `Service/` keeps the same shape, `Handler/HelloHandlerWorkflow`
-and `Handler/HelloHandlerWorkflowImpl` switch to the multi-arg signature,
-and `Handler/SampleNexusServiceImpl` unpacks the input.
+The service contract is imported from the
+[basic Nexus sample](../Nexus/README.md). Only `Handler/HelloHandlerWorkflow`
+and `Handler/HelloHandlerWorkflowImpl` (multi-arg signature) and
+`Handler/SampleNexusServiceImpl` (unpacks the input) are sample-specific.
 
 ## Prerequisites
 
-Same setup as the [basic Nexus sample](../Nexus/README.md) — namespaces and
-the endpoint must already exist. **Stop any other Nexus-flavour workers
-first**: this sample shares `my-handler-task-queue` /
-`my-caller-workflow-task-queue` and registers the same workflow type names
-as the basic sample but with a different signature, so co-running them
-will cause deserialization failures.
+Beyond the usual (`./temporal`, `./rr`), and the two namespaces the
+[Nexus sample](../Nexus/README.md) creates:
+
+```bash
+./temporal operator nexus endpoint create \
+  --name my-multiple-arguments-nexus-endpoint \
+  --target-namespace my-target-namespace \
+  --target-task-queue my-multiple-arguments-handler-task-queue
+```
+
+This sample owns its endpoint, task queues and RoadRunner RPC ports, so it
+can run alongside the other Nexus samples.
 
 ## Run
 
@@ -114,8 +119,8 @@ quick reference:
 |---|---|
 | service | `SampleNexusService` |
 | operations | `echo`, `hello` |
-| endpoint | `my-nexus-endpoint-name` |
-| handler task queue | `my-handler-task-queue` |
-| caller task queue | `my-caller-workflow-task-queue` |
+| endpoint | `my-multiple-arguments-nexus-endpoint` |
+| handler task queue | `my-multiple-arguments-handler-task-queue` |
+| caller task queue | `my-multiple-arguments-caller-task-queue` |
 | target namespace | `my-target-namespace` |
 | caller namespace | `my-caller-namespace` |

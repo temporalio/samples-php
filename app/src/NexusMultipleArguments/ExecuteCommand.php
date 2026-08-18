@@ -20,7 +20,7 @@ use Temporal\Client\WorkflowOptions;
 use Temporal\Samples\NexusMultipleArguments\Caller\CallerWorker;
 use Temporal\Samples\NexusMultipleArguments\Caller\EchoCallerWorkflow;
 use Temporal\Samples\NexusMultipleArguments\Caller\HelloCallerWorkflow;
-use Temporal\Samples\NexusMultipleArguments\Service\Language;
+use Temporal\Samples\Nexus\Service\Language;
 use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command

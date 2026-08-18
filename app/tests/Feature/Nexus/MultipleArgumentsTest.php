@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Feature\Nexus;
 
 use App\Tests\Feature\Nexus\Workflow\TestMultiArgsHelloCallerWorkflow;
-use Temporal\Samples\NexusMultipleArguments\Service\Language;
+use Temporal\Samples\Nexus\Service\Language;
 
 /**
  * End-to-end run of the NexusMultipleArguments sample: a single-DTO Nexus

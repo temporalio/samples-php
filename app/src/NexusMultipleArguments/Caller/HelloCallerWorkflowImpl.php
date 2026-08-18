@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusMultipleArguments\Caller;
 
 use Carbon\CarbonInterval;
-use Temporal\Samples\NexusMultipleArguments\Service\HelloInput;
-use Temporal\Samples\NexusMultipleArguments\Service\HelloOutput;
-use Temporal\Samples\NexusMultipleArguments\Service\Language;
-use Temporal\Samples\NexusMultipleArguments\Service\SampleNexusService;
+use Temporal\Samples\Nexus\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\HelloOutput;
+use Temporal\Samples\Nexus\Service\Language;
+use Temporal\Samples\Nexus\Service\SampleNexusService;
 use Temporal\Workflow;
 use Temporal\Workflow\NexusOperationOptions;
 

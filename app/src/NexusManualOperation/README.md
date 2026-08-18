@@ -37,20 +37,13 @@ Beyond the usual (`./temporal`, `./rr`):
 ./temporal operator namespace create --namespace my-caller-namespace
 
 ./temporal operator nexus endpoint create \
-  --name my-nexus-endpoint-name \
+  --name my-manual-nexus-endpoint \
   --target-namespace my-target-namespace \
   --target-task-queue my-manual-handler-task-queue
 ```
 
-If `my-nexus-endpoint-name` already exists from the [Nexus sample](../Nexus/README.md),
-re-point it instead:
-
-```bash
-./temporal operator nexus endpoint update \
-  --name my-nexus-endpoint-name \
-  --target-namespace my-target-namespace \
-  --target-task-queue my-manual-handler-task-queue
-```
+This sample owns its endpoint, task queues and RoadRunner RPC ports, so it
+can run alongside the other Nexus samples.
 
 ## Run
 
@@ -94,7 +87,7 @@ id built from the start request id); the handler worker logs
 |---|---|
 | service | `SampleNexusService` |
 | operations | `startJob` |
-| endpoint | `my-nexus-endpoint-name` |
+| endpoint | `my-manual-nexus-endpoint` |
 | handler task queue | `my-manual-handler-task-queue` |
 | caller task queue | `my-manual-caller-task-queue` |
 | target namespace | `my-target-namespace` |

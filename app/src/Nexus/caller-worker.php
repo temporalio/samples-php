@@ -12,7 +12,6 @@ declare(strict_types=1);
 use Temporal\Samples\Nexus\Caller\CallerWorker;
 use Temporal\Samples\Nexus\Caller\EchoCallerWorkflowImpl;
 use Temporal\Samples\Nexus\Caller\HelloCallerWorkflowImpl;
-use Temporal\Samples\Nexus\Caller\HelloWithTokenCallerWorkflowImpl;
 use Temporal\WorkerFactory;
 
 ini_set('display_errors', 'stderr');
@@ -24,7 +23,6 @@ $factory->newWorker(CallerWorker::TASK_QUEUE)
     ->registerWorkflowTypes(
         EchoCallerWorkflowImpl::class,
         HelloCallerWorkflowImpl::class,
-        HelloWithTokenCallerWorkflowImpl::class,
     );
 
 $factory->run();

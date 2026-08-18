@@ -6,5 +6,5 @@ namespace Temporal\Samples\NexusMultipleArguments\Handler;
 
 final class HandlerWorker
 {
-    public const TASK_QUEUE = 'my-handler-task-queue';
+    public const TASK_QUEUE = 'my-multiple-arguments-handler-task-queue';
 }

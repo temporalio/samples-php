@@ -20,7 +20,8 @@ final class CancellationTest extends NexusTestCase
 
         $result = $workflow->hello($this->endpoint['name'], 'Nexus');
 
-        self::assertContains($result, [
+        self::assertStringEndsWith(' [cancelled=4]', $result);
+        self::assertContains(\substr($result, 0, -\strlen(' [cancelled=4]')), [
             'Hello Nexus 👋',
             'Bonjour Nexus 👋',
             'Hallo Nexus 👋',

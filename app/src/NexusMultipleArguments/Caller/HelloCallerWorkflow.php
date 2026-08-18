@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\NexusMultipleArguments\Caller;
 
-use Temporal\Samples\NexusMultipleArguments\Service\Language;
+use Temporal\Samples\Nexus\Service\Language;
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 

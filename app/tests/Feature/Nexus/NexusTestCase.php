@@ -10,36 +10,56 @@ use Temporal\Client\WorkflowOptions;
 
 /**
  * Base for Nexus feature tests: creates a dedicated Nexus endpoint targeting
- * `static::TASK_QUEUE` before each test and drops it afterwards.
+ * `static::TASK_QUEUE` once per test class and drops it afterwards.
  */
 abstract class NexusTestCase extends TestCase
 {
     public const TASK_QUEUE = '';
 
-    protected NexusEndpointHelper $nexusHelper;
+    private static ?NexusEndpointHelper $nexusHelper = null;
 
     /** @var array{id: string, name: string} */
     protected array $endpoint;
 
-    protected function setUp(): void
+    /** @var array{id: string, name: string}|null */
+    private static ?array $sharedEndpoint = null;
+
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
+        parent::setUpBeforeClass();
 
         if (static::TASK_QUEUE === '') {
             self::fail(\sprintf('%s must override the TASK_QUEUE constant.', static::class));
         }
 
-        $this->nexusHelper = new NexusEndpointHelper(\getenv('TEMPORAL_ADDRESS') ?: 'localhost:7236');
-        $this->endpoint = $this->nexusHelper->setupEndpoint(
+        self::$nexusHelper = new NexusEndpointHelper(\getenv('TEMPORAL_ADDRESS') ?: 'localhost:7236');
+        self::$sharedEndpoint = self::$nexusHelper->setupEndpoint(
             namespace: 'default',
             taskQueue: static::TASK_QUEUE,
         );
     }
 
-    protected function tearDown(): void
+    public static function tearDownAfterClass(): void
     {
-        $this->nexusHelper->deleteEndpoint($this->endpoint['id']);
-        parent::tearDown();
+        if (self::$nexusHelper !== null) {
+            if (self::$sharedEndpoint !== null) {
+                self::$nexusHelper->deleteEndpoint(self::$sharedEndpoint['id']);
+            }
+
+            self::$nexusHelper->close();
+        }
+
+        self::$nexusHelper = null;
+        self::$sharedEndpoint = null;
+
+        parent::tearDownAfterClass();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->endpoint = self::$sharedEndpoint;
     }
 
     /**
@@ -51,9 +71,8 @@ abstract class NexusTestCase extends TestCase
     {
         return $this->workflowClient->newWorkflowStub(
             $workflowClass,
-            ($options ?? WorkflowOptions::new())
-                ->withTaskQueue(static::TASK_QUEUE)
-                ->withWorkflowExecutionTimeout(CarbonInterval::seconds(60)),
+            ($options ?? WorkflowOptions::new()->withWorkflowExecutionTimeout(CarbonInterval::seconds(60)))
+                ->withTaskQueue(static::TASK_QUEUE),
         );
     }
 }

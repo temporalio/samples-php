@@ -20,14 +20,13 @@ use Temporal\Client\WorkflowOptions;
 use Temporal\Samples\Nexus\Caller\CallerWorker;
 use Temporal\Samples\Nexus\Caller\EchoCallerWorkflow;
 use Temporal\Samples\Nexus\Caller\HelloCallerWorkflow;
-use Temporal\Samples\Nexus\Caller\HelloWithTokenCallerWorkflow;
 use Temporal\Samples\Nexus\Service\Language;
 use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command
 {
     protected const NAME = 'nexus';
-    protected const DESCRIPTION = 'Execute Nexus\\EchoCallerWorkflow + HelloCallerWorkflow + HelloWithTokenCallerWorkflow (cross-namespace via Nexus)';
+    protected const DESCRIPTION = 'Execute Nexus\\EchoCallerWorkflow + HelloCallerWorkflow (cross-namespace via Nexus)';
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -57,20 +56,6 @@ class ExecuteCommand extends Command
             WorkflowOptions::new()->withTaskQueue(CallerWorker::TASK_QUEUE),
         );
         $run = $client->start($helloWorkflow, 'Nexus', Language::ES);
-        $execution = $run->getExecution();
-        $output->writeln(\sprintf(
-            'Started: WorkflowID=<fg=magenta>%s</> RunID=<fg=magenta>%s</>',
-            $execution->getID(),
-            $execution->getRunID(),
-        ));
-        $output->writeln(\sprintf("Result: <info>%s</info>", $run->getResult('string')));
-
-        $output->writeln("\nStarting <comment>HelloWithTokenCallerWorkflow</comment>...");
-        $tokenWorkflow = $client->newWorkflowStub(
-            HelloWithTokenCallerWorkflow::class,
-            WorkflowOptions::new()->withTaskQueue(CallerWorker::TASK_QUEUE),
-        );
-        $run = $client->start($tokenWorkflow, 'Nexus', Language::FR);
         $execution = $run->getExecution();
         $output->writeln(\sprintf(
             'Started: WorkflowID=<fg=magenta>%s</> RunID=<fg=magenta>%s</>',

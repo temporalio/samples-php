@@ -6,5 +6,5 @@ namespace Temporal\Samples\NexusContextPropagation\Handler;
 
 final class HandlerWorker
 {
-    public const TASK_QUEUE = 'my-handler-task-queue';
+    public const TASK_QUEUE = 'my-context-propagation-handler-task-queue';
 }

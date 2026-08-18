@@ -18,9 +18,9 @@ use Temporal\Client\GRPC\ServiceClient;
 use Temporal\Client\WorkflowClient;
 use Temporal\Client\WorkflowOptions;
 use Temporal\Samples\NexusContextPropagation\Caller\CallerWorker;
-use Temporal\Samples\NexusContextPropagation\Caller\EchoCallerWorkflow;
-use Temporal\Samples\NexusContextPropagation\Caller\HelloCallerWorkflow;
-use Temporal\Samples\NexusContextPropagation\Service\Language;
+use Temporal\Samples\Nexus\Caller\EchoCallerWorkflow;
+use Temporal\Samples\Nexus\Caller\HelloCallerWorkflow;
+use Temporal\Samples\Nexus\Service\Language;
 use Temporal\SampleUtils\Command;
 
 class ExecuteCommand extends Command

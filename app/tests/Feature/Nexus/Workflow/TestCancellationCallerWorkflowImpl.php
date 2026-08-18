@@ -8,10 +8,10 @@ use Carbon\CarbonInterval;
 use Temporal\Exception\Failure\CanceledFailure;
 use Temporal\Exception\Failure\NexusOperationFailure;
 use Temporal\Promise;
-use Temporal\Samples\NexusCancellation\Service\HelloInput;
-use Temporal\Samples\NexusCancellation\Service\HelloOutput;
-use Temporal\Samples\NexusCancellation\Service\Language;
-use Temporal\Samples\NexusCancellation\Service\SampleNexusService;
+use Temporal\Samples\Nexus\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\HelloOutput;
+use Temporal\Samples\Nexus\Service\Language;
+use Temporal\Samples\Nexus\Service\SampleNexusService;
 use Temporal\Workflow;
 use Temporal\Workflow\NexusOperationCancellationType;
 use Temporal\Workflow\NexusOperationOptions;
@@ -45,17 +45,22 @@ class TestCancellationCallerWorkflowImpl implements TestCancellationCallerWorkfl
 
         $scope->cancel();
 
+        $cancelled = 0;
+
         foreach ($promises as $promise) {
             try {
                 yield $promise;
             } catch (CanceledFailure) {
+                ++$cancelled;
             } catch (NexusOperationFailure $e) {
                 if (!$e->getPrevious() instanceof CanceledFailure) {
                     throw $e;
                 }
+
+                ++$cancelled;
             }
         }
 
-        return $first->message;
+        return "{$first->message} [cancelled={$cancelled}]";
     }
 }

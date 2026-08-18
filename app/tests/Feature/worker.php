@@ -6,7 +6,9 @@ use App\Tests\Feature\Nexus\CallerWorkflowMockTest;
 use App\Tests\Feature\Nexus\CallerWorkflowTest;
 use App\Tests\Feature\Nexus\CancellationTest;
 use App\Tests\Feature\Nexus\ContextPropagationTest;
+use App\Tests\Feature\Nexus\ManualOperationStartFailureTest;
 use App\Tests\Feature\Nexus\ManualOperationTest;
+use App\Tests\Feature\Nexus\Mock\FailingJobClient;
 use App\Tests\Feature\Nexus\Mock\HeaderEchoNexusServiceImpl;
 use App\Tests\Feature\Nexus\Mock\MockEchoClient;
 use App\Tests\Feature\Nexus\Mock\MockHelloHandlerWorkflowImpl;
@@ -15,9 +17,9 @@ use App\Tests\Feature\Nexus\MultipleArgumentsTest;
 use App\Tests\Feature\Nexus\NexusServiceMockTest;
 use App\Tests\Feature\Nexus\Workflow\TestCancellationCallerWorkflowImpl;
 use App\Tests\Feature\Nexus\Workflow\TestContextEchoCallerWorkflowImpl;
+use App\Tests\Feature\Nexus\Workflow\TestContextHelloCallerWorkflowImpl;
 use App\Tests\Feature\Nexus\Workflow\TestEchoCallerWorkflowImpl;
 use App\Tests\Feature\Nexus\Workflow\TestHelloCallerWorkflowImpl;
-use App\Tests\Feature\Nexus\Workflow\TestHelloWithTokenCallerWorkflowImpl;
 use App\Tests\Feature\Nexus\Workflow\TestManualJobCallerWorkflowImpl;
 use App\Tests\Feature\Nexus\Workflow\TestMultiArgsHelloCallerWorkflowImpl;
 use Temporal\Client\GRPC\ServiceClient;
@@ -26,6 +28,8 @@ use Temporal\Interceptor\SimplePipelineProvider;
 use Temporal\Samples\Nexus\Handler\HelloHandlerWorkflowImpl;
 use Temporal\Samples\Nexus\Handler\SampleNexusServiceImpl;
 use Temporal\Samples\NexusContextPropagation\Propagation\NexusOutboundContextInterceptor;
+use Temporal\Samples\NexusContextPropagation\Propagation\NexusStartContextInterceptor;
+use Temporal\Samples\NexusContextPropagation\Propagation\WorkflowInboundContextInterceptor;
 use Temporal\Testing\WorkerFactory;
 
 ini_set('display_errors', 'stderr');
@@ -37,6 +41,7 @@ require_once 'vendor/autoload.php';
 // the worker needs a WorkflowClient threaded through to the operation context.
 $workflowClient = WorkflowClient::create(
     ServiceClient::create(\getenv('TEMPORAL_ADDRESS') ?: 'localhost:7236'),
+    interceptorProvider: new SimplePipelineProvider([new NexusStartContextInterceptor()]),
 );
 
 $workerFactory = WorkerFactory::create(client: $workflowClient);
@@ -61,7 +66,6 @@ $workerFactory->newWorker(taskQueue: CallerWorkflowTest::TASK_QUEUE)
     ->registerWorkflowTypes(
         TestEchoCallerWorkflowImpl::class,
         TestHelloCallerWorkflowImpl::class,
-        TestHelloWithTokenCallerWorkflowImpl::class,
         HelloHandlerWorkflowImpl::class,
     )
     ->registerNexusServiceImplementation(new SampleNexusServiceImpl());
@@ -96,7 +100,7 @@ $workerFactory->newWorker(taskQueue: CancellationTest::TASK_QUEUE)
         TestCancellationCallerWorkflowImpl::class,
         \Temporal\Samples\NexusCancellation\Handler\HelloHandlerWorkflowImpl::class,
     )
-    ->registerNexusServiceImplementation(new \Temporal\Samples\NexusCancellation\Handler\SampleNexusServiceImpl());
+    ->registerNexusServiceImplementation(new \Temporal\Samples\Nexus\Handler\SampleNexusServiceImpl());
 
 // Scenario 5: the NexusContextPropagation sample — the production outbound
 // interceptor on the caller side, a header-echoing service double on the
@@ -105,10 +109,12 @@ $workerFactory->newWorker(
     taskQueue: ContextPropagationTest::TASK_QUEUE,
     interceptorProvider: new SimplePipelineProvider([
         new NexusOutboundContextInterceptor(),
+        new WorkflowInboundContextInterceptor(),
     ]),
 )
     ->registerWorkflowTypes(
         TestContextEchoCallerWorkflowImpl::class,
+        TestContextHelloCallerWorkflowImpl::class,
         \Temporal\Samples\NexusContextPropagation\Handler\HelloHandlerWorkflowImpl::class,
     )
     ->registerNexusServiceImplementation(new HeaderEchoNexusServiceImpl());
@@ -127,5 +133,13 @@ $workerFactory->newWorker(taskQueue: MultipleArgumentsTest::TASK_QUEUE)
 $workerFactory->newWorker(taskQueue: ManualOperationTest::TASK_QUEUE)
     ->registerWorkflowTypes(TestManualJobCallerWorkflowImpl::class)
     ->registerNexusServiceImplementation(new \Temporal\Samples\NexusManualOperation\Handler\SampleNexusService());
+
+// Scenario 8: same manual-operation caller, but the external job backend
+// rejects the async submit so the caller must surface the start failure.
+$workerFactory->newWorker(taskQueue: ManualOperationStartFailureTest::TASK_QUEUE)
+    ->registerWorkflowTypes(TestManualJobCallerWorkflowImpl::class)
+    ->registerNexusServiceImplementation(
+        new \Temporal\Samples\NexusManualOperation\Handler\SampleNexusService(new FailingJobClient()),
+    );
 
 $workerFactory->run();

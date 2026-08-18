@@ -7,9 +7,10 @@ namespace Temporal\Samples\NexusCancellation\Handler;
 use Carbon\CarbonInterval;
 use Temporal\Exception\Failure\ApplicationFailure;
 use Temporal\Exception\Failure\CanceledFailure;
-use Temporal\Samples\NexusCancellation\Service\HelloInput;
-use Temporal\Samples\NexusCancellation\Service\HelloOutput;
-use Temporal\Samples\NexusCancellation\Service\Language;
+use Temporal\Samples\Nexus\Handler\HelloHandlerWorkflow;
+use Temporal\Samples\Nexus\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\HelloOutput;
+use Temporal\Samples\Nexus\Service\Language;
 use Temporal\Workflow;
 
 class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
@@ -34,7 +35,7 @@ class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
             throw new ApplicationFailure(
                 "Unsupported language: {$input->language->value}",
                 'UNSUPPORTED_LANGUAGE',
-                false,
+                true,
             );
         } catch (CanceledFailure $e) {
             yield Workflow::asyncDetached(function () {

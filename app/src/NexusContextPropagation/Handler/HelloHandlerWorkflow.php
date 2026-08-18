@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\NexusContextPropagation\Handler;
 
-use Temporal\Samples\NexusContextPropagation\Service\HelloInput;
+use Temporal\Samples\Nexus\Service\HelloInput;
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 

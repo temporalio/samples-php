@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusMultipleArguments\Handler;
 
 use Temporal\Exception\Failure\ApplicationFailure;
-use Temporal\Samples\NexusMultipleArguments\Service\HelloOutput;
-use Temporal\Samples\NexusMultipleArguments\Service\Language;
+use Temporal\Samples\Nexus\Service\HelloOutput;
+use Temporal\Samples\Nexus\Service\Language;
 
 class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
 {
@@ -27,7 +27,7 @@ class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
         throw new ApplicationFailure(
             "Unsupported language: {$language->value}",
             'UNSUPPORTED_LANGUAGE',
-            false,
+            true,
         );
     }
 }
