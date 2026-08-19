@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6e2a963ef95741e5a7bfe40d9478877",
+    "content-hash": "bb34ba5229d49452bfefff2f47439cc5",
     "packages": [
         {
             "name": "brick/math",
@@ -4510,28 +4510,29 @@
         },
         {
             "name": "temporal/sdk",
-            "version": "v2.17.1",
+            "version": "dev-nexus-new",
             "source": {
                 "type": "git",
                 "url": "https://github.com/temporalio/sdk-php.git",
-                "reference": "cdbf6874efd25b3eee50b52c5c2d54ae0d004be4"
+                "reference": "fec3ab3c9959be0100e2a5aef87e15933a7a81a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/cdbf6874efd25b3eee50b52c5c2d54ae0d004be4",
-                "reference": "cdbf6874efd25b3eee50b52c5c2d54ae0d004be4",
+                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/fec3ab3c9959be0100e2a5aef87e15933a7a81a2",
+                "reference": "fec3ab3c9959be0100e2a5aef87e15933a7a81a2",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
                 "google/common-protos": "^4.9",
-                "google/protobuf": "^4.31.1",
+                "google/protobuf": "^4.33.6 || ^5.34.0",
                 "grpc/grpc": "^1.57",
                 "internal/destroy": "^1.0",
                 "internal/promise": "^3.4",
                 "nesbot/carbon": "^2.72.6 || ^3.8.4",
                 "php": ">=8.1",
+                "psr/clock": "^1.0",
                 "psr/log": "^2.0 || ^3.0.2",
                 "ramsey/uuid": "^4.7.6",
                 "roadrunner-php/roadrunner-api-dto": "^1.14.0",
@@ -4542,7 +4543,7 @@
                 "spiral/roadrunner-kv": "^4.3.1",
                 "spiral/roadrunner-worker": "^3.6.2",
                 "symfony/filesystem": "^5.4.45 || ^6.4.13 || ^7.0 || ^8.0",
-                "symfony/http-client": "^5.4.49 || ^6.4.17 || ^7.0 || ^8.0",
+                "symfony/http-client": "^5.4.53 || ^6.4.17 || ^7.0 || ^8.0",
                 "symfony/polyfill-php83": "^1.31.0",
                 "symfony/process": "^5.4.51 || ^6.4.15 || ^7.0 || ^8.0"
             },
@@ -4553,7 +4554,7 @@
                 "dereuromark/composer-prefer-lowest": "^0.1.10",
                 "doctrine/annotations": "^1.14.4 || ^2.0.2",
                 "ext-simplexml": "*",
-                "internal/dload": "^1.2.0",
+                "internal/dload": "^1.10.0",
                 "internal/toml": "^1.0.3",
                 "jetbrains/phpstorm-attributes": "dev-master",
                 "laminas/laminas-code": "^4.16",
@@ -4574,23 +4575,84 @@
             "extra": {
                 "patches": {
                     "phpunit/phpunit": {
-                        "Make runTest protected": "patches/phpunit-run-test-protected.patch",
-                        "Improve assertInstanceOf error message": "patches/phpunit-instance-of.patch"
+                        "Improve assertInstanceOf error message": "patches/phpunit-instance-of.patch",
+                        "Make runTest protected": "patches/phpunit-run-test-protected.patch"
                     }
                 }
             },
             "autoload": {
+                "psr-4": {
+                    "Temporal\\Api\\Testservice\\": "testing/api/testservice/Temporal/Api/Testservice",
+                    "GPBMetadata\\Temporal\\Api\\Testservice\\": "testing/api/testservice/GPBMetadata/Temporal/Api/Testservice",
+                    "Temporal\\Testing\\": "testing/src",
+                    "Temporal\\": "src"
+                },
                 "files": [
                     "src/include.php"
-                ],
+                ]
+            },
+            "autoload-dev": {
                 "psr-4": {
-                    "Temporal\\": "src",
-                    "Temporal\\Testing\\": "testing/src",
-                    "Temporal\\Api\\Testservice\\": "testing/api/testservice/Temporal/Api/Testservice",
-                    "GPBMetadata\\Temporal\\Api\\Testservice\\": "testing/api/testservice/GPBMetadata/Temporal/Api/Testservice"
+                    "Temporal\\Tests\\Acceptance\\App\\": "tests/Acceptance/App",
+                    "Temporal\\Tests\\Interceptor\\": "tests/Fixtures/src/Interceptor",
+                    "Temporal\\Tests\\Workflow\\": "tests/Fixtures/src/Workflow",
+                    "Temporal\\Tests\\Activity\\": "tests/Fixtures/src/Activity",
+                    "Temporal\\Tests\\DTO\\": "tests/Fixtures/src/DTO",
+                    "Temporal\\Tests\\Proto\\": "tests/Fixtures/src/Proto",
+                    "Temporal\\Tests\\": "tests"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "get:binaries": [
+                    "dload get --no-interaction -vv",
+                    "Temporal\\Worker\\Transport\\RoadRunnerVersionChecker::postUpdate"
+                ],
+                "cs:diff": [
+                    "php-cs-fixer fix --dry-run -v --diff --show-progress dots"
+                ],
+                "cs:fix": [
+                    "php-cs-fixer fix -v"
+                ],
+                "psalm": [
+                    "psalm"
+                ],
+                "psalm:baseline": [
+                    "psalm --set-baseline=psalm-baseline.xml"
+                ],
+                "test:unit": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=Unit --color=always --testdox"
+                ],
+                "test:func": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=Functional --color=always --testdox"
+                ],
+                "test:func-timeskip": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=Functional-TimeSkipping --color=always --testdox"
+                ],
+                "test:arch": [
+                    "phpunit --testsuite=Arch --color=always --testdox"
+                ],
+                "test:accept": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=Acceptance --color=always --testdox"
+                ],
+                "test:accept-slow": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=\"Acceptance-Slow\" --color=always --testdox"
+                ],
+                "test:accept-fast": [
+                    "tests/runner.php vendor/bin/phpunit --testsuite=\"Acceptance-Fast\" --color=always --testdox"
+                ],
+                "transcripts:last": [
+                    "php tests/Acceptance/transcript-merge.php"
+                ],
+                "transcripts:list": [
+                    "php tests/Acceptance/transcript-merge.php --list"
+                ],
+                "transcripts:merge": [
+                    "php tests/Acceptance/transcript-merge.php"
+                ],
+                "transcripts:clean": [
+                    "rm -rf runtime/tests/transcripts/*"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -4607,12 +4669,12 @@
                 "workflow"
             ],
             "support": {
-                "docs": "https://docs.temporal.io",
                 "forum": "https://community.temporal.io",
+                "docs": "https://docs.temporal.io",
                 "issues": "https://github.com/temporalio/sdk-php/issues",
                 "source": "https://github.com/temporalio/sdk-php"
             },
-            "time": "2026-03-08T14:43:31+00:00"
+            "time": "2026-08-19T09:15:08+00:00"
         }
     ],
     "packages-dev": [
@@ -5357,6 +5419,70 @@
                 "source": "https://github.com/php-http/message/tree/1.16.2"
             },
             "time": "2024-10-02T11:34:13+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "2.2.8",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e285254e60f33c21902efef4a926ca0987c06804",
+                "reference": "e285254e60f33c21902efef4a926ca0987c06804",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ondřej Mirtes"
+                },
+                {
+                    "name": "Markus Staab"
+                },
+                {
+                    "name": "Vincent Langlet"
+                }
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-04T22:21:45+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -7102,9 +7228,18 @@
             "time": "2025-12-01T11:14:17+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "temporal/sdk",
+            "version": "dev-nexus-new",
+            "alias": "2.18.0",
+            "alias_normalized": "2.18.0.0"
+        }
+    ],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "temporal/sdk": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {},
