@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Feature\Nexus;
 
 use App\Tests\Feature\Nexus\Mock\FailingJobClient;
-use App\Tests\Feature\Nexus\Workflow\TestManualJobCallerWorkflow;
 use Carbon\CarbonInterval;
+use Temporal\Samples\NexusManualOperation\Caller\CallerWorker;
+use Temporal\Samples\NexusManualOperation\Caller\JobCallerWorkflow;
 use Temporal\Client\WorkflowOptions;
 use Temporal\Exception\Client\WorkflowFailedException;
 
@@ -17,16 +18,17 @@ use Temporal\Exception\Client\WorkflowFailedException;
 final class ManualOperationStartFailureTest extends NexusTestCase
 {
     public const TASK_QUEUE = 'nexus-test-manual-start-failure';
+    public const ENDPOINT_NAME = CallerWorker::ENDPOINT_NAME;
 
     public function testAsyncStartFailureFailsTheWorkflow(): void
     {
         $workflow = $this->newCaller(
-            TestManualJobCallerWorkflow::class,
+            JobCallerWorkflow::class,
             WorkflowOptions::new()->withWorkflowExecutionTimeout(CarbonInterval::seconds(15)),
         );
 
         try {
-            $workflow->run($this->endpoint['name'], 'Demo');
+            $workflow->run('Demo');
             self::fail('Expected the workflow to fail with the handler error.');
         } catch (WorkflowFailedException $e) {
             self::assertStringContainsString(

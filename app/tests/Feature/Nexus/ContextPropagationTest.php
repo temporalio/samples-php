@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Feature\Nexus;
 
-use App\Tests\Feature\Nexus\Workflow\TestContextEchoCallerWorkflow;
-use App\Tests\Feature\Nexus\Workflow\TestContextHelloCallerWorkflow;
+use Temporal\Samples\NexusContextPropagation\Caller\CallerWorker;
+use Temporal\Samples\Nexus\Caller\EchoCallerWorkflow;
+use Temporal\Samples\Nexus\Service\Language;
+use Temporal\Samples\Nexus\Caller\HelloCallerWorkflow;
 use Temporal\Client\WorkflowOptions;
 
 /**
@@ -17,16 +19,17 @@ use Temporal\Client\WorkflowOptions;
 final class ContextPropagationTest extends NexusTestCase
 {
     public const TASK_QUEUE = 'nexus-test-context';
+    public const ENDPOINT_NAME = CallerWorker::ENDPOINT_NAME;
 
     public function testCallerWorkflowIdPropagatesViaHeaders(): void
     {
         $workflowId = 'ctx-prop-' . \bin2hex(\random_bytes(4));
         $workflow = $this->newCaller(
-            TestContextEchoCallerWorkflow::class,
+            EchoCallerWorkflow::class,
             WorkflowOptions::new()->withWorkflowId($workflowId),
         );
 
-        $result = $workflow->echo($this->endpoint['name'], 'ignored');
+        $result = $workflow->echo('ignored');
 
         self::assertSame($workflowId, $result);
     }
@@ -35,11 +38,11 @@ final class ContextPropagationTest extends NexusTestCase
     {
         $workflowId = 'ctx-prop-async-' . \bin2hex(\random_bytes(4));
         $workflow = $this->newCaller(
-            TestContextHelloCallerWorkflow::class,
+            HelloCallerWorkflow::class,
             WorkflowOptions::new()->withWorkflowId($workflowId),
         );
 
-        $result = $workflow->hello($this->endpoint['name'], 'Nexus');
+        $result = $workflow->hello('Nexus', Language::EN);
 
         self::assertStringContainsString($workflowId, $result);
     }

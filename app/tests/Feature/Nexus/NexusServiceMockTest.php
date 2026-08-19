@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Feature\Nexus;
 
+use Temporal\Samples\Nexus\Caller\HelloCallerWorkflow;
+use Temporal\Samples\Nexus\Caller\EchoCallerWorkflow;
+use Temporal\Samples\Nexus\Caller\CallerWorker;
 use App\Tests\Feature\Nexus\Mock\MockHelloHandlerWorkflowImpl;
 use App\Tests\Feature\Nexus\Mock\MockSampleNexusServiceImpl;
-use App\Tests\Feature\Nexus\Workflow\TestEchoCallerWorkflow;
-use App\Tests\Feature\Nexus\Workflow\TestHelloCallerWorkflow;
 use Temporal\Samples\Nexus\Service\Language;
 
 /**
@@ -17,21 +18,22 @@ use Temporal\Samples\Nexus\Service\Language;
 final class NexusServiceMockTest extends NexusTestCase
 {
     public const TASK_QUEUE = 'nexus-test-mock-service';
+    public const ENDPOINT_NAME = CallerWorker::ENDPOINT_NAME;
 
     public function testEchoFromMockedService(): void
     {
-        $workflow = $this->newCaller(TestEchoCallerWorkflow::class);
+        $workflow = $this->newCaller(EchoCallerWorkflow::class);
 
-        $result = $workflow->echo($this->endpoint['name'], 'ignored');
+        $result = $workflow->echo('ignored');
 
         self::assertSame(MockSampleNexusServiceImpl::ECHO_CANNED, $result);
     }
 
     public function testHelloFromMockedService(): void
     {
-        $workflow = $this->newCaller(TestHelloCallerWorkflow::class);
+        $workflow = $this->newCaller(HelloCallerWorkflow::class);
 
-        $result = $workflow->hello($this->endpoint['name'], 'World', Language::DE);
+        $result = $workflow->hello('World', Language::DE);
 
         self::assertSame(MockHelloHandlerWorkflowImpl::CANNED, $result);
     }

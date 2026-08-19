@@ -16,6 +16,9 @@ abstract class NexusTestCase extends TestCase
 {
     public const TASK_QUEUE = '';
 
+    /** Endpoint name the sample under test has baked into its caller. */
+    public const ENDPOINT_NAME = '';
+
     private static ?NexusEndpointHelper $nexusHelper = null;
 
     /** @var array{id: string, name: string} */
@@ -36,6 +39,7 @@ abstract class NexusTestCase extends TestCase
         self::$sharedEndpoint = self::$nexusHelper->setupEndpoint(
             namespace: 'default',
             taskQueue: static::TASK_QUEUE,
+            name: static::ENDPOINT_NAME === '' ? null : static::ENDPOINT_NAME,
         );
     }
 

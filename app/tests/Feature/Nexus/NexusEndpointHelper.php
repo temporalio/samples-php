@@ -10,6 +10,7 @@ use Temporal\Api\Nexus\V1\EndpointTarget\Worker as WorkerTarget;
 use Temporal\Api\Operatorservice\V1\CreateNexusEndpointRequest;
 use Temporal\Api\Operatorservice\V1\DeleteNexusEndpointRequest;
 use Temporal\Api\Operatorservice\V1\GetNexusEndpointRequest;
+use Temporal\Api\Operatorservice\V1\ListNexusEndpointsRequest;
 use Temporal\Api\Operatorservice\V1\OperatorServiceClient;
 
 /**
@@ -36,9 +37,10 @@ final class NexusEndpointHelper
      *
      * @return array{id: string, name: string}
      */
-    public function setupEndpoint(string $namespace, string $taskQueue, string $prefix = 'samples-test'): array
+    public function setupEndpoint(string $namespace, string $taskQueue, ?string $name = null): array
     {
-        $name = $prefix . '-' . \bin2hex(\random_bytes(4));
+        $name ??= 'samples-test-' . \bin2hex(\random_bytes(4));
+        $this->deleteEndpointByName($name);
 
         $request = (new CreateNexusEndpointRequest())
             ->setSpec(
@@ -90,6 +92,25 @@ final class NexusEndpointHelper
     public function close(): void
     {
         $this->operator->close();
+    }
+
+    /**
+     * Endpoint names are global, and samples pin theirs by constant, so a
+     * previous run that died mid-test can leave one behind.
+     */
+    private function deleteEndpointByName(string $name): void
+    {
+        [$response, $status] = $this->operator
+            ->ListNexusEndpoints((new ListNexusEndpointsRequest())->setName($name))
+            ->wait();
+
+        if ($status->code !== \Grpc\STATUS_OK) {
+            return;
+        }
+
+        foreach ($response->getEndpoints() as $endpoint) {
+            $this->deleteEndpoint($endpoint->getId(), $endpoint->getVersion());
+        }
     }
 
     public function deleteEndpoint(string $endpointId, int $expectedVersion = 1): void
