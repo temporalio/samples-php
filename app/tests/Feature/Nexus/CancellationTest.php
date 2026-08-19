@@ -38,7 +38,9 @@ final class CancellationTest extends NexusTestCase
         $count = 0;
         foreach ($this->workflowClient->getWorkflowHistory($execution) as $event) {
             \assert($event instanceof HistoryEvent);
-            $event->hasNexusOperationCancelRequestedEventAttributes() and ++$count;
+            if ($event->hasNexusOperationCancelRequestedEventAttributes()) {
+                ++$count;
+            }
         }
 
         return $count;
