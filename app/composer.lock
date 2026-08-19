@@ -4514,12 +4514,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/temporalio/sdk-php.git",
-                "reference": "85126b125b82c5218c70d9b96a1d8bbdbafd00b7"
+                "reference": "fec3ab3c9959be0100e2a5aef87e15933a7a81a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/85126b125b82c5218c70d9b96a1d8bbdbafd00b7",
-                "reference": "85126b125b82c5218c70d9b96a1d8bbdbafd00b7",
+                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/fec3ab3c9959be0100e2a5aef87e15933a7a81a2",
+                "reference": "fec3ab3c9959be0100e2a5aef87e15933a7a81a2",
                 "shasum": ""
             },
             "require": {
@@ -4674,7 +4674,7 @@
                 "issues": "https://github.com/temporalio/sdk-php/issues",
                 "source": "https://github.com/temporalio/sdk-php"
             },
-            "time": "2026-08-18T15:44:58+00:00"
+            "time": "2026-08-19T09:15:08+00:00"
         }
     ],
     "packages-dev": [

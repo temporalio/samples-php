@@ -32,7 +32,7 @@ abstract class NexusTestCase extends TestCase
             self::fail(\sprintf('%s must override the TASK_QUEUE constant.', static::class));
         }
 
-        self::$nexusHelper = new NexusEndpointHelper(\getenv('TEMPORAL_ADDRESS') ?: 'localhost:7236');
+        self::$nexusHelper = new NexusEndpointHelper(\getenv('TEMPORAL_ADDRESS') ?: '127.0.0.1:7236');
         self::$sharedEndpoint = self::$nexusHelper->setupEndpoint(
             namespace: 'default',
             taskQueue: static::TASK_QUEUE,
