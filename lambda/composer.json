@@ -1,0 +1,30 @@
+{
+  "name": "temporal/samples-lambda",
+  "description": "Temporal PHP worker running on AWS Lambda",
+  "type": "project",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.1",
+    "temporal/sdk": "^2.17"
+  },
+  "autoload": {
+    "psr-4": {
+      "Temporal\\Samples\\Lambda\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true,
+      "spiral/composer-publish-plugin": false
+    },
+    "platform": {
+      "php": "8.3.35",
+      "ext-sockets": "8.3.35",
+      "ext-protobuf": "5.36.0",
+      "ext-pcntl": "8.3.35"
+    },
+    "sort-packages": true
+  }
+}
