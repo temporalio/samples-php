@@ -6,3 +6,7 @@ app/**/temporal.exe
 app/tests/**/*.log
 app/runtime
 app/vendor
+lambda/.rie
+lambda/rr
+lambda/.rr-build
+lambda/.rr-build-*
