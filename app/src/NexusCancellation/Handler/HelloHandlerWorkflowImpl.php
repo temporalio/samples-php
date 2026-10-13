@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusCancellation\Handler;
 
 use Carbon\CarbonInterval;
-use Temporal\Exception\Failure\ApplicationFailure;
 use Temporal\Exception\Failure\CanceledFailure;
 use Temporal\Samples\Nexus\Handler\HelloHandlerWorkflow;
 use Temporal\Samples\Nexus\Service\HelloInput;
@@ -15,28 +14,18 @@ use Temporal\Workflow;
 
 class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
 {
-    public function hello(HelloInput $input)
+    public function hello(HelloInput $input): \Generator
     {
         try {
             yield Workflow::timer(CarbonInterval::seconds(yield Workflow::sideEffect(fn() => \random_int(0, 4))));
 
-            switch ($input->language) {
-                case Language::EN:
-                    return new HelloOutput("Hello {$input->name} 👋");
-                case Language::FR:
-                    return new HelloOutput("Bonjour {$input->name} 👋");
-                case Language::DE:
-                    return new HelloOutput("Hallo {$input->name} 👋");
-                case Language::ES:
-                    return new HelloOutput("¡Hola! {$input->name} 👋");
-                case Language::TR:
-                    return new HelloOutput("Merhaba {$input->name} 👋");
-            }
-            throw new ApplicationFailure(
-                "Unsupported language: {$input->language->value}",
-                'UNSUPPORTED_LANGUAGE',
-                true,
-            );
+            return match ($input->language) {
+                Language::EN => new HelloOutput("Hello {$input->name} 👋"),
+                Language::FR => new HelloOutput("Bonjour {$input->name} 👋"),
+                Language::DE => new HelloOutput("Hallo {$input->name} 👋"),
+                Language::ES => new HelloOutput("¡Hola! {$input->name} 👋"),
+                Language::TR => new HelloOutput("Merhaba {$input->name} 👋"),
+            };
         } catch (CanceledFailure $e) {
             yield Workflow::asyncDetached(function () {
                 yield Workflow::timer(CarbonInterval::seconds(yield Workflow::sideEffect(fn() => \random_int(0, 4))));

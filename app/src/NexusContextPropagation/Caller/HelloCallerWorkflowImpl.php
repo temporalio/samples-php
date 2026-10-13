@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusContextPropagation\Caller;
 
 use Carbon\CarbonInterval;
+use Temporal\Internal\Workflow\NexusServiceProxy;
 use Temporal\Samples\NexusContextPropagation\Propagation\MDC;
 use Temporal\Samples\Nexus\Caller\HelloCallerWorkflow;
 use Temporal\Samples\Nexus\Service\HelloInput;
@@ -16,7 +17,7 @@ use Temporal\Workflow\NexusOperationOptions;
 
 class HelloCallerWorkflowImpl implements HelloCallerWorkflow
 {
-    /** @var SampleNexusService */
+    /** @var NexusServiceProxy<SampleNexusService> */
     private object $sampleNexusService;
 
     public function __construct()
@@ -29,7 +30,7 @@ class HelloCallerWorkflowImpl implements HelloCallerWorkflow
         );
     }
 
-    public function hello(string $message, Language $language)
+    public function hello(string $message, Language $language): \Generator
     {
         MDC::put('x-nexus-caller-workflow-id', Workflow::getInfo()->execution->getID());
 

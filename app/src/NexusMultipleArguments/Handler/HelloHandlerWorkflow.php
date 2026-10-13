@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusMultipleArguments\Handler;
 
 use Temporal\Samples\Nexus\Service\Language;
+use Temporal\Samples\Nexus\Service\HelloOutput;
 use Temporal\Workflow\WorkflowInterface;
 use Temporal\Workflow\WorkflowMethod;
 
@@ -12,5 +13,5 @@ use Temporal\Workflow\WorkflowMethod;
 interface HelloHandlerWorkflow
 {
     #[WorkflowMethod]
-    public function hello(string $name, Language $language);
+    public function hello(string $name, Language $language): HelloOutput;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusMultipleArguments\Caller;
 
 use Carbon\CarbonInterval;
+use Temporal\Internal\Workflow\NexusServiceProxy;
 use Temporal\Samples\Nexus\Service\EchoInput;
 use Temporal\Samples\Nexus\Service\EchoOutput;
 use Temporal\Samples\Nexus\Service\SampleNexusService;
@@ -13,7 +14,7 @@ use Temporal\Workflow\NexusOperationOptions;
 
 class EchoCallerWorkflowImpl implements EchoCallerWorkflow
 {
-    /** @var SampleNexusService */
+    /** @var NexusServiceProxy<SampleNexusService> */
     private object $sampleNexusService;
 
     public function __construct()
@@ -26,7 +27,7 @@ class EchoCallerWorkflowImpl implements EchoCallerWorkflow
         );
     }
 
-    public function echo(string $message)
+    public function echo(string $message): \Generator
     {
         /** @var EchoOutput $output */
         $output = yield $this->sampleNexusService->echo(new EchoInput($message));

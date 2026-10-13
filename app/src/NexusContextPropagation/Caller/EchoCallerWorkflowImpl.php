@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusContextPropagation\Caller;
 
 use Carbon\CarbonInterval;
+use Temporal\Internal\Workflow\NexusServiceProxy;
 use Temporal\Samples\NexusContextPropagation\Propagation\MDC;
 use Temporal\Samples\Nexus\Caller\EchoCallerWorkflow;
 use Temporal\Samples\Nexus\Service\EchoInput;
@@ -15,7 +16,7 @@ use Temporal\Workflow\NexusOperationOptions;
 
 class EchoCallerWorkflowImpl implements EchoCallerWorkflow
 {
-    /** @var SampleNexusService */
+    /** @var NexusServiceProxy<SampleNexusService> */
     private object $sampleNexusService;
 
     public function __construct()
@@ -28,7 +29,7 @@ class EchoCallerWorkflowImpl implements EchoCallerWorkflow
         );
     }
 
-    public function echo(string $message)
+    public function echo(string $message): \Generator
     {
         MDC::put('x-nexus-caller-workflow-id', Workflow::getInfo()->execution->getID());
 

@@ -15,6 +15,10 @@ final class NexusOutboundContextInterceptor implements WorkflowOutboundCallsInte
 
     private const NEXUS_HEADER_PREFIX = 'x-nexus-';
 
+    /**
+     * @param callable(ExecuteNexusOperationInput): PromiseInterface<mixed> $next
+     * @return PromiseInterface<mixed>
+     */
     public function executeNexusOperation(ExecuteNexusOperationInput $input, callable $next): PromiseInterface
     {
         $headers = $input->nexusHeaders;

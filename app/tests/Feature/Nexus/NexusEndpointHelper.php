@@ -8,9 +8,11 @@ use Temporal\Api\Nexus\V1\EndpointSpec;
 use Temporal\Api\Nexus\V1\EndpointTarget;
 use Temporal\Api\Nexus\V1\EndpointTarget\Worker as WorkerTarget;
 use Temporal\Api\Operatorservice\V1\CreateNexusEndpointRequest;
+use Temporal\Api\Operatorservice\V1\CreateNexusEndpointResponse;
 use Temporal\Api\Operatorservice\V1\DeleteNexusEndpointRequest;
 use Temporal\Api\Operatorservice\V1\GetNexusEndpointRequest;
 use Temporal\Api\Operatorservice\V1\ListNexusEndpointsRequest;
+use Temporal\Api\Operatorservice\V1\ListNexusEndpointsResponse;
 use Temporal\Api\Operatorservice\V1\OperatorServiceClient;
 
 /**
@@ -63,6 +65,8 @@ final class NexusEndpointHelper
             );
         }
 
+        \assert($response instanceof CreateNexusEndpointResponse);
+
         $id = $response->getEndpoint()->getId();
         $this->awaitEndpointResolvable($id);
 
@@ -107,6 +111,8 @@ final class NexusEndpointHelper
         if ($status->code !== \Grpc\STATUS_OK) {
             return;
         }
+
+        \assert($response instanceof ListNexusEndpointsResponse);
 
         foreach ($response->getEndpoints() as $endpoint) {
             $this->deleteEndpoint($endpoint->getId(), $endpoint->getVersion());

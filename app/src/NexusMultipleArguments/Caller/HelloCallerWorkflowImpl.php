@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Temporal\Samples\NexusMultipleArguments\Caller;
 
 use Carbon\CarbonInterval;
+use Temporal\Internal\Workflow\NexusServiceProxy;
 use Temporal\Samples\Nexus\Service\HelloInput;
 use Temporal\Samples\Nexus\Service\HelloOutput;
 use Temporal\Samples\Nexus\Service\Language;
@@ -14,7 +15,7 @@ use Temporal\Workflow\NexusOperationOptions;
 
 class HelloCallerWorkflowImpl implements HelloCallerWorkflow
 {
-    /** @var SampleNexusService */
+    /** @var NexusServiceProxy<SampleNexusService> */
     private object $sampleNexusService;
 
     public function __construct()
@@ -27,7 +28,7 @@ class HelloCallerWorkflowImpl implements HelloCallerWorkflow
         );
     }
 
-    public function hello(string $message, Language $language)
+    public function hello(string $message, Language $language): \Generator
     {
         /** @var HelloOutput $output */
         $output = yield $this->sampleNexusService->hello(new HelloInput($message, $language));

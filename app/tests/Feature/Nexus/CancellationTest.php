@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Feature\Nexus;
 
-use Temporal\Api\History\V1\HistoryEvent;
 use Temporal\Samples\NexusCancellation\Caller\CallerWorker;
 use Temporal\Samples\NexusCancellation\Caller\HelloCallerWorkflow;
 
@@ -37,7 +36,6 @@ final class CancellationTest extends NexusTestCase
     {
         $count = 0;
         foreach ($this->workflowClient->getWorkflowHistory($execution) as $event) {
-            \assert($event instanceof HistoryEvent);
             if ($event->hasNexusOperationCancelRequestedEventAttributes()) {
                 ++$count;
             }

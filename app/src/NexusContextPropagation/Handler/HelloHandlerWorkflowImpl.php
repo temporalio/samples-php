@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Temporal\Samples\NexusContextPropagation\Handler;
 
-use Temporal\Exception\Failure\ApplicationFailure;
 use Temporal\Samples\Nexus\Service\HelloInput;
 use Temporal\Samples\Nexus\Service\HelloOutput;
 use Temporal\Samples\NexusContextPropagation\Propagation\MDC;
@@ -19,22 +18,12 @@ class HelloHandlerWorkflowImpl implements HelloHandlerWorkflow
             ? $input->name
             : $input->name . ', x-nexus-caller-workflow-id: ' . $callerWorkflowId;
 
-        switch ($input->language) {
-            case Language::EN:
-                return new HelloOutput("Hello {$name} 👋");
-            case Language::FR:
-                return new HelloOutput("Bonjour {$name} 👋");
-            case Language::DE:
-                return new HelloOutput("Hallo {$name} 👋");
-            case Language::ES:
-                return new HelloOutput("¡Hola! {$name} 👋");
-            case Language::TR:
-                return new HelloOutput("Merhaba {$name} 👋");
-        }
-        throw new ApplicationFailure(
-            "Unsupported language: {$input->language->value}",
-            'UNSUPPORTED_LANGUAGE',
-            true,
-        );
+        return match ($input->language) {
+            Language::EN => new HelloOutput("Hello {$name} 👋"),
+            Language::FR => new HelloOutput("Bonjour {$name} 👋"),
+            Language::DE => new HelloOutput("Hallo {$name} 👋"),
+            Language::ES => new HelloOutput("¡Hola! {$name} 👋"),
+            Language::TR => new HelloOutput("Merhaba {$name} 👋"),
+        };
     }
 }

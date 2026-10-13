@@ -11,5 +11,5 @@ use Temporal\Workflow\WorkflowMethod;
 interface EchoCallerWorkflow
 {
     #[WorkflowMethod]
-    public function echo(string $message);
+    public function echo(string $message): \Generator;
 }

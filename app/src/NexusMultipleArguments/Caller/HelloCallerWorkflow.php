@@ -12,5 +12,5 @@ use Temporal\Workflow\WorkflowMethod;
 interface HelloCallerWorkflow
 {
     #[WorkflowMethod]
-    public function hello(string $message, Language $language);
+    public function hello(string $message, Language $language): \Generator;
 }

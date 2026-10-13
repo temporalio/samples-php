@@ -7,6 +7,7 @@ namespace Temporal\Samples\NexusCancellation\Caller;
 use Carbon\CarbonInterval;
 use Temporal\Exception\Failure\CanceledFailure;
 use Temporal\Exception\Failure\NexusOperationFailure;
+use Temporal\Internal\Workflow\NexusServiceProxy;
 use Temporal\Promise;
 use Temporal\Samples\Nexus\Service\HelloInput;
 use Temporal\Samples\Nexus\Service\HelloOutput;
@@ -18,7 +19,7 @@ use Temporal\Workflow\NexusOperationOptions;
 
 class HelloCallerWorkflowImpl implements HelloCallerWorkflow
 {
-    /** @var SampleNexusService */
+    /** @var NexusServiceProxy<SampleNexusService> */
     private object $sampleNexusService;
 
     public function __construct()
@@ -32,7 +33,7 @@ class HelloCallerWorkflowImpl implements HelloCallerWorkflow
         );
     }
 
-    public function hello(string $message)
+    public function hello(string $message): \Generator
     {
         $promises = [];
 

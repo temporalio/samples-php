@@ -42,8 +42,8 @@ final class ContextPropagationTest extends NexusTestCase
             WorkflowOptions::new()->withWorkflowId($workflowId),
         );
 
-        $result = $workflow->hello('Nexus', Language::EN);
+        $run = $this->workflowClient->start($workflow, 'Nexus', Language::EN);
 
-        self::assertStringContainsString($workflowId, $result);
+        self::assertStringContainsString($workflowId, $run->getResult('string'));
     }
 }

@@ -27,7 +27,7 @@ class HelloCallerWorkflowImpl implements HelloCallerWorkflow
         );
     }
 
-    public function hello(string $message, Language $language)
+    public function hello(string $message, Language $language): \Generator
     {
         /** @var NexusOperationHandle<HelloOutput> $handle */
         $handle = yield $this->sampleNexusService->start(
