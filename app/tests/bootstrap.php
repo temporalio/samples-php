@@ -17,7 +17,7 @@ $suite = (static function (array $argv): ?string {
     # Check --filter parameter
     if (\preg_match('/--filter(?:=|\s++)([^"\']\S++|\'[^\']*+\'|"[^\']*+")/', $string, $matches)) {
         $filter = str_replace('\\\\', '\\', \trim($matches[1], '\'"'));
-        if (\preg_match('/Temporal\\\\Tests\\\\(\\w+)\\\\/', $filter, $matches)) {
+        if (\preg_match('/(?:Temporal|App)\\\\Tests\\\\(\\w+)\\\\/', $filter, $matches)) {
             return $matches[1];
         }
     }
