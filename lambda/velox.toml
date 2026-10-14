@@ -1,0 +1,53 @@
+# Builds a RoadRunner binary that contains only what a Temporal worker on AWS
+# Lambda needs. Build it with:
+#
+#   vx build -c velox.toml -o .
+#
+[roadrunner]
+ref = "master"
+
+[log]
+level = "info"
+mode = "production"
+
+# Lambda runs linux; set arch to amd64 for an x86 function.
+[target_platform]
+os = "linux"
+arch = "arm64"
+
+[github.token]
+token = "${GITHUB_TOKEN}"
+
+# The lambda plugin is not published yet, so it is taken from a local checkout.
+# Drop this block once it is released.
+[[replaces]]
+new = "../../rr-lambda"
+old = "github.com/roadrunner-server/aws-lambda"
+
+[plugins.logger]
+tag = "latest"
+module_name = "github.com/roadrunner-server/logger/v6"
+
+[plugins.server]
+tag = "latest"
+module_name = "github.com/roadrunner-server/server/v6"
+
+[plugins.rpc]
+tag = "latest"
+module_name = "github.com/roadrunner-server/rpc/v6"
+
+[plugins.informer]
+tag = "latest"
+module_name = "github.com/roadrunner-server/informer/v6"
+
+[plugins.resetter]
+tag = "latest"
+module_name = "github.com/roadrunner-server/resetter/v6"
+
+[plugins.temporal]
+tag = "latest"
+module_name = "github.com/temporalio/roadrunner-temporal/v6"
+
+[plugins.lambda]
+tag = "master"
+module_name = "github.com/roadrunner-server/aws-lambda"

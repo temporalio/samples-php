@@ -1,0 +1,33 @@
+version: '3'
+
+# Required: Activity::heartbeat() reaches RoadRunner over this socket.
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php worker.php"
+  relay: pipes
+
+temporal:
+  address: "${TEMPORAL_ADDRESS}"
+  namespace: "${TEMPORAL_NAMESPACE}"
+  # A worker that polls for one invocation never fills the default cache of 10000.
+  cache_size: 30
+  activities:
+    num_workers: 2
+    allocate_timeout: 5s
+
+# Served by the lambda plugin, which takes over only when
+# AWS_LAMBDA_RUNTIME_API is present in the environment.
+lambda:
+  # Reserved before the invocation deadline to stop the Temporal workers and
+  # answer the Runtime API. Must exceed graceful_timeout.
+  shutdown_buffer: 6s
+  # How long the workers may drain in-flight tasks. It also becomes the
+  # worker's WorkerStopTimeout unless worker.php sets one.
+  graceful_timeout: 5s
+
+logs:
+  mode: production
+  encoding: json
+  level: info
