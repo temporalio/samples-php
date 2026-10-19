@@ -22,7 +22,7 @@ token = "${GITHUB_TOKEN}"
 # Drop this block once it is released.
 [[replaces]]
 new = "../../rr-lambda"
-old = "github.com/roadrunner-server/aws-lambda"
+old = "github.com/roadrunner-server/aws-lambda/v6"
 
 [plugins.logger]
 tag = "latest"
@@ -50,4 +50,4 @@ module_name = "github.com/temporalio/roadrunner-temporal/v6"
 
 [plugins.lambda]
 tag = "master"
-module_name = "github.com/roadrunner-server/aws-lambda"
+module_name = "github.com/roadrunner-server/aws-lambda/v6"
