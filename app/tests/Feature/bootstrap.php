@@ -12,10 +12,13 @@ $environment = Environment::create();
 
 $sysInfo = \Temporal\Testing\SystemInfo::detect();
 
-$environment->startTemporalTestServer();
+$environment->startTemporalServer(
+    parameters: ['--dynamic-config-value', 'frontend.activityAPIsEnabled=true'],
+);
 $environment->startRoadRunner(
-    rrCommand: sprintf('%s serve -c .rr.test.yaml -w tests/Feature', $sysInfo->rrExecutable),
-    commandTimeout: 5
+    rrCommand: [$sysInfo->rrExecutable, 'serve', '-c', '.rr.test.yaml', '-w', 'tests/Feature'],
+    commandTimeout: 5,
+    configFile: 'tests/Feature/.rr.test.yaml',
 );
 
 register_shutdown_function(fn() => $environment->stop());
