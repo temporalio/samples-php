@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Temporal\SampleUtils;
 
+use Temporal\Client\ActivityClient;
+use Temporal\Client\ActivityClientInterface;
 use Temporal\Client\GRPC\ServiceClient;
 use Temporal\Client\ScheduleClient;
 use Temporal\Client\ScheduleClientInterface;
@@ -37,6 +39,7 @@ class Command extends \Symfony\Component\Console\Command\Command
 
     protected WorkflowClientInterface $workflowClient;
     protected ScheduleClientInterface $scheduleClient;
+    protected ActivityClientInterface $activityClient;
 
     /**
      * Command constructor.
@@ -52,6 +55,7 @@ class Command extends \Symfony\Component\Console\Command\Command
             ])
         );
         $this->scheduleClient = ScheduleClient::create($serviceClient);
+        $this->activityClient = ActivityClient::create($serviceClient);
     }
 
     /**

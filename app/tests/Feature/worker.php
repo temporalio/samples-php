@@ -19,5 +19,9 @@ $worker->registerActivity(
     \Temporal\Samples\SimpleActivity\GreetingActivity::class,
     fn() => new \Temporal\Samples\SimpleActivity\GreetingActivity(),
 );
+$worker->registerActivity(
+    \Temporal\Samples\StandaloneActivity\GreetingActivity::class,
+    fn() => new \Temporal\Samples\StandaloneActivity\GreetingActivity(),
+);
 
 $workerFactory->run();

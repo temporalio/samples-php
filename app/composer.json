@@ -1,9 +1,15 @@
 {
   "minimum-stability": "dev",
   "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/temporalio/sdk-php"
+    }
+  ],
   "require": {
     "spiral/tokenizer": "^3.16.0",
-    "temporal/sdk": "^2.17",
+    "temporal/sdk": "dev-feature/standalone-activities as 2.21.0",
     "temporal/open-telemetry-interceptors": "^1.0",
     "open-telemetry/exporter-otlp": "^1.3",
     "open-telemetry/transport-grpc": "^1.1",
