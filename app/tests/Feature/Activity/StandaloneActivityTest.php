@@ -36,7 +36,7 @@ final class StandaloneActivityTest extends TestCase
             'Temporal',
         );
 
-        $this->assertNotSame('', (string) $handle->getRunId());
+        $this->assertNotSame('', (string) $handle->getRunID());
         $this->assertSame('Hello Temporal!', $handle->getResult('string'));
         $this->assertSame(ActivityExecutionStatus::Completed, $handle->describe()->info->status);
     }

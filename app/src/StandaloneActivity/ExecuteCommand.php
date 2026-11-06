@@ -38,8 +38,8 @@ class ExecuteCommand extends Command
 
         $output->writeln(\sprintf(
             'Started: ActivityID=<fg=magenta>%s</fg=magenta>, RunID=<fg=magenta>%s</fg=magenta>',
-            $handle->getId(),
-            $handle->getRunId(),
+            $handle->getID(),
+            $handle->getRunID(),
         ));
 
         $output->writeln(\sprintf("Result:\n<info>%s</info>", $handle->getResult('string')));

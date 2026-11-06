@@ -5209,12 +5209,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/temporalio/sdk-php.git",
-                "reference": "d18422e7d35d2b593b362cc3ea7dcbd2e9758bc3"
+                "reference": "668a568638639760975cb801d7c292dee1a5b0fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/d18422e7d35d2b593b362cc3ea7dcbd2e9758bc3",
-                "reference": "d18422e7d35d2b593b362cc3ea7dcbd2e9758bc3",
+                "url": "https://api.github.com/repos/temporalio/sdk-php/zipball/668a568638639760975cb801d7c292dee1a5b0fc",
+                "reference": "668a568638639760975cb801d7c292dee1a5b0fc",
                 "shasum": ""
             },
             "require": {
@@ -5373,7 +5373,7 @@
                 "issues": "https://github.com/temporalio/sdk-php/issues",
                 "source": "https://github.com/temporalio/sdk-php"
             },
-            "time": "2026-11-02T20:39:33+00:00"
+            "time": "2026-11-06T13:49:33+00:00"
         },
         {
             "name": "yiisoft/injector",
