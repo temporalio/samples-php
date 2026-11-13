@@ -37,17 +37,23 @@ docker compose exec app php app.php {sample-name}
 To observe active workers:
 
 ```shell
-docker compose exec app rr workers -i
+docker compose exec app ./rr workers -i
 ```
 
 To run feature tests in docker use:
 
 ```shell
 docker compose exec app composer test:feat
-````
+```
+
+To inspect Workflows using the Temporal CLI:
+
+```shell
+docker compose exec temporal-cli temporal workflow list
+```
 
 ## Local Setup
-**1. Make sure you have PHP 8.1, or higher, installed.**
+**1. Make sure you have PHP 8.4, or higher, installed.**
 
 **2. Clone this repo and change directory into the root of the project.**
 
@@ -83,7 +89,7 @@ Run the following command to download the necessary binaries:
 composer get:binaries
 ```
 
-Note: You can install RoadRunner manually by downloading its binary from the [release page](https://github.com/spiral/roadrunner/releases/tag/v1.9.2).
+Note: If installing RoadRunner manually, use the 2025.1 release series required by the SDK version in the committed lockfile, as specified in `app/dload.xml`.
 
 Note: Check the [Quick install guide](https://docs.temporal.io/docs/server/quick-install) to install Temporal Server manually.
 
