@@ -59,13 +59,14 @@ services:
     volumes:
       - ./config/dynamicconfig:/etc/temporal/config/dynamicconfig
 
-  temporal-admin-tools:
-    container_name: temporal-admin-tools
+  temporal-cli:
+    container_name: temporal-cli
     depends_on:
       - temporal
     environment:
-      - TEMPORAL_CLI_ADDRESS=temporal:7233
-    image: temporalio/admin-tools:${TEMPORAL_VERSION}
+      - TEMPORAL_ADDRESS=temporal:7233
+    image: ${TEMPORAL_CLI_IMAGE}
+    entrypoint: [ "sleep", "infinity" ]
     networks:
       - temporal-network
     stdin_open: true
@@ -108,6 +109,8 @@ services:
     build:
       dockerfile: docker/app/Dockerfile
       context: ./
+      args:
+        TEMPORAL_CLI_IMAGE: ${TEMPORAL_CLI_IMAGE}
     # volumes:
     #  - ./app:/var/app
     depends_on:
@@ -115,16 +118,15 @@ services:
     networks:
       - temporal-network
     environment:
-      - TEMPORAL_CLI_ADDRESS=temporal:7233
+      - TEMPORAL_ADDRESS=temporal:7233
       - TELEMETRY_DRIVER=otel
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://collector:4318
       - OTEL_PHP_TRACES_PROCESSOR=simple
-      - TEMPORAL_HOST=temporal
       - OTEL_HOST=collector
       - INTERCEPTORS_RR_PATH=/var/app/rr
-    command: [ "/usr/local/bin/wait-for-temporal.sh", "temporal", "/var/app/rr", "serve" ]
+    command: [ "/usr/local/bin/wait-for-temporal.sh", "/var/app/rr", "serve" ]
 
 networks:
   temporal-network:
