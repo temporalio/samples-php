@@ -127,6 +127,8 @@ The following samples demonstrate much of the basic functionality and capabiliti
 
 - **[SimpleActivity](https://github.com/temporalio/samples-php/tree/master/app/src/SimpleActivity)**: Single Activity Workflow
 
+- **[StandaloneActivity](https://github.com/temporalio/samples-php/tree/master/app/src/StandaloneActivity)**: How to execute an Activity without a Workflow
+
 - **[ActivityRetry](https://github.com/temporalio/samples-php/blob/master/app/src/ActivityRetry)**: How to retry an Activity
 
 - **[AsyncActivity](https://github.com/temporalio/samples-php/blob/master/app/src/AsyncActivity)**: How to call Activities asynchronously and wait for them using Promises
