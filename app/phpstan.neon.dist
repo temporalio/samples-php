@@ -1,0 +1,10 @@
+parameters:
+    level: 6
+    paths:
+        - src/Nexus
+        - src/NexusCancellation
+        - src/NexusContextPropagation
+        - src/NexusMultipleArguments
+        - tests/Feature
+    excludePaths:
+        - tests/Feature/worker.log
